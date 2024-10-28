@@ -1,0 +1,7 @@
+[centos8-base]
+name = CentOS 8 Base OS
+# This is now deprecated, using vault instead
+# baseurl = http://mirror.centos.org/centos/8/BaseOS/x86_64/os/
+baseurl = https://vault.centos.org/centos/8/BaseOS/x86_64/os/
+gpgcheck = 0
+enabled = 0

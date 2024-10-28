@@ -1,0 +1,22 @@
+services:
+  remote-rhel:
+    image: remote-rhel
+    build: .
+    container_name: remote-rhel
+    ports:
+      - 42313:3389
+      - 42419:5901
+      - 41811:8080
+      # expose:
+      # - 8080
+    restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.remote.rule=Host(`remote.localhost`)
+      - traefik.http.routers.remote.entrypoints=http
+      - traefik.http.services.remote.loadbalancer.server.port=41811
+
+networks:
+  default:
+    name: main
+    external: true
