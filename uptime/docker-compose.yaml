@@ -1,0 +1,21 @@
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma
+    container_name: uptime-kuma
+    volumes:
+      - './data:/app/data'
+      # ports:
+      #   - '3001:3001'
+    restart: always
+    environment:
+      - UPTIME_KUMA_DISABLE_FRAME_SAMEORIGIN=true
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.uptime.rule=Host(`uptime.localhost`)
+      - traefik.http.routers.uptime.entrypoints=http
+      - traefik.http.services.uptime.loadbalancer.server.port=3001
+
+networks:
+  default:
+    name: main
+    external: true

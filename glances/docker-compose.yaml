@@ -1,0 +1,27 @@
+services:
+  glances:
+    image: 'nicolargo/glances:latest'
+    environment:
+      - TZ=America/New_York
+      - PGID=1000
+      - PUID=1000
+      - GLANCES_OPT=-w
+    privileged: true
+    pid: host
+    ports:
+      - '61208:61208'
+    volumes:
+      - '/var/run/podman/podman.sock:/var/run/podman/podman.sock:ro'
+    restart: unless-stopped
+    container_name: glances
+
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.glance.rule=Host(`glance.localhost`)
+      - traefik.http.routers.glance.entrypoints=http
+      - traefik.http.services.glance.loadbalancer.server.port=61208
+
+networks:
+  default:
+    name: main
+    external: true

@@ -1,0 +1,425 @@
+pageInfo:
+  title: Local Dashboard
+  description: ''
+  navLinks:
+    - title: Documentation
+      path: https://dashy.to/docs
+      target: newtab
+appConfig:
+  theme: crayola
+  layout: horizontal
+  iconSize: medium
+sections:
+  - name: Today
+    icon: far fa-calendar-day
+    widgets:
+      - type: clock
+        options:
+          format: en-US
+        id: 0_513_clock
+      - type: iframe
+        options:
+          url: http://uptime.localhost/status/main
+          frameHeight: 150
+        id: 1_513_iframe
+  - name: Bookmarks
+    icon: fas fa-bookmark
+    displayData:
+      sortBy: default
+      rows: 5
+      cols: 5
+      collapsed: true
+      hideForGuests: false
+    items:
+      - title: DSI Links
+        icon: fas fa-link
+        url: https://172.22.142.107/dsilinks/
+        target: newtab
+        id: 0_937_dsilinks
+      - title: ZENWARRIOR
+        icon: fab fa-gitlab
+        url: https://172.22.142.103/zw
+        target: newtab
+        id: 1_937_zenwarrior
+      - title: Activity
+        icon: far fa-chart-bar
+        url: https://172.22.142.103/dashboard/activity?filter=projects
+        target: newtab
+        id: 2_937_activity
+      - title: Groups
+        icon: fas fa-users
+        url: https://172.22.142.103/explore/groups
+        target: newtab
+        id: 3_937_groups
+      - title: Sprint Board
+        icon: fas fa-clipboard
+        url: https://ssjira01.ldrnet.com/secure/RapidBoard.jspa?rapidView=677#
+        target: newtab
+        id: 4_937_sprintboard
+      - title: Backlog
+        icon: fas fa-list
+        url: >-
+          https://ssjira01.ldrnet.com/secure/RapidBoard.jspa?rapidView=677&view=planning.nodetail&issueLimit=100#
+        target: newtab
+        id: 5_937_backlog
+      - title: ZW
+        icon: fas fa-lightbulb
+        url: https://confluence.ldrnet.com/display/GTT1/About
+        target: newtab
+        id: 6_937_zw
+      - title: Server Checkout
+        icon: fas fa-table
+        url: https://confluence.ldrnet.com/display/GTT1/Server+Checkout
+        target: newtab
+        id: 7_937_servercheckout
+      - title: How To's
+        icon: fas fa-unlock
+        url: https://confluence.ldrnet.com/display/GTT1/5.+How-to+articles
+        target: newtab
+        id: 8_937_howtos
+      - title: Gmail
+        icon: fas fa-inbox
+        url: https://mail.google.com/mail/u/0/#inbox
+        target: newtab
+        id: 9_937_gmail
+      - title: Slack
+        icon: fab fa-slack
+        url: https://app.slack.com.rproxy.goskope.com/client/ELM26L70A/D062B43UTL5
+        target: newtab
+        id: 10_937_slack
+      - title: Drive
+        icon: fab fa-google-drive
+        url: https://drive.google.com/drive/home
+        target: newtab
+        id: 11_937_drive
+      - target: newtab
+        title: Calendar
+        icon: far fa-calendar
+        url: https://calendar.google.com/calendar/u/0/r
+        id: 12_937_calendar
+      - target: newtab
+        title: Zoom
+        icon: fas fa-video
+        url: https://mantech.zoomgov.com/meeting#/upcoming
+        id: 13_937_zoom
+      - title: VDI
+        icon: fas fa-laptop-house
+        url: https://vdi.mantech.com/portal/webclient/#/launchitems
+        target: newtab
+        id: 14_937_vdi
+      - title: Workday
+        description: Timesheet
+        icon: fas fa-calendar
+        url: https://www.myworkday.com/mantech/d/home.htmld
+        target: newtab
+        id: 15_937_workday
+      - title: NSS-MEOS-GLIDINGEAGLE
+        description: TTO-7107 ZW - TTO-7107 ZW
+        icon: fas fa-folder
+        url: >-
+          https://mantech.sharepoint.us/sites/NSS-MEOS-GLIDINGEAGLE-TTO-7107ZW/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FNSS%2DMEOS%2DGLIDINGEAGLE%2DTTO%2D7107ZW%2FShared%20Documents%2FTTO%2D7107%20ZW&p=true&ga=1
+        target: newtab
+        id: 16_937_nssmeosglidingeagle
+      - target: newtab
+        title: vSphere
+        icon: fas fa-server
+        url: https://172.22.142.100/
+        id: 17_937_vsphere
+      - title: ManTech
+        icon: fas fa-building
+        url: https://one.mantech.com/
+        target: newtab
+        id: 18_937_mantech
+  - name: DSI Links
+    items:
+      - title: VCenter (vcsa)
+        url: https://172.22.142.100/
+        target: newtab
+        subItems: null
+        id: 0_769_vcentervcsa
+        icon: fas fa-server
+      - target: newtab
+        title: VCenter Server Management
+        url: https://172.22.142.100:5480/
+        id: 1_769_vcenterservermanagement
+        icon: fas fa-server
+      - target: newtab
+        title: ESXi 1
+        url: https://172.22.142.51/
+        id: 2_769_esxi
+        icon: fas fa-server
+      - target: newtab
+        title: ESXi 2
+        url: https://172.22.142.52/
+        id: 3_769_esxi
+        icon: fas fa-server
+      - target: newtab
+        title: ESXi 3
+        url: https://172.22.142.53/
+        id: 4_769_esxi
+        icon: fas fa-server
+      - target: newtab
+        title: ESXi 4
+        url: https://172.22.142.54/
+        id: 5_769_esxi
+        icon: fas fa-server
+      - target: newtab
+        title: ESXi 5
+        url: https://172.22.142.55/
+        id: 6_769_esxi
+        icon: fas fa-server
+      - target: newtab
+        title: ESXi 6
+        url: https://172.22.142.56/
+        id: 7_769_esxi
+        icon: fas fa-server
+      - target: newtab
+        title: GitLab Activity
+        url: https://gitlab.raptornet.dev/dashboard/activity?filter=projects
+        id: 8_769_gitlabactivity
+        icon: fab fa-gitlab
+      - target: newtab
+        title: GitLab Projects
+        url: https://gitlab.raptornet.dev/zw
+        id: 9_769_gitlabprojects
+        icon: fab fa-gitlab
+      - target: newtab
+        title: Jira (LDRnet)
+        url: https://ssjira01.ldrnet.com/secure/RapidBoard.jspa?rapidView=677#
+        id: 10_769_jiraldrnet
+        icon: fab fa-jira
+      - target: newtab
+        title: Confluence (LDRnet)
+        url: https://confluence.ldrnet.com/pages/viewpage.action?pageId=71402049
+        id: 11_769_confluenceldrnet
+        icon: fab fa-confluence
+      - target: newtab
+        title: IDM/FreeIPA
+        url: https://ipaserver.raptornet.dev/
+        id: 12_769_idmfreeipa
+        icon: fas fa-server
+      - target: newtab
+        title: TrueNAS Scale (Datastore/Shares)
+        url: https://sm-storage1.raptornet.dev/
+        id: 13_769_truenasscaledatastoreshares
+        icon: fas fa-server
+      - target: newtab
+        title: TrueNAS Scale (Backups)
+        url: https://sm-storage2.raptornet.dev/
+        id: 14_769_truenasscalebackups
+        icon: fas fa-server
+      - title: Dell Latitude 5530 (DVD-Duplicator)
+        icon: fas fa-laptop
+        url: https://172.22.142.107/dsilinks/DVD-Duplicator.rdp
+        target: newtab
+        id: 15_769_delllatitudedvdduplicator
+      - title: GE-Store NAS (Ciphertex)
+        icon: fab fa-sellsy
+        url: https://ge-store.raptornet.dev/
+        target: newtab
+        id: 16_769_gestorenasciphertex
+      - target: newtab
+        title: APC - Rack 1, Left
+        url: http://172.22.142.27/
+        id: 17_769_apcrackleft
+        icon: fas fa-server
+      - target: newtab
+        title: APC - Rack 1, Right
+        url: http://172.22.142.26/
+        id: 18_769_apcrackright
+        icon: fas fa-server
+      - target: newtab
+        title: APC - Rack 2, Left
+        url: http://172.22.142.29/
+        id: 19_769_apcrackleft
+        icon: fas fa-server
+      - target: newtab
+        title: APC - Rack 2, Right
+        url: http://172.22.142.28/
+        id: 20_769_apcrackright
+        icon: fas fa-server
+      - target: newtab
+        title: ic1n1
+        url: https://10.0.0.40/
+        id: 21_769_icn
+        icon: fas fa-server
+      - target: newtab
+        title: ic1n2
+        url: https://10.0.0.41/
+        id: 22_769_icn
+        icon: fas fa-server
+      - target: newtab
+        title: ic1n3
+        url: https://10.0.0.42/
+        id: 23_769_icn
+        icon: fas fa-server
+      - target: newtab
+        title: zwpxe
+        url: https://10.0.0.43/
+        id: 24_769_zwpxe
+        icon: fas fa-server
+      - target: newtab
+        title: ic2n1
+        url: https://10.0.0.44/
+        id: 25_769_icn
+        icon: fas fa-server
+      - target: newtab
+        title: ic2n2
+        url: https://10.0.0.45/
+        id: 26_769_icn
+        icon: fas fa-server
+      - target: newtab
+        title: ic2n3
+        url: https://10.0.0.46/
+        id: 27_769_icn
+        icon: fas fa-server
+      - target: newtab
+        title: ic2n4
+        url: https://10.0.0.47/
+        id: 28_769_icn
+        icon: fas fa-server
+      - target: newtab
+        title: ic4n1
+        url: https://10.0.0.36/
+        id: 29_769_icn
+        icon: fas fa-server
+      - target: newtab
+        title: ic4n2
+        url: https://10.0.0.37/
+        id: 30_769_icn
+        icon: fas fa-server
+      - target: newtab
+        title: ic4n3
+        url: https://10.0.0.38/
+        id: 31_769_icn
+        icon: fas fa-server
+      - target: newtab
+        title: ic4n4
+        url: https://10.0.0.39/
+        id: 32_769_icn
+        icon: fas fa-server
+      - target: newtab
+        title: ic5n1
+        url: https://10.0.0.28/
+        id: 33_769_icn
+        icon: fas fa-server
+      - target: newtab
+        title: ic5n2
+        url: https://10.0.0.29/
+        id: 34_769_icn
+        icon: fas fa-server
+      - target: newtab
+        title: ic5n3
+        url: https://10.0.0.30/
+        id: 35_769_icn
+        icon: fas fa-server
+      - target: newtab
+        title: ic5n4
+        url: https://10.0.0.31/
+        id: 36_769_icn
+        icon: fas fa-server
+      - target: newtab
+        title: ic6n1
+        url: https://10.0.0.24/
+        id: 37_769_icn
+        icon: fas fa-server
+      - target: newtab
+        title: ic6n2
+        url: https://10.0.0.25/
+        id: 38_769_icn
+        icon: fas fa-server
+      - target: newtab
+        title: ic6n3
+        url: https://10.0.0.26/
+        id: 39_769_icn
+        icon: fas fa-server
+      - target: newtab
+        title: ic6n4
+        url: https://10.0.0.27/
+        id: 40_769_icn
+        icon: fas fa-server
+      - target: newtab
+        title: ic7n1
+        url: https://10.0.0.20/
+        id: 41_769_icn
+        icon: fas fa-server
+      - target: newtab
+        title: ic7n2
+        url: https://10.0.0.21/
+        id: 42_769_icn
+        icon: fas fa-server
+      - target: newtab
+        title: ic7n3
+        url: https://10.0.0.22/
+        id: 43_769_icn
+        icon: fas fa-server
+      - target: newtab
+        title: ic7n4
+        url: https://10.0.0.23/
+        id: 44_769_icn
+        icon: fas fa-server
+    displayData:
+      sortBy: default
+      rows: 1
+      cols: 1
+      collapsed: true
+      hideForGuests: false
+    icon: fas fa-network-wired
+  - name: Localhost
+    displayData:
+      sortBy: default
+      rows: 1
+      cols: 1
+      collapsed: true
+      hideForGuests: false
+    items:
+      - title: Traefik
+        icon: fas fa-route
+        url: http://proxy.localhost
+        target: newtab
+        id: 0_937_traefik
+      - title: IT Tools
+        icon: fas fa-tools
+        url: http://tools.localhost
+        target: newtab
+        id: 1_937_ittools
+      - title: Whoami
+        icon: fas fa-question
+        url: http://who.localhost
+        target: newtab
+        id: 2_937_whoami
+      - title: Glances
+        icon: fas fa-search
+        url: http://glance.localhost
+        target: newtab
+        id: 3_937_glances
+      - title: Uptime
+        icon: fas fa-signal
+        url: http://uptime.localhost
+        target: newtab
+        id: 4_937_uptime
+    icon: fab fa-ioxhost
+  - name: Status
+    icon: fas fa-thermometer-full
+    displayData:
+      sortBy: default
+      rows: 1
+      cols: 1
+      collapsed: false
+      hideForGuests: false
+    widgets:
+      - type: gl-current-cpu
+        options:
+          hostname: http://localhost:61208
+          updateInterval: 5
+        id: 0_644_glcurrentcpu
+      - type: gl-current-mem
+        options:
+          hostname: http://localhost:61208
+          updateInterval: 5
+        id: 1_644_glcurrentmem
+      - type: gl-network-interfaces
+        options:
+          hostname: http://localhost:61208
+          updateInterval: 5
+        id: 2_644_glnetworkinterfaces

@@ -1,0 +1,24 @@
+services:
+  it-tools:
+    image: corentinth/it-tools
+    container_name: tools
+    tty: true
+    stdin_open: true
+    restart: unless-stopped
+    # ports:
+    # - '8081:80'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tools.rule=Host(`$HOST`)"
+      - "traefik.http.routers.tools.entrypoints=http"
+      - "traefik.http.services.tools.loadbalancer.server.port=80"
+      - homepage.group=Tools
+      - homepage.name=IT Tools
+      # - homepage.icon=questionmark.png
+      - homepage.href=http://$HOST
+      - homepage.description=Collection of IT Tools
+
+networks:
+  default:
+    name: main
+    external: true
