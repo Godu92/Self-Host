@@ -120,17 +120,31 @@ fi
         https://github.com/marlonrichert/zsh-snap.git ~/git/znap
 source ~/git/znap/znap.zsh  # Start Znap
 
-source ~/git/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+if [ -e $HOME/git/zsh-autocomplete/zsh-autocomplete.plugin.zsh ]; then
+    source $HOME/git/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+fi
 
-### Docker
-#export DOCKER_HOST=unix:///run/user/1000/docker.sock
-### Podman
-# export DOCKER_HOST=unix:///run/user/$UID/podman/podman.sock
-export DOCKER_HOST=unix:///run/podman/podman.sock
-export PODMAN_COMPOSE_WARNING_LOGS=false
+### Docker / Podman
+if command -v docker &> /dev/null; then
+    export DOCKER_HOST="unix:///run/user/1000/docker.sock"
+else
+    echo "Docker is not installed. Using podman instead."
+    if command -v podman &> /dev/null; then
+      export DOCKER_HOST="unix:///var/run/podman/podman.sock"
+      export PODMAN_COMPOSE_WARNING_LOGS=false
+    fi
+fi
+
 export MVN_HOME=/usr/local/apache-maven
 
-source $HOME/.aliases
+
+if [ -e $HOME/.aliases ]; then
+    source $HOME/.bash_functions
+fi
+
+if [ -e $HOME/.bash_functions ]; then
+    source $HOME/.bash_functions
+fi
 
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -138,3 +152,18 @@ export NVM_DIR="$HOME/.config/nvm"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+
+if [ -f /etc/debian_version ]; then
+  alias yum='apt'
+  alias dnf='yum'
+elif [ -f /etc/redhat-release ]; then
+  alias yum='dnf'
+  alias apt='yum'
+  alias docker='podman'
+  alias docker-compose='podman compose'
+elif [ -f /etc/arch-release ]; then
+  alias yum='pacman'
+  alias apt='yum'
+  alias update='sudo pacman -Syu'
+fi

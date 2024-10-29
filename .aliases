@@ -1,12 +1,21 @@
-### Aliases
+# Aliases
 
-alias docker='podman'
+## General
+
+alias update='sudo apt update -y'
+alias upgrade='sudo apt upgrade -y'
+alias sudo='sudo '
+alias c='clear'
+alias ipconfig='ifconfig'
+
+## LS
+
+alias lt='ls --human-readable --size -1 -S --classify'
+
+## Docker / Podman
+
 alias dk='docker'
-alias docker-compose='podman compose'
-alias 'docker compose'='docker-compose'
+alias 'docker-compose'='docker compose'
 alias dkc='docker-compose'
 alias dkup='dkc up'
 alias dkdn='dkc down'
-alias sudo='sudo '
-alias c='clear'
-alias apt='yum'
