@@ -1,0 +1,42 @@
+services:
+  test:
+    image: test
+    container_name: test
+    build:
+      ## Modify these for your specific case
+      context: .
+      dockerfile: Dockerfile
+      args:
+        ## Don't use quotes on these values
+        - MAINTAINER=Douglas Shoemaker
+        - APP_NAME=Test
+        - DESC=A test docker image for labels
+        - APP_VERSION=v0.1
+        - BUILD_DATE=29-10-2024
+        - DOCS=https://github.com/Godu92/Remote-Rhel/testing/README.md
+        - LICENSES=N/A
+        - REVISION=N/A
+        - SOURCE=https://hub.docker.com/_/debian/tags?name=jessie
+        - URL=https://github.com/Godu92/Remote-Rhel
+        - VENDOR=N/A
+        ## Optional: This will set the image:tag that you want to build from
+        - IMAGE_NAME=debian
+        - IMAGE_TAG=jessie
+    # ports:
+    # - 80:80
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      ## Remeber to change service names as well as host / path
+      - traefik.http.routers.test.rule=Host(`test.localhost`)
+      # - traefik.http.routers.test.rule=PathPrefix(`/test`)
+      # - traefik.http.routers.test.rule=Host(`localhost`) && PathPrefix(`/test`)
+      - traefik.http.routers.test.entrypoints=http
+      ## Also don't forget to match the port
+      - traefik.http.services.test.loadbalancer.server.port=80
+
+# Ideally this is the same as your traefik network
+networks:
+  default:
+    name: main
+    external: true

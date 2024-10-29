@@ -2,18 +2,13 @@ services:
   whoami:
     image: traefik/whoami
     container_name: whoami
-    ports:
-      - 81:80
+    # ports:
+    #   - 81:80
     labels:
       - traefik.enable=true
       - traefik.http.routers.who.rule=Host(`who.localhost`)
-      - "traefik.http.routers.who.entrypoints=http"
+      - traefik.http.routers.who.entrypoints=http
       - traefik.http.services.who.loadbalancer.server.port=80
-      - homepage.group=Media
-      - homepage.name=Whoami
-      # - homepage.icon=questionmark.png
-      - homepage.href=http://who.localhost
-      - homepage.description=Tester
 
 networks:
   default:

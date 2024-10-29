@@ -1,7 +1,7 @@
 # JUMP is a Universal Maintenance Pod
 
-**This version is based on Red Hat Enterprise Linux!**   
-*For the version built on CentOS, see: https://github.com/venera-13/jump*
+**This version is based on Red Hat Enterprise Linux!**  
+_For the version built on CentOS, see: https://github.com/venera-13/jump_
 
 JUMP is a container originally designed as a tool for maintenance on ''edge'' systems running Podman. Starting a JUMP maintenance container can give access for troubleshooting or maintenance using the remote access tools most engineers are comfortable with. Using multiple protocols provides flexibility and allows access from numerous clients from a great number of operating systems.
 
@@ -64,16 +64,15 @@ The HTTPS and RDP protocols enforce encryption by default. TigerVNC offers anony
 
 Clone the Git repository and add your own values to the "ARG" variables in the Containerfile.
 
-| ARG        | Description                              |
-|------------|------------------------------------------|
-| USER       | Username of desktop user                 |
-| PASS       | Password of desktop user                 |
-| TZ         | Timezone the container lives in          |
-| KEYSUBJECT | Information about the SSL certificate    |
-| VNCTLS     | Enforce TLS encryption on VNC server     |
-| BROWSER    | Select your browser: firefox/chromium    |
-| OPTPKGS    | Select optional packages to install      |
-
+| ARG        | Description                           |
+| ---------- | ------------------------------------- |
+| USER       | Username of desktop user              |
+| PASS       | Password of desktop user              |
+| TZ         | Timezone the container lives in       |
+| KEYSUBJECT | Information about the SSL certificate |
+| VNCTLS     | Enforce TLS encryption on VNC server  |
+| BROWSER    | Select your browser: firefox/chromium |
+| OPTPKGS    | Select optional packages to install   |
 
 Building the container with podman
 
@@ -93,14 +92,14 @@ podman run -d --rm --shm-size=1g --name jump  -p 3389:3389 -p 5901:5901 -p 8080:
 podman stop jump
 ```
 
-| Parameter     | Omschrijving                                                       |
-|---------------|--------------------------------------------------------------------|
-| -d            | Run container in background non interactively                      |
-| --rm          | Delete container after you're done with it                         |
-| --shm-size=1g | Increase allowed shared memory. Keeps modern browsers from crashing|
-| --name jump   | Name the container so it is easy to recognise                      |
-| -p 3389:3389  | Expose RDP port                                                    |
-| -p 5901:5901  | Expose VNC port                                                    |
-| -p 8080:8080  | Expose port for noVNC HTML5 VNC frontend                           |
+| Parameter     | Omschrijving                                                        |
+| ------------- | ------------------------------------------------------------------- |
+| -d            | Run container in background non interactively                       |
+| --rm          | Delete container after you're done with it                          |
+| --shm-size=1g | Increase allowed shared memory. Keeps modern browsers from crashing |
+| --name jump   | Name the container so it is easy to recognise                       |
+| -p 3389:3389  | Expose RDP port                                                     |
+| -p 5901:5901  | Expose VNC port                                                     |
+| -p 8080:8080  | Expose port for noVNC HTML5 VNC frontend                            |
 
 After starting, the container is ready to accept connections from RDP, VNC or Web clients.
