@@ -139,7 +139,7 @@ export MVN_HOME=/usr/local/apache-maven
 
 
 if [ -e $HOME/.aliases ]; then
-    source $HOME/.bash_functions
+    source $HOME/.aliases
 fi
 
 if [ -e $HOME/.bash_functions ]; then
