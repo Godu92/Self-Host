@@ -1,0 +1,12 @@
+### Aliases
+
+alias docker='podman'
+alias dk='docker'
+alias docker-compose='podman compose'
+alias 'docker compose'='docker-compose'
+alias dkc='docker-compose'
+alias dkup='dkc up'
+alias dkdn='dkc down'
+alias sudo='sudo '
+alias c='clear'
+alias apt='yum'
