@@ -11,6 +11,8 @@ alias ipconfig='ifconfig'
 ## LS
 
 alias lt='ls --human-readable --size -1 -S --classify'
+alias lda='ls -al --color | sort -k1 -h'
+alias ld='ls --color | sort -k1'
 
 ## Docker / Podman
 
