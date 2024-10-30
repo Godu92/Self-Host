@@ -1,6 +1,6 @@
 pageInfo:
   title: Local Dashboard
-  description: ''
+  description: ""
   navLinks:
     - title: Documentation
       path: https://dashy.to/docs
@@ -64,6 +64,30 @@ sections:
         url: http://uptime.localhost
         target: newtab
         id: 4_937_uptime
+      - title: Notes
+        description: Daily notes
+        icon: fas fa-sticky-note
+        url: http://notes.localhost
+        target: newtab
+        id: 5_937_notes
+      - title: Icons
+        description: Font Awesome Icons
+        icon: fab fa-font-awesome
+        url: https://fontawesome.com/search?m=free&o=r
+        id: 6_937_icons
+      - title: DB Viewer
+        icon: fas fa-database
+        url: http://dbviewer.localhost
+        target: newtab
+        id: 7_937_dbviewer
+      - title: AppSmith
+        icon: fas fa-database
+        url: http://lowui.localhost
+        target: newtab
+      - title: Directus
+        icon: fas fa-database
+        url: http://lowdb.localhost
+        target: newtab
     icon: fab fa-ioxhost
   - name: Status
     icon: fas fa-thermometer-full

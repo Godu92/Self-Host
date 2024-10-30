@@ -2,6 +2,7 @@
 services:
   dailynotes:
     image: m0ngr31/dailynotes
+    container_name: dailynotes
     volumes:
       - './config:/app/config'
     # ports:

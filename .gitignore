@@ -3,3 +3,6 @@ dashy/conf.yml
 *.nfs*
 *.env
 *.db
+appsmith/stacks
+directus/uploads
+directus/extensions

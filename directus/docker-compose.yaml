@@ -1,0 +1,23 @@
+services:
+  directus:
+    image: directus/directus:11.1.2
+    volumes:
+      - ./uploads:/directus/uploads
+      - ./extensions:/directus/extensions
+    env_file:
+      - .env
+    environment:
+      SECRET: "replace-with-secure-random-value"
+      ADMIN_EMAIL: "admin@example.com"
+      ADMIN_PASSWORD: "password"
+      WEBSOCKETS_ENABLED: "true"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.lowdb.rule=Host(`lowdb.localhost`)
+      - traefik.http.routers.lowdb.entrypoints=http
+      - traefik.http.services.lowdb.loadbalancer.server.port=8055
+
+networks:
+  default:
+    name: main
+    external: true

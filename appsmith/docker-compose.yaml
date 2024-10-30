@@ -1,0 +1,18 @@
+services:
+  appsmith:
+    image: index.docker.io/appsmith/appsmith-ee
+    container_name: appsmith
+    volumes:
+      - ./stacks:/appsmith-stacks
+      - /etc/pki/ca-trust:/etc/pki/ca-trust
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.lowui.rule=Host(`lowui.localhost`)
+      - traefik.http.routers.lowui.entrypoints=http
+      - traefik.http.services.lowui.loadbalancer.server.port=80
+
+networks:
+  default:
+    name: main
+    external: true

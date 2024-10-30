@@ -1,0 +1,17 @@
+services:
+  adminer:
+    restart: unless-stopped
+    image: docker.io/adminer
+    container_name: adminer
+    # ports:
+    #   - 8080:8080
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.dbviewer.rule=Host(`dbviewer.localhost`)
+      - traefik.http.routers.dbviewer.entrypoints=http
+      - traefik.http.services.dbviewer.loadbalancer.server.port=8080
+
+networks:
+  default:
+    name: main
+    external: true
