@@ -29,7 +29,7 @@ sections:
       rows: 5
       cols: 5
       collapsed: true
-      hideForGuests: false
+      hideForGuests: true
     items: []
   - name: Localhost
     displayData:

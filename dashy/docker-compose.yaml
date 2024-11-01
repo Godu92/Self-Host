@@ -4,9 +4,7 @@ services:
     restart: unless-stopped
     container_name: dashy
     volumes:
-      - './conf.yml:/app/user-data/conf.yml'
-    # ports:
-    # - '8080:8080'
+      - './conf-dev.yml:/app/user-data/conf.yml'
     labels:
       - traefik.enable=true
       - traefik.http.routers.dash.rule=Host(`dash.localhost`)
