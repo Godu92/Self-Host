@@ -88,6 +88,10 @@ sections:
         icon: fas fa-database
         url: http://lowdb.localhost
         target: newtab
+      - title: Monica
+        icon: fas fa-search
+        url: http://people.localhost/
+        target: newtab
     icon: fab fa-ioxhost
   - name: Status
     icon: fas fa-thermometer-full
