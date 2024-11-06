@@ -1,0 +1,63 @@
+# version: "3.9"
+
+x-backend: &common
+  image: papermerge/papermerge:3.0.3
+  environment:
+    PAPERMERGE__SECURITY__SECRET_KEY: 12345
+    PAPERMERGE__AUTH__USERNAME: admin
+    PAPERMERGE__AUTH__PASSWORD: admin
+    PAPERMERGE__DATABASE__URL: postgresql://user:passwd@db:5432/data
+    PAPERMERGE__REDIS__URL: redis://redis:6379/0
+  volumes:
+    - index_db:/core_app/index_db
+    - media:/core_app/media
+services:
+  web:
+    <<: *common
+    # ports:
+    #   - "12000:80"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.paper.rule=Host(`paper.localhost`)
+      - traefik.http.routers.paper.entrypoints=http
+      - traefik.http.services.paper.loadbalancer.server.port=80
+  worker:
+    <<: *common
+    command: worker
+  redis:
+    image: redis:6
+    healthcheck:
+      test: redis-cli --raw incr ping
+      interval: 5s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+  db:
+    image: postgres:16.1
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_PASSWORD: passwd
+      POSTGRES_DB: data
+      POSTGRES_USER: user
+    healthcheck:
+      test: pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB
+      interval: 5s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+
+networks:
+  default:
+    name: main
+    external: true
+
+volumes:
+  postgres_data:
+  index_db:
+  media:

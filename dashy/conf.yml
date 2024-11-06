@@ -84,14 +84,27 @@ sections:
         icon: fas fa-database
         url: http://lowui.localhost
         target: newtab
+        id: 8_937_appsmith
       - title: Directus
         icon: fas fa-database
         url: http://lowdb.localhost
         target: newtab
+        id: 9_937_directus
       - title: Monica
-        icon: fas fa-search
+        icon: fas fa-users
         url: http://people.localhost/
         target: newtab
+        id: 10_937_monica
+      - title: Papermerge
+        icon: fas fa-paste
+        url: http://paper.localhost/
+        target: newtab
+        id: 11_937_papermerge
+      - title: Focalboard
+        icon: fas fa-tasks
+        url: http://board.localhost/
+        target: newtab
+        id: 12_937_focalboard
     icon: fab fa-ioxhost
   - name: Status
     icon: fas fa-thermometer-full

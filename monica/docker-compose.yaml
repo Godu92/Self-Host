@@ -1,17 +1,18 @@
 services:
   app:
     image: monica
-    depends_on:
-      - db
+    container_name: monica
     # ports:
     #   - 8081:80
     environment:
-      - APP_KEY=
+      - APP_KEY=base64:Zu1bDO3IWoL2/JVShYPLk7rATdkb+9PXg7fMQSmkvwk=
       - DB_HOST=db
       - DB_USERNAME=usermonica
       - DB_PASSWORD=secret
     volumes:
       - data:/var/www/html/storage
+    depends_on:
+      - db
     restart: always
     labels:
       - traefik.enable=true
@@ -21,6 +22,7 @@ services:
 
   db:
     image: mariadb:11
+    container_name: monica-db
     environment:
       - MYSQL_RANDOM_ROOT_PASSWORD=true
       - MYSQL_DATABASE=monica
