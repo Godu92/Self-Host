@@ -3,7 +3,7 @@
 dirs=$(ls -d ./*)
 
 # Define the list of excluded directories
-EXCLUDED_DIRS=("adminer" "appsmith" "directus" "remoteRhel" "testing")
+EXCLUDED_DIRS=("adminer" "appsmith" "directus" "remoteRhel" "testing" "wordle")
 
 eval "podman network create -d bridge main"
 

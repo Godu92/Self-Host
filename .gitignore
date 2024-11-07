@@ -1,9 +1,11 @@
-uptime/data
-dashy/conf-dev.yml
 *.nfs*
 *.env
 *.db
+
+uptime/data
+dashy/conf-dev.yml
 appsmith/stacks
 directus/uploads
 directus/extensions
 dashy/bookmarks.html
+grocy/config

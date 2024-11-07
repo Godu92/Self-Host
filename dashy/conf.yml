@@ -105,6 +105,11 @@ sections:
         url: http://board.localhost/
         target: newtab
         id: 12_937_focalboard
+      - title: Grocy
+        icon: fas fa-utensils
+        url: http://grocy.localhost/
+        target: newtab
+        id: 13_937_grocy
     icon: fab fa-ioxhost
   - name: Status
     icon: fas fa-thermometer-full
