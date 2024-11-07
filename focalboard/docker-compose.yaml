@@ -20,7 +20,3 @@ volumes:
   fbdata:
 
 
-networks:
-  default:
-    name: main
-    external: true

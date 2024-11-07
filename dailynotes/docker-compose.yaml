@@ -16,8 +16,3 @@ services:
       - traefik.http.routers.notes.rule=Host(`notes.localhost`)
       - traefik.http.routers.notes.entrypoints=http
       - traefik.http.services.notes.loadbalancer.server.port=5000
-
-networks:
-  default:
-    name: main
-    external: true

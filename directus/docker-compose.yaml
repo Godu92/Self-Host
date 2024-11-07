@@ -16,8 +16,3 @@ services:
       - traefik.http.routers.lowdb.rule=Host(`lowdb.localhost`)
       - traefik.http.routers.lowdb.entrypoints=http
       - traefik.http.services.lowdb.loadbalancer.server.port=8055
-
-networks:
-  default:
-    name: main
-    external: true

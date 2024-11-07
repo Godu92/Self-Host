@@ -10,8 +10,3 @@ services:
       - traefik.http.routers.dash.rule=Host(`dash.localhost`)
       - traefik.http.routers.dash.entrypoints=http
       - traefik.http.services.dash.loadbalancer.server.port=8080
-
-networks:
-  default:
-    name: main
-    external: true

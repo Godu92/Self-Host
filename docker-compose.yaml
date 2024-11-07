@@ -1,0 +1,55 @@
+## Networks
+networks:
+  default:
+    driver: bridge
+    name: proxy
+  # socket_proxy:
+  #   name: socket_proxy
+  #   driver: bridge
+  #   ipam:
+  #     config:
+  #       - subnet: 192.168.91.0/24
+
+include:
+  ## Services
+
+  # TODO: Merge databases ie into one PostgresQL
+  # TODO: See about adding common setup stuff to this file, ie restart policy, traefik enable label, etc
+
+  ### Routing
+  - traefik/docker-compose.yaml
+  # - socket/docker-compose.yaml
+
+  ### Testing
+  - whoami/docker-compose.yaml
+  # - testing/docker-compose.yaml
+
+  ### Admininstration
+  # - adminer/docker-compose.yaml
+  - ittools/docker-compose.yaml
+  #### Monitors
+  - glances/docker-compose.yaml
+  - uptime/docker-compose.yaml
+
+  ### Notes
+  - dailynotes/docker-compose.yaml
+
+  ### Dashboard
+  - dashy/docker-compose.yaml
+
+  ### People CRM
+  - monica/docker-compose.yaml
+  ### Management
+  # - papermerge/docker-compose.yaml
+  # - focalboard/docker-compose.yaml
+  # - grocy/docker-compose.yaml
+
+  ### Games
+  # - wordle/docker-compose.yaml
+
+  ### Development
+  # - remoteRhel/docker-compose.yaml
+
+  ### Low Code
+  # - directus/docker-compose.yaml
+  # - appsmith/docker-compose.yaml

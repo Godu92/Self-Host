@@ -23,8 +23,3 @@ services:
       - traefik.http.routers.proxy.rule=Host(`proxy.localhost`)
       - traefik.http.routers.proxy.entrypoints=http
       - traefik.http.services.proxy.loadbalancer.server.port=8080
-
-networks:
-  default:
-    name: main
-    external: true

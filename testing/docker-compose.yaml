@@ -36,7 +36,3 @@ services:
       - traefik.http.services.test.loadbalancer.server.port=80
 
 # Ideally this is the same as your traefik network
-networks:
-  default:
-    name: main
-    external: true

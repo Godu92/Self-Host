@@ -10,8 +10,3 @@ services:
       - traefik.http.routers.dbviewer.rule=Host(`dbviewer.localhost`)
       - traefik.http.routers.dbviewer.entrypoints=http
       - traefik.http.services.dbviewer.loadbalancer.server.port=8080
-
-networks:
-  default:
-    name: main
-    external: true

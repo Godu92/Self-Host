@@ -34,13 +34,10 @@ services:
     labels:
       - traefik.enable=true
 
-networks:
-  default:
-    name: main
-    external: true
-
 volumes:
   data:
     name: data
+    external: true
   mysql:
     name: mysql
+    external: true

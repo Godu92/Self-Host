@@ -20,8 +20,3 @@ services:
       - traefik.http.routers.glance.rule=Host(`glance.localhost`)
       - traefik.http.routers.glance.entrypoints=http
       - traefik.http.services.glance.loadbalancer.server.port=61208
-
-networks:
-  default:
-    name: main
-    external: true

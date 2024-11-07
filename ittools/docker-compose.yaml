@@ -17,8 +17,3 @@ services:
       # - homepage.icon=questionmark.png
       - homepage.href=http://$HOST
       - homepage.description=Collection of IT Tools
-
-networks:
-  default:
-    name: main
-    external: true

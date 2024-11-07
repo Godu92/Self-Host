@@ -9,8 +9,3 @@ services:
       - traefik.http.routers.who.rule=Host(`who.localhost`)
       - traefik.http.routers.who.entrypoints=http
       - traefik.http.services.who.loadbalancer.server.port=80
-
-networks:
-  default:
-    name: main
-    external: true
