@@ -25,6 +25,9 @@ include:
   # - testing/docker-compose.yaml
 
   ### Admininstration
+  # - ttdy/docker-compose.yaml
+  - filebrowser/docker-compose.yaml
+  #### Tools
   # - adminer/docker-compose.yaml
   - ittools/docker-compose.yaml
   #### Monitors
@@ -32,7 +35,8 @@ include:
   - uptime/docker-compose.yaml
 
   ### Notes
-  - dailynotes/docker-compose.yaml
+  # - dailynotes/docker-compose.yaml
+  - trillium/docker-compose.yaml
 
   ### Dashboard
   - dashy/docker-compose.yaml
@@ -45,8 +49,7 @@ include:
   # - grocy/docker-compose.yaml
 
   ### Games
-  # - wordle/docker-compose.yaml
-
+  - wordle/docker-compose.yaml
   ### Development
   # - remoteRhel/docker-compose.yaml
 

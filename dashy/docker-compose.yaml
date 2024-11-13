@@ -4,7 +4,9 @@ services:
     restart: unless-stopped
     container_name: dashy
     volumes:
-      - './conf-dev.yml:/app/user-data/conf.yml'
+      - './config/conf.yml:/app/user-data/conf.yml'
+      ## Place other pages under this folder and link in the `conf.yml`
+      - './config:/app/user-data'
     labels:
       - traefik.enable=true
       - traefik.http.routers.dash.rule=Host(`dash.localhost`)

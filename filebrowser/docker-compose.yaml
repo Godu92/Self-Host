@@ -1,0 +1,18 @@
+services:
+  filebrowser:
+    image: 'filebrowser/filebrowser'
+    container_name: filebrowser
+    ports:
+      - '8180:80'
+    environment:
+      - PGID=100010
+      - PUID=100010
+    volumes:
+      - './data/settings.json:/.filebrowser.json'
+      - './data/filebrowser.db:/database/filebrowser.db'
+      - .:/srv
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.file.rule=Host(`file.localhost`)"
+      - "traefik.http.routers.file.entrypoints=http"
+      - "traefik.http.services.file.loadbalancer.server.port=80"

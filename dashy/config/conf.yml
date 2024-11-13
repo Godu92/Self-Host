@@ -1,14 +1,15 @@
+pages:
+  - name: Main
+    path: conf.yml
+  - name: Local
+    path: conf-dev.yml
 pageInfo:
-  title: Local Dashboard
-  description: ""
+  title: System Dashboard
+  description: ''
   navLinks:
     - title: Documentation
       path: https://dashy.to/docs
       target: newtab
-appConfig:
-  theme: crayola
-  layout: horizontal
-  iconSize: medium
 sections:
   - name: Today
     icon: far fa-calendar-day
@@ -22,22 +23,38 @@ sections:
           url: http://uptime.localhost/status/main
           frameHeight: 150
         id: 1_513_iframe
-  - name: Bookmarks
-    icon: fas fa-bookmark
-    displayData:
-      sortBy: default
-      rows: 5
-      cols: 5
-      collapsed: true
-      hideForGuests: true
-    items: []
-  - name: Localhost
+  - name: Status
+    icon: fas fa-thermometer-full
     displayData:
       sortBy: default
       rows: 1
       cols: 1
-      collapsed: true
+      collapsed: false
       hideForGuests: false
+    widgets:
+      - type: gl-current-cpu
+        options:
+          hostname: http://localhost:61208
+          updateInterval: 5
+        id: 0_644_glcurrentcpu
+      - type: gl-current-mem
+        options:
+          hostname: http://localhost:61208
+          updateInterval: 5
+        id: 1_644_glcurrentmem
+      - type: gl-network-interfaces
+        options:
+          hostname: http://localhost:61208
+          updateInterval: 5
+        id: 2_644_glnetworkinterfaces
+  - name: Localhost
+    icon: fab fa-ioxhost
+    displayData:
+      sortBy: default
+      rows: 3
+      cols: 5
+      collapsed: false
+      hideForGuests: true
     items:
       - title: Traefik
         icon: fas fa-route
@@ -110,28 +127,21 @@ sections:
         url: http://grocy.localhost/
         target: newtab
         id: 13_937_grocy
-    icon: fab fa-ioxhost
-  - name: Status
-    icon: fas fa-thermometer-full
-    displayData:
-      sortBy: default
-      rows: 1
-      cols: 1
-      collapsed: false
-      hideForGuests: false
-    widgets:
-      - type: gl-current-cpu
-        options:
-          hostname: http://localhost:61208
-          updateInterval: 5
-        id: 0_644_glcurrentcpu
-      - type: gl-current-mem
-        options:
-          hostname: http://localhost:61208
-          updateInterval: 5
-        id: 1_644_glcurrentmem
-      - type: gl-network-interfaces
-        options:
-          hostname: http://localhost:61208
-          updateInterval: 5
-        id: 2_644_glnetworkinterfaces
+      - title: Wiki
+        description: Wiki & Notes
+        icon: fab fa-file-word
+        url: http://wiki.localhost
+        target: newtab
+        id: 14_937_wiki
+      - title: Wordle
+        description: Worlde
+        icon: fas fa-chess-board
+        url: http://wordle.localhost
+        target: newtab
+        id: 15_937_wordle
+      - title: File Browser
+        description: Remote File Browser
+        icon: fas fa-folder-open
+        url: http://file.localhost
+        target: newtab
+        id: 16_937_filebrowser

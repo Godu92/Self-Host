@@ -3,9 +3,16 @@
 *.db
 
 uptime/data
-dashy/conf-dev.yml
+
+dashy/config/conf-dev.yml
+dashy/config/config-backups
+dashy/bookmarks.html
+
 appsmith/stacks
+
 directus/uploads
 directus/extensions
-dashy/bookmarks.html
+
 grocy/config
+
+trillium/trilium-data
