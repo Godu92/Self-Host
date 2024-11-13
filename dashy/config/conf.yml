@@ -5,7 +5,7 @@ pages:
     path: conf-dev.yml
 pageInfo:
   title: System Dashboard
-  description: ''
+  description: ""
   navLinks:
     - title: Documentation
       path: https://dashy.to/docs
@@ -145,3 +145,8 @@ sections:
         url: http://file.localhost
         target: newtab
         id: 16_937_filebrowser
+      - title: OnlyOffice
+        description: Remote office tools
+        icon: fas fa-folder
+        url: http://office.localhost
+        target: newtab

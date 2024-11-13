@@ -1,0 +1,19 @@
+services:
+  onlyoffice:
+    image: onlyoffice/documentserver
+    container_name: onlyoffice
+    environment:
+      - JWT_SECRET=my_jwt_secret
+    volumes:
+      - './config/db:/var/lib/postgresql'
+      - './config/lib:/var/lib/onlyoffice'
+      - './config/data:/var/www/onlyoffice/Data'
+      - './config/logs:/var/log/onlyoffice'
+    restart: always
+    # ports:
+    #   - '80:80'
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.office.rule=Host(`office.localhost`)
+      - traefik.http.routers.office.entrypoints=http
+      - traefik.http.services.office.loadbalancer.server.port=80

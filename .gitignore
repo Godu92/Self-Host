@@ -1,7 +1,9 @@
+## General ignores
 *.nfs*
 *.env
 *.db
 
+## App specific ignores
 uptime/data
 
 dashy/config/conf-dev.yml
@@ -16,3 +18,7 @@ directus/extensions
 grocy/config
 
 trillium/trilium-data
+
+onlyoffice/config
+
+## TODO: dockerignores
