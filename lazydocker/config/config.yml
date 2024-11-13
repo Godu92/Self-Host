@@ -29,11 +29,11 @@ gui:
   # Determines the style of the container status and container health display in the
   # containers panel. "long": full words (default), "short": one or two characters,
   # "icon": unicode emoji.
-  containerStatusHealthStyle: "long"
+  containerStatusHealthStyle: "icon"
 logs:
-  timestamps: false
-  since: "60m" # set to '' to show all logs
-  tail: "" # set to 200 to show last 200 lines of logs
+  timestamps: true
+  since: "" # set to '' to show all logs
+  tail: "10" # set to 200 to show last 200 lines of logs
 commandTemplates:
   dockerCompose: docker compose # Determines the Docker Compose command to run, referred to as .DockerCompose in commandTemplates
   restartService: "{{ .DockerCompose }} restart {{ .Service.Name }}"
@@ -68,5 +68,9 @@ customCommands:
   containers:
     - name: bash
       attach: true
-      command: "docker exec -it {{ .Container.ID }} bash"
+      command: "docker exec -it {{ .Container }} bash"
+      serviceNames: []
+    - name: sh
+      attach: true
+      command: "docker exec -it {{ .Container }} sh"
       serviceNames: []
