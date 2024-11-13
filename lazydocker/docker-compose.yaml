@@ -1,0 +1,14 @@
+services:
+  lazydocker:
+    image: lazyteam/lazydocker
+    container_name: lazydocker
+    stdin_open: true
+    tty: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./config:/.config/jesseduffield/lazydocker
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.lazy.rule=Host(`lazy.locahost`)"
+      - "traefik.http.routers.lazy.entrypoints=http"
+      - "traefik.http.services.lazy.loadbalancer.server.port=80"

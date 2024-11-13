@@ -2,8 +2,8 @@ services:
   filebrowser:
     image: 'filebrowser/filebrowser'
     container_name: filebrowser
-    ports:
-      - '8180:80'
+    # ports:
+    #   - '8180:80'
     environment:
       - PGID=100010
       - PUID=100010

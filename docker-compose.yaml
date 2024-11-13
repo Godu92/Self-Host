@@ -25,7 +25,8 @@ include:
   # - testing/docker-compose.yaml
 
   ### Admininstration
-  # - ttdy/docker-compose.yaml
+  # - ttyd/docker-compose.yaml
+  # - lazydocker/docker-compose.yaml
   - filebrowser/docker-compose.yaml
   #### Tools
   # - adminer/docker-compose.yaml
