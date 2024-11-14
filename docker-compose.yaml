@@ -49,7 +49,6 @@ include:
   # - focalboard/docker-compose.yaml
   #### Office tools
   # - papermerge/docker-compose.yaml
-  # - onlyoffice/docker-compose.yaml
   #### Misc
   # - grocy/docker-compose.yaml
 
