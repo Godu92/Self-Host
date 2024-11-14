@@ -1,32 +1,44 @@
 import yaml
 from bs4 import BeautifulSoup
 
-def parse_bookmarks(html_file):
-    with open(html_file, 'r') as f:
-        soup = BeautifulSoup(f, 'html.parser')
 
-    bookmarks = []
-    for bookmark in soup.find_all('a'):
-        url = bookmark.get('href')
-        title = bookmark.text.strip() or url
-        target = bookmark.get('target','newtab')  # default to'self' if not specified
-        # id = bookmark.get('id')
+def parse_bookmarks(html_file: str) -> str:
+    """Converts bookmarks html file into dashy yml list
 
-        bookmarks.append({
-            'title': title,
-            'url': url,
-            'target': target,
-            # 'id': id
-        })
+    Args:
+        html_file (str): the bookmarks file to convert to dashy list
+
+    Returns:
+        (str): a dashy styled yml list
+    """
+    with open(html_file, "r", encoding="utf-8") as f:
+        soup = BeautifulSoup(f, "html.parser")
+
+    bookmarks: list[str] = []
+    for bookmark in soup.find_all("a"):
+        url: str = bookmark.get("href")
+        title: str = bookmark.text.strip() or url
+        target: str = bookmark.get("target", "newtab")
+
+        bookmarks.append(
+            {
+                "title": title,
+                "url": url,
+                "target": target,
+            }
+        )
 
     return bookmarks
 
-def main():
-    html_file = 'bookmarks.html'
-    bookmarks = parse_bookmarks(html_file)
 
-    yaml_output = yaml.dump(bookmarks, default_flow_style=False)
+def main():
+    """The main method"""
+    html_file: str = "bookmarks.html"
+    bookmarks: list[str] = parse_bookmarks(html_file)
+
+    yaml_output: str = yaml.dump(bookmarks, default_flow_style=False)
     print(yaml_output)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
