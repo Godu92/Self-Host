@@ -1,5 +1,6 @@
 import argparse
 
+import docker
 import yaml
 
 
@@ -21,9 +22,8 @@ def create_args() -> argparse.Namespace:
 
     # The docker run arg
     parser.add_argument(
-        "cmd",
+        "docker_cmd",
         metavar="cmd",
-        dest="docker_cmd",
         type=str,
         help="the `docker run` command",
     )
@@ -46,7 +46,6 @@ def create_args() -> argparse.Namespace:
         "--network",
         metavar="network",
         nargs="?",
-        default="proxy",
         type=str,
         help="the network name",
     )
@@ -158,8 +157,27 @@ def main():
     # )
 
     # Adding networks to bottom of file
-    ## TODO: get traefik network
+    ## TODO: get traefik network automatically
     traefik_network: str = args.network
+
+    if not traefik_network:
+        containers = docker.from_env().containers.list()
+
+        for container in containers:
+            if container.image.tags and any(
+                "traefik" in tag for tag in container.image.tags
+            ):
+                print(container.ports)
+                traefik_network = container.network
+        # traefik_network = subprocess.run(
+        #     [
+        #         "docker inspect",
+        #         "traefik",
+        #         "-f '{{range .NetworkSettings.Networks}}{{println .NetworkID}}{{end}}'",
+        #     ],
+        #     check=False,
+        # )
+
     networks: dict = {
         "networks": {
             "default": {
