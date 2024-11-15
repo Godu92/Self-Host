@@ -38,7 +38,7 @@ include:
 
   ### Notes
   # - dailynotes/docker-compose.yaml
-  - trillium/docker-compose.yaml
+  - trilium/docker-compose.yaml
 
   ### Dashboard
   - dashy/docker-compose.yaml
