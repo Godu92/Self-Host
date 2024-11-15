@@ -125,8 +125,8 @@ if [ -e $HOME/git/zsh-autocomplete/zsh-autocomplete.plugin.zsh ]; then
 fi
 
 ### Docker / Podman
-if command -v docker &> /dev/null; then
-    export DOCKER_HOST="unix:///run/user/1000/docker.sock"
+if command -v docker &> /dev/null && ! declare -f docker &> /dev/null; then
+    export DOCKER_HOST="unix:///var/run/docker.sock"
 else
     echo "Docker is not installed. Using podman instead."
     if command -v podman &> /dev/null; then
