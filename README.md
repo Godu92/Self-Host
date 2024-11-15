@@ -2,6 +2,26 @@
 
 This is a collection of local tools for RHEL8 using podman. Most of this should also work for Docker, save a few commands in the shell scripts, .zsh files and aliases.
 
+## Source files
+
+The various `.` files are for Linux based preferences.
+
+### One Time
+
+They can be used by simply copying into your `home` directory and then restarting your terminal.
+
+### Always Updated
+
+Alternatively, you can link to the files and thus they will be updated anytime this project gets updates.
+
+Example:
+
+```bash
+ln -s tools/.vimrc .vimrc
+```
+
+> Note: You can take this one step further and do the link as `root` as well to have the same alias and preferences there as well
+
 ## ZSH
 
 ZSH is currently being used with `FiraMono Nerd Font`
