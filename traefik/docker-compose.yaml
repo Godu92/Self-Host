@@ -17,9 +17,11 @@ services:
       - "8080:8080"
     volumes:
       # So that Traefik can listen to the Docker events
-      - /run/podman/podman.sock:/var/run/docker.sock:z
+      - $DOCKER_DIR:/var/run/docker.sock:z
+      # - /var/run/docker.sock:/var/run/docker.sock:z
+      # - /run/podman/podman.sock:/var/run/docker.sock:Z
     labels:
       - "traefik.enable=true"
-      - traefik.http.routers.proxy.rule=Host(`proxy.localhost`)
+      - traefik.http.routers.proxy.rule=Host(`proxy.$HOST`)
       - traefik.http.routers.proxy.entrypoints=http
       - traefik.http.services.proxy.loadbalancer.server.port=8080

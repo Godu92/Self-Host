@@ -1,14 +1,14 @@
 services:
   dashy:
-    image: 'lissy93/dashy:latest'
+    image: "lissy93/dashy:latest"
     restart: unless-stopped
     container_name: dashy
     volumes:
-      - './config/conf.yml:/app/user-data/conf.yml'
+      - "./config/conf.yml:/app/user-data/conf.yml"
       ## Place other pages under this folder and link in the `conf.yml`
-      - './config:/app/user-data'
+      - "./config:/app/user-data"
     labels:
       - traefik.enable=true
-      - traefik.http.routers.dash.rule=Host(`dash.localhost`)
+      - traefik.http.routers.dash.rule=Host(`$HOST`)
       - traefik.http.routers.dash.entrypoints=http
       - traefik.http.services.dash.loadbalancer.server.port=8080

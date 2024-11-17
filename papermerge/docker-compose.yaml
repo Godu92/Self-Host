@@ -16,29 +16,33 @@ services:
     <<: *common
     # ports:
     #   - "12000:80"
+    container_name: papermerge
     depends_on:
-      db:
+      papermerge-db:
         condition: service_healthy
       redis:
         condition: service_healthy
     labels:
       - traefik.enable=true
-      - traefik.http.routers.paper.rule=Host(`paper.localhost`)
+      - traefik.http.routers.paper.rule=Host(`paper.$HOST`)
       - traefik.http.routers.paper.entrypoints=http
       - traefik.http.services.paper.loadbalancer.server.port=80
   worker:
     <<: *common
     command: worker
+    container_name: papermerge-worker
   redis:
     image: redis:6
+    container_name: papermerge-redis
     healthcheck:
       test: redis-cli --raw incr ping
       interval: 5s
       timeout: 10s
       retries: 5
       start_period: 10s
-  db:
+  papermerge-db:
     image: postgres:16.1
+    container_name: papermerge-db
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:

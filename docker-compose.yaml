@@ -56,12 +56,13 @@ include:
   - grocy/docker-compose.yaml
 
   ### Games
-  - wordle/docker-compose.yaml
+  # - wordle/docker-compose.yaml
 
   ### Development
   # - remoteRhel/docker-compose.yaml
 
   ### Books
+  ## TODO: Merge into one file
   # - calibre/docker-compose.yaml
 
   ### Low Code

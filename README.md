@@ -32,6 +32,17 @@ The remote RHEL 8 Docker image is based off of [JUMP-RHEL by Venera-13](https://
 
 ## Starting
 
+Create and edit a `.env` file at the root of this project:
+
+Example:
+
+```shell
+HOST=localhost
+DOCKER_DIR=/var/run/docker.sock
+```
+
+> Sadly this does not extend to `dashy/config` files as of yet
+
 Can be started either via the `start.sh` or the root level `docker-compose.yaml` file.
 
 > Note: certain services are not started automatically for one reason or another. Check what is in `EXCLUDED_DIRS` or what is commented out.

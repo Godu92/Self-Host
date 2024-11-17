@@ -28,11 +28,10 @@ services:
     labels:
       - traefik.enable=true
       ## Remeber to change service names as well as host / path
-      - traefik.http.routers.test.rule=Host(`test.localhost`)
+      - traefik.http.routers.test.rule=Host(`test.$HOST`)
       # - traefik.http.routers.test.rule=PathPrefix(`/test`)
       # - traefik.http.routers.test.rule=Host(`localhost`) && PathPrefix(`/test`)
       - traefik.http.routers.test.entrypoints=http
       ## Also don't forget to match the port
       - traefik.http.services.test.loadbalancer.server.port=80
-
 # Ideally this is the same as your traefik network

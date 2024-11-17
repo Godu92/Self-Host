@@ -3,19 +3,20 @@ services:
     image: louislam/uptime-kuma
     container_name: uptime-kuma
     volumes:
-      - './data:/app/data'
-      - /run/podman/podman.sock:/var/run/docker.sock
+      - "./data:/app/data"
+      - $DOCKER_DIR:/var/run/docker.sock
+      # - /var/run/docker.sock:/var/run/docker.sock
+      # - /run/podman/podman.sock:/var/run/docker.sock
     # ports:
     #   - '3001:3001'
     restart: always
     environment:
       - UPTIME_KUMA_DISABLE_FRAME_SAMEORIGIN=true
-      - BASE_URL=uptime.localhost
+      - BASE_URL=uptime.$HOST
     labels:
       - traefik.enable=true
-      - traefik.http.routers.uptime.rule=Host(`uptime.localhost`)
+      - traefik.http.routers.uptime.rule=Host(`uptime.$HOST`)
       - traefik.http.routers.uptime.entrypoints=http
       - traefik.http.services.uptime.loadbalancer.server.port=3001
       - traefik.docker.network=main
-
 ## See this for more config information: https://www.smarthomebeginner.com/uptime-kuma-docker-compose-guide/

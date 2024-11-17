@@ -8,6 +8,6 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.lowui.rule=Host(`lowui.localhost`)
+      - traefik.http.routers.lowui.rule=Host(`lowui.$HOST`)
       - traefik.http.routers.lowui.entrypoints=http
       - traefik.http.services.lowui.loadbalancer.server.port=80

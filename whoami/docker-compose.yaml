@@ -6,6 +6,6 @@ services:
     #   - 81:80
     labels:
       - traefik.enable=true
-      - traefik.http.routers.who.rule=Host(`who.localhost`)
+      - traefik.http.routers.who.rule=Host(`who.$HOST`)
       - traefik.http.routers.who.entrypoints=http
       - traefik.http.services.who.loadbalancer.server.port=80

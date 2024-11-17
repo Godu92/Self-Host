@@ -4,15 +4,15 @@ services:
     image: m0ngr31/dailynotes
     container_name: dailynotes
     volumes:
-      - './config:/app/config'
+      - "./config:/app/config"
     # ports:
     #   - '5000:5000'
     env_file:
       - ./config/.env
     environment:
-      - BASE_URL=notes.localhost
+      - BASE_URL=notes.$HOST
     labels:
       - traefik.enable=true
-      - traefik.http.routers.notes.rule=Host(`notes.localhost`)
+      - traefik.http.routers.notes.rule=Host(`notes.$HOST`)
       - traefik.http.routers.notes.entrypoints=http
       - traefik.http.services.notes.loadbalancer.server.port=5000

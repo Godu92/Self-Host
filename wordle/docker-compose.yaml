@@ -7,6 +7,6 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.wordle.rule=Host(`wordle.localhost`)
+      - traefik.http.routers.wordle.rule=Host(`wordle.$HOST`)
       - traefik.http.routers.wordle.entrypoints=http
       - traefik.http.services.wordle.loadbalancer.server.port=80

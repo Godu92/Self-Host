@@ -7,6 +7,6 @@ services:
     #   - 8080:8080
     labels:
       - traefik.enable=true
-      - traefik.http.routers.dbviewer.rule=Host(`dbviewer.localhost`)
+      - traefik.http.routers.dbviewer.rule=Host(`dbviewer.$HOST`)
       - traefik.http.routers.dbviewer.entrypoints=http
       - traefik.http.services.dbviewer.loadbalancer.server.port=8080

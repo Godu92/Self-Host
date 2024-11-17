@@ -13,6 +13,6 @@ services:
       WEBSOCKETS_ENABLED: "true"
     labels:
       - traefik.enable=true
-      - traefik.http.routers.lowdb.rule=Host(`lowdb.localhost`)
+      - traefik.http.routers.lowdb.rule=Host(`lowdb.$HOST`)
       - traefik.http.routers.lowdb.entrypoints=http
       - traefik.http.services.lowdb.loadbalancer.server.port=8055

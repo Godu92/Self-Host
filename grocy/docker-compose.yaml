@@ -13,6 +13,6 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.grocy.rule=Host(`grocy.localhost`)
+      - traefik.http.routers.grocy.rule=Host(`grocy.$HOST`)
       - traefik.http.routers.grocy.entrypoints=http
       - traefik.http.services.grocy.loadbalancer.server.port=80
