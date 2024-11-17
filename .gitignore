@@ -6,6 +6,8 @@
 ## App specific ignores
 uptime/data
 
+pihole/etc-pihole
+
 dashy/config/conf-dev.yml
 dashy/config/config-backups
 dashy/bookmarks.html

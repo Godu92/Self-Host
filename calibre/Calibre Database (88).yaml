@@ -1,0 +1,59 @@
+name: keen_corey
+services:
+  calibre:
+    cpu_shares: 90
+    command: []
+    container_name: calibre
+    deploy:
+      resources:
+        limits:
+          memory: 1846M
+    environment:
+      - CLI_ARGS=
+      - PASSWORD=
+      - PGID=1000
+      - PUID=1000
+      - TZ=Etc/UTC
+    hostname: calibre
+    image: lscr.io/linuxserver/calibre:latest
+    labels:
+      icon: https://upload.wikimedia.org/wikipedia/commons/c/cf/Calibre_logo_3.png
+      traefik.enable: "true"
+      traefik.http.routers.calibreDB.rule: Host(`calibreDB.raspi.lan`)
+      traefik.http.services.calibreDB.loadbalancer.server.port: "8080"
+    ports:
+      - target: 8080
+        published: "88"
+        protocol: tcp
+      - target: 8181
+        published: "89"
+        protocol: tcp
+      - target: 8081
+        published: "90"
+        protocol: tcp
+    restart: unless-stopped
+    security_opt:
+      - seccomp:unconfined
+    volumes:
+      - type: bind
+        source: /DATA/AppData/config
+        target: /config
+      - type: bind
+        source: /media/devmon/500GB External/Books
+        target: /mnt
+    devices: []
+    cap_add: []
+    network_mode: bridge
+    privileged: false
+x-casaos:
+  author: self
+  category: self
+  hostname: ""
+  icon: https://upload.wikimedia.org/wikipedia/commons/c/cf/Calibre_logo_3.png
+  index: /
+  is_uncontrolled: false
+  port_map: "88"
+  scheme: http
+  store_app_id: keen_corey
+  title:
+    custom: Calibre Database (88)

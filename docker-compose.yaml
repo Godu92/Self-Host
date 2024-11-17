@@ -35,6 +35,9 @@ include:
   #### Monitors
   - glances/docker-compose.yaml
   - uptime/docker-compose.yaml
+  # - pihole/docker-compse.yaml
+  #### Downloaders
+  # - gopeed/docker-compose.yaml
 
   ### Notes
   # - dailynotes/docker-compose.yaml
@@ -43,19 +46,23 @@ include:
   ### Dashboard
   - dashy/docker-compose.yaml
 
-  ### People CRM
-  - monica/docker-compose.yaml
   ### Management
-  # - focalboard/docker-compose.yaml
+  - focalboard/docker-compose.yaml
+  #### People CRM
+  - monica/docker-compose.yaml
   #### Office tools
-  # - papermerge/docker-compose.yaml
+  - papermerge/docker-compose.yaml
   #### Misc
-  # - grocy/docker-compose.yaml
+  - grocy/docker-compose.yaml
 
   ### Games
   - wordle/docker-compose.yaml
+
   ### Development
   # - remoteRhel/docker-compose.yaml
+
+  ### Books
+  # - calibre/docker-compose.yaml
 
   ### Low Code
   # - directus/docker-compose.yaml
