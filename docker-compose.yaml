@@ -47,24 +47,22 @@ include:
   - dashy/docker-compose.yaml
 
   ### Management
-  - focalboard/docker-compose.yaml
+  # - focalboard/docker-compose.yaml
   #### People CRM
   - monica/docker-compose.yaml
   #### Office tools
-  - papermerge/docker-compose.yaml
+  # - papermerge/docker-compose.yaml
   #### Misc
-  - grocy/docker-compose.yaml
+  # - grocy/docker-compose.yaml
 
   ### Games
-  # - wordle/docker-compose.yaml
-
+  - wordle/docker-compose.yaml
   ### Development
   # - remoteRhel/docker-compose.yaml
 
   ### Books
-  ## TODO: Merge into one file
   # - calibre/docker-compose.yaml
-
+  # - kavita/docker-compose.yaml
   ### Low Code
   # - directus/docker-compose.yaml
   # - appsmith/docker-compose.yaml

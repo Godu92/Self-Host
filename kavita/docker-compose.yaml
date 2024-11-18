@@ -1,0 +1,19 @@
+services:
+  kavita:
+    image: lscr.io/linuxserver/kavita:latest
+    container_name: kavita
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=EST
+    volumes:
+      - ./config:/config
+      - ./data:/data #optional
+    # ports:
+    #   - 5000:5000
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.read.rule=Host(`read.$HOST`)
+      - traefik.http.routers.read.entrypoints=http
+      - traefik.http.services.read.loadbalancer.server.port=5000
