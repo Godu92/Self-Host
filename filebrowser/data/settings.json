@@ -4,5 +4,5 @@
   "address": "",
   "log": "stdout",
   "database": "/database/filebrowser.db",
-  "root": "/srv"
+  "root": "/files"
 }

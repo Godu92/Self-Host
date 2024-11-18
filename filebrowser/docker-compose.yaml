@@ -5,12 +5,12 @@ services:
     # ports:
     #   - '8180:80'
     environment:
-      - PGID=100010
-      - PUID=100010
+      - PGID=1000
+      - PUID=1000
     volumes:
       - "./data/settings.json:/.filebrowser.json"
       - "./data/filebrowser.db:/database/filebrowser.db"
-      - ~/Self-Host/:/srv
+      - ~/Self-Host/:/files
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.file.rule=Host(`file.$HOST`)"
