@@ -160,10 +160,13 @@ if [ -f /etc/debian_version ]; then
 elif [ -f /etc/redhat-release ]; then
   alias yum='dnf'
   alias apt='yum'
+  alias apt-get='yum'
   alias docker='podman'
   alias docker-compose='podman compose'
 elif [ -f /etc/arch-release ]; then
   alias yum='pacman'
   alias apt='yum'
+  alias dnf='apt'
+  alias apt-get='yum'
   alias update='sudo pacman -Syu'
 fi
