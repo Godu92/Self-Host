@@ -10,7 +10,7 @@ services:
     volumes:
       - "./data/settings.json:/.filebrowser.json"
       - "./data/filebrowser.db:/database/filebrowser.db"
-      - .:/srv
+      - ~/Self-Host/:/srv
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.file.rule=Host(`file.$HOST`)"
