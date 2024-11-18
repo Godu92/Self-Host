@@ -1,0 +1,39 @@
+x-settings: &common
+  environment:
+    - PUID=1000
+    - PGID=1000
+    - TZ=Etc/UTC
+  labels:
+    - traefik.enable=true
+
+services:
+  calibre-web:
+    <<: &common 
+    image: lscr.io/linuxserver/calibre-web:latest
+    container_name: calibre-web
+    volumes:
+      - /path/to/data:/config
+      - /path/to/calibre/library:/books
+    # ports:
+    #   - 8083:8083
+    restart: unless-stopped
+    labels:
+      - traefik.http.routers.books.rule=Host(`books.$HOST`)
+      - traefik.http.routers.books.entrypoints=http
+      - traefik.http.services.books.loadbalancer.server.port=8083
+
+  calibre:
+    <<: &common 
+    image: lscr.io/linuxserver/calibre:latest
+    container_name: calibre
+    volumes:
+      - /path/to/calibre/config:/config
+    # ports:
+    #   - 8080:8080
+    #   - 8181:8181
+    #   - 8081:8081
+    restart: unless-stopped
+    labels:
+      - traefik.http.routers.books-db.rule=Host(`books-db.$HOST`)
+      - traefik.http.routers.books-db.entrypoints=http
+      - traefik.http.services.books-db.loadbalancer.server.port=8080
