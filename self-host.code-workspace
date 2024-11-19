@@ -19,7 +19,7 @@
 	],
 	"settings": {
 		"python.defaultInterpreterPath": ".venv/bin/python",
-		"python.terminal.activateEnvInCurrentTerminal": true,
+		"python.terminal.activateEnvInCurrentTerminal": false,
 		"python.analysis.autoImportCompletions": true,
 		"autoDocstring.generateDocstringOnEnter": true,
 		"autoDocstring.guessTypes": true,
@@ -49,7 +49,8 @@
 			"ms-python.black-formatter",
 			"anjali.clipboard-history",
 			"sleistner.vscode-fileutils",
-			"oderwat.indent-rainbow"
+			"oderwat.indent-rainbow",
+			"yzhang.markdown-all-in-one"
 		]
 	}
 }

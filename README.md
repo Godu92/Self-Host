@@ -1,6 +1,18 @@
-# Tools
+# Self-Host
 
 This is a collection of local tools for `RHEL 8` using `podman`. Most of this should also work for `Docker`, save a few commands in the shell scripts, .zsh files and aliases.
+
+- [Self-Host](#self-host)
+  - [Source files](#source-files)
+    - [One Time](#one-time)
+    - [Always Updated](#always-updated)
+    - [ZSH](#zsh)
+  - [RHEL8](#rhel8)
+  - [Starting](#starting)
+    - [Example](#example)
+  - [Templates](#templates)
+  - [Sample projects](#sample-projects)
+  - [Devcontainer](#devcontainer)
 
 ## Source files
 
@@ -23,11 +35,13 @@ ln -s Self-Host/profile/.vimrc .vimrc
 > Note: You can take this one step further and do the link as `root` as well to have the same alias and preferences there as well
 > TODO: Make script to simplify this process
 
-## ZSH
+### ZSH
 
 ZSH is currently being used with `FiraMono Nerd Font`
 
-## TODO: Move Rhel8 remote to own repo
+## RHEL8
+
+> TODO: Move to own repo
 
 The remote RHEL 8 Docker image is based off of [JUMP-RHEL by Venera-13](https://github.com/venera-13/jump-rhel)
 
@@ -35,7 +49,7 @@ The remote RHEL 8 Docker image is based off of [JUMP-RHEL by Venera-13](https://
 
 Create and edit a `.env` file at the root of this project:
 
-Example:
+Example (also found at `.env-dev`):
 
 ```shell
 HOST=localhost
@@ -59,7 +73,27 @@ EXCLUDED_DIRS=("adminer" "appsmith" "directus" "remoteRhel" "testing" "wordle")
 - `docker-compose.yaml`
 
 ```yaml
-### Admininstration
+#### Tools
 # - adminer/docker-compose.yaml
 - ittools/docker-compose.yaml
 ```
+
+## Templates
+
+> TODO: Make template files for commonly used files
+>
+> - ie Dockerfile, docker-compose.yaml, .sh, etc
+
+## Sample projects
+
+> TODO: Create sample projects
+>
+> - ie Sample NodeJs, Springboot Java, etc
+
+Yes I realize it's not that hard to find and make these (Springboot can be gotten easily from their website); however I'd like to have my own copies with settings and preferences already setup
+
+- ie NodeJs pre-configured with TypeOrm
+
+## Devcontainer
+
+TODO: Setup devcontainer for project
