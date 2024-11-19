@@ -15,7 +15,6 @@ include:
 
   # TODO: Merge databases ie into one PostgresQL
   # TODO: See about adding common setup stuff to this file, ie restart policy, traefik enable label, etc
-  # TODO: Also see about simple script to hand `docker run` into and have it create the folder and compose file
 
   ### Routing
   - traefik/docker-compose.yaml

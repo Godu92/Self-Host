@@ -8,7 +8,8 @@ def create_args() -> argparse.Namespace:
     """Method to setup argument parsing
 
     Returns:
-        (argparse.Namespace): The arguments to pass along
+        (argparse.Namespace):
+            The arguments to pass along
     """
     parser = argparse.ArgumentParser(
         prog="run2compose",
@@ -71,10 +72,12 @@ def transform(args) -> str:
     """Transforms cmd into compose yaml
 
     Args:
-      args (str) = the docker run command to convert
+      args (str):
+        the docker run command to convert
 
     Returns:
-      (str) = the template string of a compose file
+      (str):
+        the template string of a compose file
     """
     # Define the docker compose JSON-like object
     template: dict = {"services": {}}
@@ -144,6 +147,43 @@ def transform(args) -> str:
     return template
 
 
+def create_networks(network_name: str) -> dict:
+    """
+    Creates the network section at the bottom of the compose file
+
+    Args:
+        network_name (str):
+            the name of the network to use.
+            if not provided, will check the running containers
+
+    Returns:
+        dict: _description_
+    """
+    # Adding networks to bottom of file
+    traefik_network: str = network_name
+
+    if not traefik_network:
+        containers = docker.from_env().containers.list()
+
+        for container in containers:
+            if container.image.tags and any(
+                "traefik" in tag for tag in container.image.tags
+            ):
+                print(container.ports)
+                traefik_network = container.network
+
+    networks: dict = {
+        "networks": {
+            "default": {
+                "name": f"{traefik_network}",
+                "external": "true",
+            }
+        }
+    }
+
+    return networks
+
+
 def main():
     """take in `docker run` command,
     produce compose file with `traefik` tags based on image name,
@@ -156,41 +196,11 @@ def main():
     #     "docker run --rm -it --shm-size=512m -p 6901:6901 -e VNC_PW=password kasmweb/only-office:1.16.0"
     # )
 
-    # Adding networks to bottom of file
-    ## TODO: get traefik network automatically
-    traefik_network: str = args.network
-
-    if not traefik_network:
-        containers = docker.from_env().containers.list()
-
-        for container in containers:
-            if container.image.tags and any(
-                "traefik" in tag for tag in container.image.tags
-            ):
-                print(container.ports)
-                traefik_network = container.network
-        # traefik_network = subprocess.run(
-        #     [
-        #         "docker inspect",
-        #         "traefik",
-        #         "-f '{{range .NetworkSettings.Networks}}{{println .NetworkID}}{{end}}'",
-        #     ],
-        #     check=False,
-        # )
-
-    networks: dict = {
-        "networks": {
-            "default": {
-                "name": f"{traefik_network}",
-                "external": "true",
-            }
-        }
-    }
-
     output: str = transform(args)
     yaml_output: str = yaml.dump(output, default_flow_style=True, indent=4)
     print(yaml_output)
 
+    networks: dict = create_networks(args)
     yaml_output = yaml.dump(networks, default_flow_style=True, indent=4)
     print(yaml_output)
 
