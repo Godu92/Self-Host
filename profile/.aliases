@@ -26,4 +26,4 @@ alias dkdn='dkc down'
 alias pip='py -m pip'
 
 ## Requires other dependecies
-alias dkps='docker run --rm -it -v /var/run/docker.sock:/var/run/docker.sock -v ~/Self-Host/lazydocker/config:/.config/jesseduffield/lazydocker lazyteam/lazydocker'
+alias dkps='docker run --rm -it -v /var/run/docker.sock:/var/run/docker.sock -v ~/git/Self-Host/lazydocker/config:/.config/jesseduffield/lazydocker lazyteam/lazydocker'

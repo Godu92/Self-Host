@@ -13,6 +13,7 @@ This is a collection of local tools for `RHEL 8` using `podman`. Most of this sh
   - [Templates](#templates)
   - [Sample projects](#sample-projects)
   - [Devcontainer](#devcontainer)
+  - [Storage](#storage)
 
 ## Source files
 
@@ -97,3 +98,7 @@ Yes I realize it's not that hard to find and make these (Springboot can be gotte
 ## Devcontainer
 
 TODO: Setup devcontainer for project
+
+## Storage
+
+TODO: Set more containers to docker volumes
