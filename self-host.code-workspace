@@ -17,7 +17,19 @@
 			"name": "Profile"
 		}
 	],
-	"settings": {},
+	"settings": {
+		"python.defaultInterpreterPath": ".venv/bin/python",
+		"python.terminal.activateEnvInCurrentTerminal": true,
+		"python.analysis.autoImportCompletions": true,
+		"autoDocstring.generateDocstringOnEnter": true,
+		"autoDocstring.guessTypes": true,
+		"autoDocstring.startOnNewLine": true,
+		"black-formatter.cwd": "${workspaceFolder}",
+		"python.analysis.inlayHints.callArgumentNames": "partial",
+		"python.analysis.inlayHints.functionReturnTypes": true,
+		"python.analysis.inlayHints.pytestParameters": true,
+		"python.analysis.inlayHints.variableTypes": true
+	},
 	"extensions": {
 		"recommendations": [
 			"njpwerner.autodocstring",
