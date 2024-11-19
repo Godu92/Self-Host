@@ -10,7 +10,7 @@ eval "docker network create -d bridge main"
 # Loop through each directory
 # In the event you have "self-signed cert" issues, try running as docker run with `--volume /etc/pki/ca-trust:/etc/pki/ca-trust`
 GLOBIGNORE=".*"
-for dir in */; do
+for dir in ../*/; do
   dir=${dir%/} # remove trailing slash
   excluded_dirs_str=$(printf "%s " "${EXCLUDED_DIRS[@]}")
   if [[ ! ${excluded_dirs_str} =~ ${dir} ]]; then

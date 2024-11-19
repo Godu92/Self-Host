@@ -1,0 +1,43 @@
+{
+	"folders": [
+		{
+			"path": ".",
+			"name": "ROOT"
+		},
+		{
+			"path": ".venv",
+			"name": "Python ENV"
+		},
+		{
+			"path": "scripts",
+			"name": "Scripts"
+		},
+		{
+			"path": "profile",
+			"name": "Profile"
+		}
+	],
+	"settings": {},
+	"extensions": {
+		"recommendations": [
+			"njpwerner.autodocstring",
+			"pinage404.bash-extension-pack",
+			"streetsidesoftware.code-spell-checker",
+			"p1c2u.docker-compose",
+			"formulahendry.docker-extension-pack",
+			"michelemelluso.gitignore",
+			"ms-python.isort",
+			"davidanson.vscode-markdownlint",
+			"christian-kohler.path-intellisense",
+			"drmerfy.overtype",
+			"esbenp.prettier-vscode",
+			"nanlei.save-all",
+			"wayou.vscode-todo-highlight",
+			"gruntfuggly.todo-tree",
+			"ms-python.black-formatter",
+			"anjali.clipboard-history",
+			"sleistner.vscode-fileutils",
+			"oderwat.indent-rainbow"
+		]
+	}
+}
