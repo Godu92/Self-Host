@@ -1,6 +1,6 @@
 # Self-Host
 
-This is a collection of local tools for `RHEL 8` using `podman`. Most of this should also work for `Docker`, save a few commands in the shell scripts, .zsh files and aliases.
+This is a collection of local tools, originally made for`RHEL 8` using `podman`. Most of this should also work for `Docker`, save a few commands in the shell scripts, .zsh files and aliases.
 
 - [Self-Host](#self-host)
   - [Source files](#source-files)
@@ -14,10 +14,16 @@ This is a collection of local tools for `RHEL 8` using `podman`. Most of this sh
   - [Sample projects](#sample-projects)
   - [Devcontainer](#devcontainer)
   - [Storage](#storage)
+    - [List of Volumes](#list-of-volumes)
+      - [Monica](#monica)
+      - [Uptime](#uptime)
+      - [Trilium](#trilium)
 
 ## Source files
 
-The various `profile` files are for Linux based preferences.
+The various `./profile` files are for Linux based preferences.
+
+> TODO: Move to own repo
 
 ### One Time
 
@@ -48,30 +54,30 @@ The remote RHEL 8 Docker image is based off of [JUMP-RHEL by Venera-13](https://
 
 ## Starting
 
-Create and edit a `.env` file at the root of this project:
+Create and edit a `./.env` file at the root of this project:
 
-Example (also found at `.env-dev`):
+Example (also found at `./.env-dev`):
 
 ```shell
 HOST=localhost
 DOCKER_DIR=/var/run/docker.sock
 ```
 
-> Sadly this does not extend to `dashy/config` files as of yet
+> Sadly this does not extend to `./dashy/config` files as of yet
 
-Can be started either via the `scripts/start.sh` or the root level `docker-compose.yaml` file.
+Can be started either via the `./scripts/start.sh` or the root level `./docker-compose.yaml` file.
 
 > Note: certain services are not started automatically for one reason or another. Check what is in `EXCLUDED_DIRS` or what is commented out.
 
 ### Example
 
-- `start.sh`
+- `./scripts/start.sh`
 
 ```bash
 EXCLUDED_DIRS=("adminer" "appsmith" "directus" "remoteRhel" "testing" "wordle")
 ```
 
-- `docker-compose.yaml`
+- `./docker-compose.yaml`
 
 ```yaml
 #### Tools
@@ -82,14 +88,16 @@ EXCLUDED_DIRS=("adminer" "appsmith" "directus" "remoteRhel" "testing" "wordle")
 ## Templates
 
 > TODO: Make template files for commonly used files
->
-> - ie Dockerfile, docker-compose.yaml, .sh, etc
+
+Template Dockerfile, docker-compose.yaml can be found in `./testing`
 
 ## Sample projects
 
 > TODO: Create sample projects
 >
 > - ie Sample NodeJs, Springboot Java, etc
+>
+> Ideally sample projects are their own project
 
 Yes I realize it's not that hard to find and make these (Springboot can be gotten easily from their website); however I'd like to have my own copies with settings and preferences already setup
 
@@ -102,3 +110,22 @@ TODO: Setup devcontainer for project
 ## Storage
 
 TODO: Set more containers to docker volumes
+
+You should need to create some volumes ahead of time for the ease of launching containers.
+
+> You could go change all instances of `external` to `false` if you don't want to do that
+
+### List of Volumes
+
+#### Monica
+
+- mysql
+- data
+
+#### Uptime
+
+- up-data
+
+#### Trilium
+
+- tril-data

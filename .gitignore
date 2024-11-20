@@ -4,8 +4,6 @@
 *.db
 
 ## App specific ignores
-uptime/data
-
 pihole/etc-pihole
 
 dashy/config/conf-dev.yml
@@ -18,8 +16,6 @@ directus/uploads
 directus/extensions
 
 grocy/config
-
-trilium/trilium-data
 
 onlyoffice/config
 

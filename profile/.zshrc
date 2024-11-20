@@ -125,14 +125,12 @@ if [ -e $HOME/git/zsh-autocomplete/zsh-autocomplete.plugin.zsh ]; then
 fi
 
 ### Docker / Podman
-if command -v docker &> /dev/null && ! declare -f docker &> /dev/null; then
+if command -v podman &> /dev/null; then
+    export DOCKER_HOST="unix:///var/run/podman/podman.sock"
+    export PODMAN_COMPOSE_WARNING_LOGS=false
+elif command -v docker &> /dev/null && ! declare -f docker &> /dev/null; then
+    echo "Podman is not installed. Using docker instead."
     export DOCKER_HOST="unix:///var/run/docker.sock"
-else
-    echo "Docker is not installed. Using podman instead."
-    if command -v podman &> /dev/null; then
-      export DOCKER_HOST="unix:///var/run/podman/podman.sock"
-      export PODMAN_COMPOSE_WARNING_LOGS=false
-    fi
 fi
 
 export MVN_HOME=/usr/local/apache-maven
