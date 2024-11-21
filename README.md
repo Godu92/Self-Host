@@ -61,6 +61,7 @@ Example (also found at `./.env-dev`):
 ```shell
 HOST=localhost
 DOCKER_DIR=/var/run/docker.sock
+TRILIUM_DATA_DIR=./data # optional
 ```
 
 > Sadly this does not extend to `./dashy/config` files as of yet
@@ -129,3 +130,7 @@ You should need to create some volumes ahead of time for the ease of launching c
 #### Trilium
 
 - tril-data
+
+> Also has a possible `.env` bind in the event you want it set somewhere but not tracked
+>
+> TODO: Add this option for all mounts
