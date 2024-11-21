@@ -11,10 +11,6 @@
 		{
 			"path": "scripts",
 			"name": "Scripts"
-		},
-		{
-			"path": "profile",
-			"name": "Profile"
 		}
 	],
 	"settings": {

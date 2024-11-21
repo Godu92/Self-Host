@@ -3,10 +3,6 @@
 This is a collection of local tools, originally made for`RHEL 8` using `podman`. Most of this should also work for `Docker`, save a few commands in the shell scripts, .zsh files and aliases.
 
 - [Self-Host](#self-host)
-  - [Source files](#source-files)
-    - [One Time](#one-time)
-    - [Always Updated](#always-updated)
-    - [ZSH](#zsh)
   - [RHEL8](#rhel8)
   - [Starting](#starting)
     - [Example](#example)
@@ -18,33 +14,6 @@ This is a collection of local tools, originally made for`RHEL 8` using `podman`.
       - [Monica](#monica)
       - [Uptime](#uptime)
       - [Trilium](#trilium)
-
-## Source files
-
-The various `./profile` files are for Linux based preferences.
-
-> TODO: Move to own repo
-
-### One Time
-
-They can be used by simply copying into your `home` directory and then restarting your terminal.
-
-### Always Updated
-
-Alternatively, you can link to the files and thus they will be updated anytime this project gets updates.
-
-Example:
-
-```bash
-ln -s Self-Host/profile/.vimrc .vimrc
-```
-
-> Note: You can take this one step further and do the link as `root` as well to have the same alias and preferences there as well
-> TODO: Make script to simplify this process
-
-### ZSH
-
-ZSH is currently being used with `FiraMono Nerd Font`
 
 ## RHEL8
 
