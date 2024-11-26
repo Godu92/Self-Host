@@ -1,9 +1,8 @@
 # Self-Host
 
-This is a collection of local tools, originally made for`RHEL 8` using `podman`. Most of this should also work for `Docker`, save a few commands in the shell scripts, .zsh files and aliases.
+This is a collection of local tools, originally made for`RHEL 8` using `podman`. Most of this should also work for `Docker`, save a few commands in the shell scripts.
 
 - [Self-Host](#self-host)
-  - [RHEL8](#rhel8)
   - [Starting](#starting)
     - [Example](#example)
   - [Templates](#templates)
@@ -14,12 +13,6 @@ This is a collection of local tools, originally made for`RHEL 8` using `podman`.
       - [Monica](#monica)
       - [Uptime](#uptime)
       - [Trilium](#trilium)
-
-## RHEL8
-
-> TODO: Move to own repo
-
-The remote RHEL 8 Docker image is based off of [JUMP-RHEL by Venera-13](https://github.com/venera-13/jump-rhel)
 
 ## Starting
 
@@ -75,7 +68,7 @@ Yes I realize it's not that hard to find and make these (Springboot can be gotte
 
 ## Devcontainer
 
-TODO: Setup devcontainer for project
+TODO: Setup devcontainer for project with extensions and settings
 
 ## Storage
 
