@@ -22,6 +22,12 @@ onlyoffice/config
 kavita/data
 kavita/config
 
+## Any containers that just "data" as a folder
+### Should probably make this easier by making everything:
+#### "assets" "data" "config"
 data
+
+pxe/assets
+pxe/config
 
 ## TODO: dockerignores

@@ -47,7 +47,7 @@ include:
   ### Management
   # - focalboard/docker-compose.yaml
   #### People CRM
-  - monica/docker-compose.yaml
+  # - monica/docker-compose.yaml
   #### Office tools
   # - papermerge/docker-compose.yaml
   #### Misc
@@ -57,6 +57,7 @@ include:
   - wordle/docker-compose.yaml
   ### Development
   # - remoteRhel/docker-compose.yaml
+  # - pxe/docker-compose.yaml
 
   ### Books
   # - calibre/docker-compose.yaml
