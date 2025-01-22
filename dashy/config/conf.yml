@@ -129,7 +129,7 @@ sections:
         id: 13_937_grocy
       - title: Wiki
         description: Wiki & Notes
-        icon: fab fa-file-word
+        icon: fab fa-wikipedia-w
         url: http://wiki.localhost
         target: newtab
         id: 14_937_wiki
@@ -149,4 +149,9 @@ sections:
         description: Remote office tools
         icon: fas fa-folder
         url: http://office.localhost
+        target: newtab
+      - title: PXE
+        description: Remote pxe file browser
+        icon: fas fa-network-wired
+        url: http://pxe.localhost
         target: newtab

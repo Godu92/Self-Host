@@ -57,7 +57,7 @@ include:
   - wordle/docker-compose.yaml
   ### Development
   # - remoteRhel/docker-compose.yaml
-  # - pxe/docker-compose.yaml
+  - pxe/docker-compose.yaml
 
   ### Books
   # - calibre/docker-compose.yaml
