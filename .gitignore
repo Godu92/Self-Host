@@ -26,6 +26,7 @@ kavita/config
 ### Should probably make this easier by making everything:
 #### "assets" "data" "config"
 data
+certs
 
 pxe/assets
 pxe/config
