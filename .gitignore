@@ -2,6 +2,8 @@
 *.nfs*
 *.env
 *.db
+*.zip
+*.gz
 
 ## App specific ignores
 pihole/etc-pihole

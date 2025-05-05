@@ -1,6 +1,6 @@
 services:
   adminer:
-    restart: unless-stopped
+    restart: always
     image: docker.io/adminer
     container_name: adminer
     # ports:

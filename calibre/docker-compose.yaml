@@ -16,7 +16,7 @@ services:
       - /path/to/calibre/library:/books
     # ports:
     #   - 8083:8083
-    restart: unless-stopped
+    restart: always
     labels:
       - traefik.http.routers.books.rule=Host(`books.$HOST`)
       - traefik.http.routers.books.entrypoints=http
@@ -32,7 +32,7 @@ services:
     #   - 8080:8080
     #   - 8181:8181
     #   - 8081:8081
-    restart: unless-stopped
+    restart: always
     labels:
       - traefik.http.routers.books-db.rule=Host(`books-db.$HOST`)
       - traefik.http.routers.books-db.entrypoints=http

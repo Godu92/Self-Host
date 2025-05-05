@@ -24,7 +24,7 @@ services:
         - IMAGE_TAG=jessie
     # ports:
     # - 80:80
-    restart: unless-stopped
+    restart: always
     labels:
       - traefik.enable=true
       ## Remeber to change service names as well as host / path

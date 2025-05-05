@@ -5,7 +5,7 @@ services:
     volumes:
       - ./stacks:/appsmith-stacks
       - /etc/pki/ca-trust:/etc/pki/ca-trust
-    restart: unless-stopped
+    restart: always
     labels:
       - traefik.enable=true
       - traefik.http.routers.lowui.rule=Host(`lowui.$HOST`)

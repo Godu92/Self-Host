@@ -98,7 +98,7 @@ def transform(args) -> str:
     image: str = pieces[-1]
     template["services"][f"{simple_name}"] = {}
     template["services"][f"{simple_name}"]["image"] = f"{image}"
-    template["services"][f"{simple_name}"]["restart"] = "unless-stopped"
+    template["services"][f"{simple_name}"]["restart"] = "always"
     template["services"][f"{simple_name}"]["container_name"] = f"{simple_name}"
     template["services"][f"{simple_name}"]["ports"] = []
     template["services"][f"{simple_name}"]["environment"] = []

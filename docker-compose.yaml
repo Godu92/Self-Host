@@ -3,6 +3,7 @@ networks:
   default:
     driver: bridge
     name: proxy
+    external: true
   # socket_proxy:
   #   name: socket_proxy
   #   driver: bridge
@@ -47,17 +48,18 @@ include:
   ### Management
   # - focalboard/docker-compose.yaml
   #### People CRM
-  # - monica/docker-compose.yaml
+  - monica/docker-compose.yaml
   #### Office tools
   # - papermerge/docker-compose.yaml
+  - drawio/docker-compose.yaml
   #### Misc
   # - grocy/docker-compose.yaml
 
   ### Games
-  - wordle/docker-compose.yaml
+  # - wordle/docker-compose.yaml
   ### Development
   # - remoteRhel/docker-compose.yaml
-  - pxe/docker-compose.yaml
+  # - pxe/docker-compose.yaml
 
   ### Books
   # - calibre/docker-compose.yaml
@@ -65,3 +67,8 @@ include:
   ### Low Code
   # - directus/docker-compose.yaml
   # - appsmith/docker-compose.yaml
+
+  ### Development
+  # - jenkins/docker-compose.yaml
+  # - gitea/docker-compose.yaml
+

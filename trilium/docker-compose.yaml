@@ -2,7 +2,7 @@ services:
   trilium:
     image: triliumnext/notes:latest
     container_name: trilium
-    restart: unless-stopped
+    restart: always
     # environment:
     # - TRILIUM_DATA_DIR=/home/node/trilium-data
     # ports:

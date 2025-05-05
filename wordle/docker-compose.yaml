@@ -4,7 +4,7 @@ services:
     container_name: wxrdle
     # ports:
     #     - 4011:80
-    restart: unless-stopped
+    restart: always
     labels:
       - traefik.enable=true
       - traefik.http.routers.wordle.rule=Host(`wordle.$HOST`)

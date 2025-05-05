@@ -3,7 +3,7 @@ services:
     # The official v3 Traefik docker image
     image: traefik:v3.1
     container_name: traefik
-    restart: unless-stopped
+    restart: always
     # Enables the web UI and tells Traefik to listen to docker
     command:
       - "--api.insecure=true"

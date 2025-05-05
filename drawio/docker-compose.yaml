@@ -1,0 +1,16 @@
+# version: '3.9'
+services:
+  drawio:
+    image: jgraph/drawio
+    # ports:
+    #     - '8443:8443'
+    #     - '8080:8080'
+    container_name: drawio
+    tty: true
+    stdin_open: true
+    restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.drawio.rule=Host(`drawio.$HOST`)
+      - traefik.http.routers.drawio.entrypoints=http
+      - traefik.http.services.drawio.loadbalancer.server.port=8080

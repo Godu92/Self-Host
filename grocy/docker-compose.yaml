@@ -10,7 +10,7 @@ services:
       - ./config:/config
     # ports:
     #   - 9283:80
-    restart: unless-stopped
+    restart: always
     labels:
       - traefik.enable=true
       - traefik.http.routers.grocy.rule=Host(`grocy.$HOST`)
