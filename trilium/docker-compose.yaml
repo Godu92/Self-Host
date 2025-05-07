@@ -12,9 +12,9 @@ services:
       # - tril-data/styles:/usr/src/app/styles
     labels:
       - traefik.enable=true
-      - traefik.http.routers.wiki.rule=Host(`wiki.$HOST`)
-      - traefik.http.routers.wiki.entrypoints=http
-      - traefik.http.services.wiki.loadbalancer.server.port=8080
+      - traefik.http.routers.notes.rule=Host(`notes.$HOST`)
+      - traefik.http.routers.notes.entrypoints=http
+      - traefik.http.services.notes.loadbalancer.server.port=8080
 
 volumes:
   tril-data:

@@ -39,7 +39,7 @@ include:
   # - gopeed/docker-compose.yaml
 
   ### Notes
-  # - dailynotes/docker-compose.yaml
+  - wikijs/docker-compose.yaml
   - trilium/docker-compose.yaml
 
   ### Dashboard

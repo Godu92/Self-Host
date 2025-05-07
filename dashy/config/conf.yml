@@ -5,7 +5,7 @@ pages:
     path: conf-dev.yml
 pageInfo:
   title: System Dashboard
-  description: ""
+  description: ''
   navLinks:
     - title: Documentation
       path: https://dashy.to/docs
@@ -61,37 +61,51 @@ sections:
         url: http://proxy.localhost
         target: newtab
         id: 0_937_traefik
+        statusCheck: true
+        statusCheckAllowInsecure: true
       - title: IT Tools
         icon: fas fa-tools
         url: http://tools.localhost
         target: newtab
         id: 1_937_ittools
+        statusCheck: true
+        statusCheckAllowInsecure: true
       - title: Whoami
         icon: fas fa-question
         url: http://who.localhost
         target: newtab
         id: 2_937_whoami
+        statusCheck: true
+        statusCheckAllowInsecure: true
       - title: Glances
         icon: fas fa-search
         url: http://glance.localhost
         target: newtab
         id: 3_937_glances
+        statusCheck: true
+        statusCheckAllowInsecure: true
       - title: Uptime
         icon: fas fa-signal
         url: http://uptime.localhost
         target: newtab
         id: 4_937_uptime
+        statusCheck: true
+        statusCheckAllowInsecure: true
       - title: Notes
-        description: Daily notes
+        description: Trilium
         icon: fas fa-sticky-note
         url: http://notes.localhost
         target: newtab
         id: 5_937_notes
+        statusCheck: true
+        statusCheckAllowInsecure: true
       - title: Icons
         description: Font Awesome Icons
         icon: fab fa-font-awesome
         url: https://fontawesome.com/search?m=free&o=r
         id: 6_937_icons
+        statusCheck: true
+        statusCheckAllowInsecure: true
       - title: DB Viewer
         icon: fas fa-database
         url: http://dbviewer.localhost
@@ -112,6 +126,8 @@ sections:
         url: http://people.localhost/
         target: newtab
         id: 10_937_monica
+        statusCheck: true
+        statusCheckAllowInsecure: true
       - title: Papermerge
         icon: fas fa-paste
         url: http://paper.localhost/
@@ -128,11 +144,13 @@ sections:
         target: newtab
         id: 13_937_grocy
       - title: Wiki
-        description: Wiki & Notes
+        description: WikiJS
         icon: fab fa-wikipedia-w
         url: http://wiki.localhost
         target: newtab
         id: 14_937_wiki
+        statusCheck: true
+        statusCheckAllowInsecure: true
       - title: Wordle
         description: Worlde
         icon: fas fa-chess-board
@@ -150,8 +168,21 @@ sections:
         icon: fas fa-folder
         url: http://office.localhost
         target: newtab
+        id: 17_937_onlyoffice
       - title: PXE
         description: Remote pxe file browser
         icon: fas fa-network-wired
         url: http://pxe.localhost
         target: newtab
+        id: 18_937_pxe
+      - title: DrawIO
+        icon: fas fa-pencil
+        url: http://drawio.localhost/
+        target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 19_937_drawio
+appConfig:
+  theme: crayola
+  layout: horizontal
+  iconSize: medium

@@ -54,22 +54,6 @@ EXCLUDED_DIRS=("adminer" "appsmith" "directus" "remoteRhel" "testing" "wordle")
 
 Template Dockerfile, docker-compose.yaml can be found in `./testing`
 
-## Sample projects
-
-> TODO: Create sample projects
->
-> - ie Sample NodeJs, Springboot Java, etc
->
-> Ideally sample projects are their own project
-
-Yes I realize it's not that hard to find and make these (Springboot can be gotten easily from their website); however I'd like to have my own copies with settings and preferences already setup
-
-- ie NodeJs pre-configured with TypeOrm
-
-## Devcontainer
-
-TODO: Setup devcontainer for project with extensions and settings
-
 ## Storage
 
 TODO: Set more containers to docker volumes
