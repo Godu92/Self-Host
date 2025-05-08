@@ -24,6 +24,8 @@ onlyoffice/config
 kavita/data
 kavita/config
 
+gitea/gitea
+
 ## Any containers that just "data" as a folder
 ### Should probably make this easier by making everything:
 #### "assets" "data" "config"
