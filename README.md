@@ -80,3 +80,9 @@ You should need to create some volumes ahead of time for the ease of launching c
 > Also has a possible `.env` bind in the event you want it set somewhere but not tracked
 >
 > TODO: Add this option for all mounts
+
+## TODO
+
+- Would be neat to have a script that could auto add to the top level compose file
+- also a script that could put all services into the dashboard, with running ones getting status lights
+- And while we're at it, add them to the uptime monitor
