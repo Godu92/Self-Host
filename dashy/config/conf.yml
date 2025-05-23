@@ -102,7 +102,7 @@ sections:
       - title: Icons
         description: Font Awesome Icons
         icon: fab fa-font-awesome
-        url: https://fontawesome.com/search?m=free&o=r
+        url: https://fontawesome.com/search?ic=free
         id: 6_937_icons
         statusCheck: true
         statusCheckAllowInsecure: true
@@ -111,16 +111,22 @@ sections:
         url: http://dbviewer.localhost
         target: newtab
         id: 7_937_dbviewer
+        statusCheck: false
+        statusCheckAllowInsecure: true
       - title: AppSmith
-        icon: fas fa-database
+        icon: fas fa-list
         url: http://lowui.localhost
         target: newtab
         id: 8_937_appsmith
+        statusCheck: false
+        statusCheckAllowInsecure: true
       - title: Directus
-        icon: fas fa-database
+        icon: fas fa-bars
         url: http://lowdb.localhost
         target: newtab
         id: 9_937_directus
+        statusCheck: false
+        statusCheckAllowInsecure: true
       - title: Monica
         icon: fas fa-users
         url: http://people.localhost/
@@ -137,44 +143,56 @@ sections:
         icon: fas fa-tasks
         url: http://board.localhost/
         target: newtab
+        statusCheck: false
+        statusCheckAllowInsecure: true
         id: 12_937_focalboard
       - title: Grocy
         icon: fas fa-utensils
         url: http://grocy.localhost/
         target: newtab
+        statusCheck: false
+        statusCheckAllowInsecure: true
         id: 13_937_grocy
       - title: Wiki
         description: WikiJS
         icon: fab fa-wikipedia-w
         url: http://wiki.localhost
         target: newtab
-        id: 14_937_wiki
-        statusCheck: true
+        statusCheck: false
         statusCheckAllowInsecure: true
+        id: 14_937_wiki
       - title: Wordle
         description: Worlde
         icon: fas fa-chess-board
         url: http://wordle.localhost
         target: newtab
+        statusCheck: false
+        statusCheckAllowInsecure: true
         id: 15_937_wordle
       - title: File Browser
         description: Remote File Browser
-        icon: fas fa-folder-open
+        icon: fas fa-folder-tree
         url: http://file.localhost
         target: newtab
         id: 16_937_filebrowser
+        statusCheck: false
+        statusCheckAllowInsecure: true
       - title: OnlyOffice
         description: Remote office tools
-        icon: fas fa-folder
+        icon: fas fa-briefcase
         url: http://office.localhost
         target: newtab
         id: 17_937_onlyoffice
+        statusCheck: false
+        statusCheckAllowInsecure: true
       - title: PXE
         description: Remote pxe file browser
         icon: fas fa-network-wired
         url: http://pxe.localhost
         target: newtab
         id: 18_937_pxe
+        statusCheck: false
+        statusCheckAllowInsecure: true
       - title: DrawIO
         icon: fas fa-pencil
         url: http://drawio.localhost/
@@ -182,6 +200,54 @@ sections:
         statusCheck: true
         statusCheckAllowInsecure: true
         id: 19_937_drawio
+      - title: Gitea
+        icon: fab fa-git
+        url: http://git.localhost/
+        target: newtab
+        statusCheck: false
+        statusCheckAllowInsecure: true
+        id: 20_937_gitea
+      - title: Jenkins
+        icon: fab fa-jenkins
+        url: http://jenkins.localhost/
+        target: newtab
+        statusCheck: false
+        statusCheckAllowInsecure: true
+        id: 21_937_jenkins
+      - title: PiHole
+        icon: fab fa-raspberry-pi
+        url: http://jenkins.localhost/
+        target: newtab
+        statusCheck: false
+        statusCheckAllowInsecure: true
+        id: 22_937_pihole
+      - title: GoPeed
+        icon: fas fa-download
+        url: http://jenkins.localhost/
+        target: newtab
+        statusCheck: false
+        statusCheckAllowInsecure: true
+        id: 23_937_gopeed
+      - title: Socket
+        icon: fas fa-ethernet
+        url: http://jenkins.localhost/
+        target: newtab
+        statusCheck: false
+        statusCheckAllowInsecure: true
+        id: 24_937_socket
+      - title: Calibre
+        icon: fas fa-book
+        url: http://jenkins.localhost/
+        target: newtab
+        statusCheck: false
+        statusCheckAllowInsecure: true
+        id: 25_937_calibre
+      - title: Kavita
+        icon: fas fa-book-open
+        url: http://jenkins.localhost/
+        target: newtab
+        statusCheckAllowInsecure: false
+        id: 26_937_kavita
 appConfig:
   theme: crayola
   layout: horizontal
