@@ -1,0 +1,37 @@
+services:
+  db:
+    container_name: airtrail_db
+    image: postgres:16-alpine
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${DB_DATABASE_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE_NAME}']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  airtrail:
+    container_name: airtrail
+    image: johly/airtrail:latest
+    restart: always
+    env_file:
+      - .env
+    # ports:
+    #   - 3000:3000
+    depends_on:
+      db:
+        condition: service_healthy
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.air.rule=Host(`air.$HOST`)
+      - traefik.http.routers.air.entrypoints=http
+      - traefik.http.services.air.loadbalancer.server.port=3000
+
+volumes:
+  db_data:
