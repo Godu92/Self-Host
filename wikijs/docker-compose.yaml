@@ -1,5 +1,5 @@
 services:
-  db:
+  wiki-db:
     image: postgres:15-alpine
     container_name: wiki-db
     environment:
@@ -11,15 +11,17 @@ services:
     restart: always
     volumes:
       - wiki-data:/var/lib/postgresql/data
+    labels:
+      - traefik.enable=true
 
   wiki:
     image: ghcr.io/requarks/wiki:2
     container_name: wiki
     depends_on:
-      - db
+      - wiki-db
     environment:
       DB_TYPE: postgres
-      DB_HOST: db
+      DB_HOST: wiki-db
       DB_PORT: 5432
       DB_USER: wikijs
       DB_PASS: wikijsrocks

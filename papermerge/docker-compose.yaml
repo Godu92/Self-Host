@@ -6,8 +6,8 @@ x-backend: &common
     PAPERMERGE__SECURITY__SECRET_KEY: 12345
     PAPERMERGE__AUTH__USERNAME: admin
     PAPERMERGE__AUTH__PASSWORD: admin
-    PAPERMERGE__DATABASE__URL: postgresql://user:passwd@db:5432/data
-    PAPERMERGE__REDIS__URL: redis://redis:6379/0
+    PAPERMERGE__DATABASE__URL: postgresql://user:passwd@papermerge-db:5432/data
+    PAPERMERGE__REDIS__URL: redis://papermerge-redis:6379/0
   volumes:
     - index_db:/core_app/index_db
     - media:/core_app/media
@@ -20,7 +20,7 @@ services:
     depends_on:
       papermerge-db:
         condition: service_healthy
-      redis:
+      papermerge-redis:
         condition: service_healthy
     labels:
       - traefik.enable=true
@@ -31,7 +31,7 @@ services:
     <<: *common
     command: worker
     container_name: papermerge-worker
-  redis:
+  papermerge-redis:
     image: redis:6
     container_name: papermerge-redis
     healthcheck:
@@ -40,6 +40,8 @@ services:
       timeout: 10s
       retries: 5
       start_period: 10s
+    labels:
+      - traefik.enable=true
   papermerge-db:
     image: postgres:16.1
     container_name: papermerge-db
@@ -55,6 +57,8 @@ services:
       timeout: 10s
       retries: 5
       start_period: 10s
+    labels:
+      - traefik.enable=true
 
 volumes:
   postgres_data:
