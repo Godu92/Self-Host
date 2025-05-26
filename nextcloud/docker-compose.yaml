@@ -1,0 +1,19 @@
+services:
+  nextcloud:
+    image: lscr.io/linuxserver/nextcloud:latest
+    container_name: nextcloud
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./config:/config
+      - ./data:/data
+    ports:
+      - 443:443
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      # - traefik.http.routers.next.rule=Host(`next.$HOST`)
+      # - traefik.http.routers.next.entrypoints=http
+      # - traefik.http.services.next.loadbalancer.server.port=443

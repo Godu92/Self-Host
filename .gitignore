@@ -21,10 +21,17 @@ grocy/config
 
 onlyoffice/config
 
+nextcloud/config
+
 kavita/data
 kavita/config
 
 gitea/gitea
+
+# Specifically tracking envs for test purposes
+## TODO: Delete later
+!firefly/*.env
+!airtrail/*.env
 
 ## Any containers that just "data" as a folder
 ### Should probably make this easier by making everything:

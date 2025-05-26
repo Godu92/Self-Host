@@ -1,0 +1,55 @@
+# version: "3"
+
+services:
+  docmost:
+    image: docmost/docmost:latest
+    container_name: docmost
+    depends_on:
+      - docmost-db
+      - docmost-redis
+    environment:
+      APP_URL: "http://doc.$HOST"
+      APP_SECRET: "reallylongpasswordthatshouldbesecurenoughforanyone"
+      DATABASE_URL: "postgresql://docmost:strongerdbpassword@docmost-db:5432/docmost?schema=public"
+      REDIS_URL: "redis://docmost-redis:6379"
+    # ports:
+    # - "3000:3000"
+    restart: unless-stopped
+    volumes:
+      - docmost:/app/data/storage
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.doc.rule=Host(`doc.$HOST`)
+      - traefik.http.routers.doc.entrypoints=http
+      - traefik.http.services.doc.loadbalancer.server.port=3000
+
+  docmost-db:
+    image: postgres:16-alpine
+    container_name: docmost-db
+    environment:
+      POSTGRES_DB: docmost
+      POSTGRES_USER: docmost
+      POSTGRES_PASSWORD: strongerdbpassword
+    restart: unless-stopped
+    expose:
+      - 5432
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    labels:
+      - traefik.enable=true
+
+  docmost-redis:
+    image: redis:7.2-alpine
+    container_name: docmost-redis
+    restart: unless-stopped
+    expose:
+      - 6379
+    volumes:
+      - redis_data:/data
+    labels:
+      - traefik.enable=true
+
+volumes:
+  docmost:
+  db_data:
+  redis_data:

@@ -27,7 +27,6 @@ include:
 
   ### Admininstration
   # - lazydocker/docker-compose.yaml
-  # - filebrowser/docker-compose.yaml
   #### Tools
   # - adminer/docker-compose.yaml
   - ittools/docker-compose.yaml
@@ -41,6 +40,7 @@ include:
   ### Notes
   # - wikijs/docker-compose.yaml
   - trilium/docker-compose.yaml
+  # - docmost/docker-compose.yaml
 
   ### Dashboard
   - dashy/docker-compose.yaml
@@ -52,14 +52,25 @@ include:
   #### Office tools
   # - papermerge/docker-compose.yaml
   - drawio/docker-compose.yaml
-  #### Misc
+  # - stirlingpdf/docker-compose.yaml
+  ### File management
+  # - filebrowser/docker-compose.yaml
+  # - nextcloud/docker-compose.yaml
+  ### Finances
+  # - firefly/docker-compose.yaml
+  #### Food
   # - grocy/docker-compose.yaml
+  #### Travel
+  # - airtrail/docker-compose.yaml
+  # adventurelog/docker-compose.yaml
 
   ### Games
   # - wordle/docker-compose.yaml
   ### Development
   # - remoteRhel/docker-compose.yaml
   # - pxe/docker-compose.yaml
+  # - jenkins/docker-compose.yaml
+  # - gitea/docker-compose.yaml
 
   ### Books
   # - calibre/docker-compose.yaml
@@ -67,8 +78,3 @@ include:
   ### Low Code
   # - directus/docker-compose.yaml
   # - appsmith/docker-compose.yaml
-
-  ### Development
-  # - jenkins/docker-compose.yaml
-  # - gitea/docker-compose.yaml
-
