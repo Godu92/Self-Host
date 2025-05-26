@@ -52,7 +52,7 @@ include:
   #### Office tools
   # - papermerge/docker-compose.yaml
   - drawio/docker-compose.yaml
-  # - stirlingpdf/docker-compose.yaml
+  - stirlingpdf/docker-compose.yaml
   ### File management
   # - filebrowser/docker-compose.yaml
   # - nextcloud/docker-compose.yaml
@@ -61,8 +61,8 @@ include:
   #### Food
   # - grocy/docker-compose.yaml
   #### Travel
-  # - airtrail/docker-compose.yaml
-  # adventurelog/docker-compose.yaml
+  # - airtrail/docker-compose.yml
+  # - adventurelog/docker-compose.yml
 
   ### Games
   # - wordle/docker-compose.yaml

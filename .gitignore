@@ -28,6 +28,8 @@ kavita/config
 
 gitea/gitea
 
+stirlingpdf/StirlingPDF
+
 # Specifically tracking envs for test purposes
 ## TODO: Delete later
 !firefly/*.env

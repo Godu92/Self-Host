@@ -1,5 +1,5 @@
 services:
-  web:
+  adventure-web:
     #build: ./frontend/
     image: ghcr.io/seanmorley15/adventurelog-frontend:latest
     container_name: adventurelog-frontend
@@ -11,14 +11,14 @@ services:
     # ports:
     #   - "8015:3000"
     depends_on:
-      - server
+      - adventure-server
     labels:
       - traefik.enable=true
       - traefik.http.routers.adventure.rule=Host(`adventure.$HOST`)
       - traefik.http.routers.adventure.entrypoints=http
       - traefik.http.services.adventure.loadbalancer.server.port=3000
 
-  db:
+  adventure-db:
     image: postgis/postgis:15-3.3
     container_name: adventurelog-db
     restart: unless-stopped
@@ -31,7 +31,7 @@ services:
     labels:
       - traefik.enable=true
 
-  server:
+  adventure-server:
     #build: ./backend/
     image: ghcr.io/seanmorley15/adventurelog-backend:latest
     container_name: adventurelog-backend
@@ -52,7 +52,7 @@ services:
     ports:
       - "8016:80"
     depends_on:
-      - db
+      - adventure-db
     volumes:
       - adventurelog_media:/code/media/
     labels:

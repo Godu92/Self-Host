@@ -7,7 +7,7 @@
 #
 
 services:
-  app:
+  firefly:
     image: fireflyiii/core:latest
     hostname: app
     container_name: firefly_iii_core
@@ -17,16 +17,16 @@ services:
     volumes:
       - firefly_iii_upload:/var/www/html/storage/upload
     env_file: .env
-    # ports:
-      # - '80:8080'
+    ports:
+    - '84:8080'
     depends_on:
-      - db
+      - firefly-db
     labels:
       - traefik.enable=true
       - traefik.http.routers.fire.rule=Host(`fire.$HOST`)
       - traefik.http.routers.fire.entrypoints=http
       - traefik.http.services.fire.loadbalancer.server.port=8080
-  db:
+  firefly-db:
     image: mariadb:lts
     hostname: db
     container_name: firefly_iii_db
@@ -39,44 +39,44 @@ services:
     labels:
       - traefik.enable=true
 
-  importer:
-    image: fireflyiii/data-importer:latest
-    hostname: importer
-    restart: always
-    container_name: firefly_iii_importer
-    networks:
-      - firefly_iii
-    ports:
-      - '81:8080'
-    depends_on:
-      - app
-    env_file: .importer.env
-    labels:
-      - traefik.enable=true
+  # firefly-importer:
+  #   image: fireflyiii/data-importer:latest
+  #   hostname: importer
+  #   restart: always
+  #   container_name: firefly_iii_importer
+  #   networks:
+  #     - firefly_iii
+  #   ports:
+  #     - "81:8080"
+  #   depends_on:
+  #     - firefly
+  #   env_file: .importer.env
+  #   labels:
+  #     - traefik.enable=true
 
-  cron:
-    #
-    # To make this work, set STATIC_CRON_TOKEN in your .env file or as an environment variable and replace PLEASE_REPLACE_WITH_32_CHAR_CODE below
-    # The STATIC_CRON_TOKEN must be *exactly* 32 characters long
-    # Use this URL for inspiration: https://www.random.org/strings/?num=1&len=32&digits=on&upperalpha=on&loweralpha=on&unique=on&format=html&rnd=new
-    #
-    image: alpine
-    container_name: firefly_iii_cron
-    restart: always
-    command: sh -c "
-      apk add tzdata
-      && ln -s /usr/share/zoneinfo/${TZ} /etc/localtime
-      | echo \"0 3 * * * wget -qO- http://app:8080/api/v1/cron/PLEASE_REPLACE_WITH_32_CHAR_CODE;echo\" 
-      | crontab - 
-      && crond -f -L /dev/stdout"
-    networks:
-      - firefly_iii
-    labels:
-      - traefik.enable=true
-      
+  # firefly-cron:
+  #   #
+  #   # To make this work, set STATIC_CRON_TOKEN in your .env file or as an environment variable and replace PLEASE_REPLACE_WITH_32_CHAR_CODE below
+  #   # The STATIC_CRON_TOKEN must be *exactly* 32 characters long
+  #   # Use this URL for inspiration: https://www.random.org/strings/?num=1&len=32&digits=on&upperalpha=on&loweralpha=on&unique=on&format=html&rnd=new
+  #   #
+  #   image: alpine
+  #   container_name: firefly_iii_cron
+  #   restart: always
+  #   command: sh -c "
+  #     apk add tzdata
+  #     && ln -s /usr/share/zoneinfo/${TZ} /etc/localtime
+  #     | echo \"0 3 * * * wget -qO- http://app:8080/api/v1/cron/PLEASE_REPLACE_WITH_32_CHAR_CODE;echo\"
+  #     | crontab -
+  #     && crond -f -L /dev/stdout"
+  #   networks:
+  #     - firefly_iii
+  #   labels:
+  #     - traefik.enable=true
+
 volumes:
-   firefly_iii_upload:
-   firefly_iii_db:
+  firefly_iii_upload:
+  firefly_iii_db:
 
 networks:
   firefly_iii:
