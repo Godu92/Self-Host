@@ -30,6 +30,7 @@ include:
   #### Tools
   # - adminer/docker-compose.yaml
   - ittools/docker-compose.yaml
+  - olivetin/docker-compose.yaml
   #### Monitors
   - glances/docker-compose.yaml
   - uptime/docker-compose.yaml

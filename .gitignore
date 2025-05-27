@@ -4,6 +4,7 @@
 *.db
 *.zip
 *.gz
+*.bak
 
 ## App specific ignores
 pihole/etc-pihole
@@ -29,6 +30,9 @@ kavita/config
 gitea/gitea
 
 stirlingpdf/StirlingPDF
+
+olivetin/config/entities
+olivetin/config/ssh
 
 # Specifically tracking envs for test purposes
 ## TODO: Delete later

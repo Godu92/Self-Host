@@ -6,13 +6,12 @@ This is a collection of local tools, originally made for`RHEL 8` using `podman`.
   - [Starting](#starting)
     - [Example](#example)
   - [Templates](#templates)
-  - [Sample projects](#sample-projects)
-  - [Devcontainer](#devcontainer)
   - [Storage](#storage)
     - [List of Volumes](#list-of-volumes)
       - [Monica](#monica)
       - [Uptime](#uptime)
       - [Trilium](#trilium)
+  - [TODO](#todo)
 
 ## Starting
 
@@ -22,7 +21,7 @@ Example (also found at `./.env-dev`):
 
 ```shell
 HOST=localhost
-DOCKER_DIR=/var/run/docker.sock
+DOCKER_DIR=/var/run/docker.sock # or wherever podman is for you
 TRILIUM_DATA_DIR=./data # optional
 ```
 

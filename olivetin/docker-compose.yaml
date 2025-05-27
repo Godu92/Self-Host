@@ -1,0 +1,16 @@
+services:
+  olivetin:
+    container_name: olivetin
+    image: jamesread/olivetin
+    volumes:
+      - ./config:/config # replace host path or volume as needed
+      - "$DOCKER_DIR:/var/run/docker.sock:ro"
+    user: root
+    ports:
+      - "1337:1337"
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.cmd.rule=Host(`cmd.$HOST`)
+      - traefik.http.routers.cmd.entrypoints=http
+      # - traefik.http.services.cmd.loadbalancer.server.port=1337

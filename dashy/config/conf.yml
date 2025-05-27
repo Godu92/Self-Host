@@ -248,6 +248,21 @@ sections:
         target: newtab
         statusCheckAllowInsecure: false
         id: 26_937_kavita
+      - title: PDF Tools
+        icon: fas fa-file-pdf
+        url: http://pdf.localhost
+        target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 27_937_pdftools
+      - title: OliveTin
+        description: CMDs from the browser
+        icon: fas fa-terminal
+        url: http://cmd.localhost
+        target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 28_937_olivetin
 appConfig:
   theme: crayola
   layout: horizontal
