@@ -27,6 +27,7 @@ include:
 
   ### Admininstration
   # - lazydocker/docker-compose.yaml
+  # - watchtower/docker-compose.yaml
   #### Tools
   # - adminer/docker-compose.yaml
   - ittools/docker-compose.yaml

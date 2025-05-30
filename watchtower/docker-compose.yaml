@@ -1,0 +1,12 @@
+services:
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: unless-stopped
+    volumes:
+      - $DOCKER_DIR:/var/run/docker.sock # Required to monitor other containers
+    command: --interval 3600 # Check for updates every hour (3600s)
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.watch.rule=Host(`watch.$HOST`)
+      - traefik.http.routers.watch.entrypoints=http--label-enable

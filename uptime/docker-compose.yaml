@@ -10,6 +10,10 @@ services:
       # ports:
       #   - '3001:3001'
     restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 512m
     environment:
       - UPTIME_KUMA_DISABLE_FRAME_SAMEORIGIN=true
       - BASE_URL=uptime.$HOST

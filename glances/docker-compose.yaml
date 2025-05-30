@@ -8,6 +8,10 @@ services:
       - GLANCES_OPT=-w
     privileged: true
     pid: host
+    deploy:
+      resources:
+        limits:
+          memory: 512m
     ports:
       - "61208:61208"
     volumes:

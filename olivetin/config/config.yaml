@@ -30,6 +30,7 @@ actions:
     id: status_command
     shell: date
     hidden: false
+    icon: <iconify-icon icon="fluent-mdl2:sync-status"></iconify-icon>
     execOnStartup: true
     execOnCron:
       - "*/1 * * * *"
@@ -188,15 +189,36 @@ actions:
     icon: "&#129302;"
     shell: ansible-playbook -i /etc/hosts /root/myRepo/myPlaybook.yaml
     timeout: 120
+    popupOnStart: execution-dialog
 
+  - title: Ping All Servers
+    shell: "echo 'Ping all servers' && ping -c 2 kvmprime.havana.zen"
+    icon: ping
+    popupOnStart: execution-button
+    maxRate:
+      - limit: 3
+        duration: 5m
+    maxConcurrent: 1
   # The following actions are "dummy" actions, used in a Dashboard. As long as
   # you have these referenced in a dashboard, they will not show up in the
   # `actions` view.
-  - title: Ping hypervisor1
-    shell: echo "hypervisor1 online"
+  - title: Ping havana
+    shell: ping -c 2 kvmprime.havana.zen && echo "---Havana is online---"
+    popupOnStart: execution-button
+    icon: <iconify-icon icon="mdi:server-outline" width="24" height="24"></iconify-icon>
+    maxRate:
+      - limit: 3
+        duration: 5m
+    maxConcurrent: 1
 
   - title: Ping hypervisor2
     shell: echo "hypervisor2 online"
+    popupOnStart: execution-button
+    icon: <iconify-icon icon="lets-icons:server" width="24" height="24"></iconify-icon>
+    maxRate:
+      - limit: 3
+        duration: 5m
+    maxConcurrent: 1
 
   - title: "{{ server.name }} Wake on Lan"
     shell: echo "Sending Wake on LAN to {{ server.hostname }}"
@@ -206,13 +228,15 @@ actions:
     shell: "echo 'Power Off Server: {{ server.hostname }}'"
     entity: server
 
-  - title: Ping All Servers
-    shell: "echo 'Ping all servers'"
-    icon: ping
-
   - title: Start {{ container.Names }}
     icon: box
     shell: docker start {{ container.Names }}
+    entity: container
+    triggers: ["Update container entity file"]
+
+  - title: Restart {{ container.Names }}
+    icon: box
+    shell: docker restart {{ container.Names }}
     entity: container
     triggers: ["Update container entity file"]
 
@@ -225,13 +249,17 @@ actions:
   # Lastly, you can hide actions from the web UI, this is useful for creating
   # background helpers that execute only on startup or a cron, for updating
   # entity files.
-
   - title: Update container entity file
     shell: "docker ps -a --format json > /config/entities/containers.json"
-    hidden: false
+    hidden: true
     execOnStartup: true
     execOnCron: "*/1 * * * *"
     # popupOnStart: execution-dialog
+
+  - title: Mr Green
+    icon: '<img src = "custom-webui/icons/giphy.gif" />'
+    shell: echo "I don't like the word 'emoji' "
+    popupOnStart: execution-dialog-stdout-only
 
 # An entity is something that exists - a "thing", like a VM, or a Container
 # is an entity. OliveTin allows you to then dynamically generate actions based
@@ -280,46 +308,46 @@ dashboards:
         contents:
           - type: stdout-most-recent-execution
             title: status_command
-  # - title: My Servers
-  #   contents:
-  #     - title: All Servers
-  #       type: fieldset
-  #       contents:
-  #         # The contents of a dashboard will try to look for an action with a
-  #         # matching title IF the `contents: ` property is empty.
-  #         - title: Ping All Servers
+  - title: My Servers
+    contents:
+      - title: All Servers
+        type: fieldset
+        contents:
+          # The contents of a dashboard will try to look for an action with a
+          # matching title IF the `contents: ` property is empty.
+          - title: Ping All Servers
 
-  #         # If you create an item with some "contents:", OliveTin will show that as
-  #         # directory.
-  #         - title: Hypervisors
-  #           contents:
-  #             - title: Ping hypervisor1
-  #             - title: Ping hypervisor2
+          # If you create an item with some "contents:", OliveTin will show that as
+          # directory.
+          - title: Hypervisors
+            contents:
+              - title: Ping havana
+              - title: Ping hypervisor2
 
-  #     # If you specify `type: fieldset` and some `contents`, it will show your
-  #     # actions grouped together without a folder.
-  #     - type: fieldset
-  #       entity: server
-  #       title: "Server: {{ server.hostname }}"
-  #       contents:
-  #         # By default OliveTin will look for an action with a matching title
-  #         # and put it on the dashboard.
-  #         #
-  #         # Fieldsets  also support `type: display`, which can display arbitary
-  #         # text. This is useful for displaying things like a container's state.
-  #         - type: display
-  #           title: |
-  #             Hostname: <strong>{{ server.name }}</strong>
-  #             IP Address: <strong>{{ server.ip }}</strong>
+      # If you specify `type: fieldset` and some `contents`, it will show your
+      # actions grouped together without a folder.
+      - type: fieldset
+        entity: server
+        title: "Server: {{ server.hostname }}"
+        contents:
+          # By default OliveTin will look for an action with a matching title
+          # and put it on the dashboard.
+          #
+          # Fieldsets  also support `type: display`, which can display arbitary
+          # text. This is useful for displaying things like a container's state.
+          - type: display
+            title: |
+              Hostname: <strong>{{ server.name }}</strong>
+              IP Address: <strong>{{ server.ip }}</strong>
 
-  #         # These are the actions (defined above) that we want on the dashboard.
-  #         - title: "{{ server.name }} Wake on Lan"
-  #         - title: "{{ server.name }} Power Off"
+          # These are the actions (defined above) that we want on the dashboard.
+          - title: "{{ server.name }} Wake on Lan"
+          - title: "{{ server.name }} Power Off"
 
   # This is the second dashboard.
   - title: My Containers
     contents:
-      - title: "Container {{ container.Names }} ({{ container.Image }})"
+      - title: "Container {{ container.Names }}"
         entity: container
         type: fieldset
         contents:
@@ -328,4 +356,6 @@ dashboards:
               {{ container.RunningFor }} <br /><br /><strong>{{ container.State }}</strong>
 
           - title: "Start {{ container.Names }}"
+          - title: "Restart {{ container.Names }}"
           - title: "Stop {{ container.Names }}"
+themeName: mocha
