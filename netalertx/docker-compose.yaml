@@ -1,0 +1,18 @@
+services:
+  netalertx:
+    image: ghcr.io/jokob-sk/netalertx:latest
+    container_name: NetAlertX
+    privileged: true
+    environment:
+      - TZ=America/New_York
+      - PORT=20211
+    restart: always
+    volumes:
+      - ./netalertx/db:/app/db
+      - ./netalertx/config:/app/config
+    network_mode: host
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.net.rule=Host(`net.$HOST`)"
+      - "traefik.http.routers.net.entrypoints=http"
+      - "traefik.http.services.net.loadbalancer.server.port=20211"

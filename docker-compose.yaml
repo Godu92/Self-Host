@@ -36,6 +36,7 @@ include:
   - glances/docker-compose.yaml
   - uptime/docker-compose.yaml
   # - pihole/docker-compse.yaml
+  - netalertx/docker-compose.yaml
   #### Downloaders
   # - gopeed/docker-compose.yaml
 

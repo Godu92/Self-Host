@@ -263,6 +263,14 @@ sections:
         statusCheck: true
         statusCheckAllowInsecure: true
         id: 28_937_olivetin
+      - title: NetAlertX
+        description: Network Tracing and Monitoring
+        icon: fas fa-network-wired
+        url: http://net.localhost
+        target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 29_937_netalertx
 appConfig:
   theme: crayola
   layout: horizontal
