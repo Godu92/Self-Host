@@ -271,6 +271,14 @@ sections:
         statusCheck: true
         statusCheckAllowInsecure: true
         id: 29_937_netalertx
+      - title: Change Detection
+        description: Website change watcher
+        icon: fas fa-clock
+        url: http://change.localhost
+        target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 30_937_changedetection
 appConfig:
   theme: crayola
   layout: horizontal
