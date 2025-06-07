@@ -37,6 +37,7 @@ include:
   - uptime/docker-compose.yaml
   # - pihole/docker-compse.yaml
   - netalertx/docker-compose.yaml
+  - changedetect/docker-compose.yaml
   #### Downloaders
   # - gopeed/docker-compose.yaml
 
