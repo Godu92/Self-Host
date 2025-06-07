@@ -1,7 +1,7 @@
 services:
   netalertx:
     image: ghcr.io/jokob-sk/netalertx:latest
-    container_name: NetAlertX
+    container_name: netalertx
     privileged: true
     environment:
       - TZ=America/New_York
