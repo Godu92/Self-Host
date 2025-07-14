@@ -3,6 +3,8 @@ services:
     image: "lissy93/dashy:latest"
     restart: always
     container_name: dashy
+    environment:
+      - TZ=America/New_York
     volumes:
       - "./config/conf.yml:/app/user-data/conf.yml"
       ## Place other pages under this folder and link in the `conf.yml`

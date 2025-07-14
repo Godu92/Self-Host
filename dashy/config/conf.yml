@@ -5,7 +5,7 @@ pages:
     path: conf-dev.yml
 pageInfo:
   title: System Dashboard
-  description: ''
+  description: ""
   navLinks:
     - title: Documentation
       path: https://dashy.to/docs
@@ -17,6 +17,8 @@ sections:
       - type: clock
         options:
           format: en-US
+          timeZone: America/New_York
+          hideDate: false
         id: 0_513_clock
       - type: iframe
         options:
@@ -47,6 +49,11 @@ sections:
           hostname: http://localhost:61208
           updateInterval: 5
         id: 2_644_glnetworkinterfaces
+      - type: gl-system-load
+        options:
+          hostname: http://localhost:61208
+          updateInterval: 5
+        id: 3_644_glsystemload
   - name: Localhost
     icon: fab fa-ioxhost
     displayData:
