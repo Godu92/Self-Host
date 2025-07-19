@@ -1,293 +1,32 @@
-pages:
-  - name: Main
-    path: conf.yml
-  - name: Local
-    path: conf-dev.yml
-pageInfo:
-  title: System Dashboard
-  description: ""
-  navLinks:
-    - title: Documentation
-      path: https://dashy.to/docs
-      target: newtab
-sections:
-  - name: Today
-    icon: far fa-calendar-day
-    widgets:
-      - type: clock
-        options:
-          format: en-US
-          timeZone: America/New_York
-          hideDate: false
-        id: 0_513_clock
-      - type: iframe
-        options:
-          url: http://uptime.localhost/status/main
-          # uk1_FFnuFMeCkjCxOOgNBLnyDTtFNTH256G1WCHlnLzy
-          frameHeight: 150
-        id: 1_513_iframe
-  - name: Status
-    icon: fas fa-thermometer-full
-    displayData:
-      sortBy: default
-      rows: 1
-      cols: 1
-      collapsed: false
-      hideForGuests: false
-    widgets:
-      - type: gl-current-cpu
-        options:
-          hostname: http://localhost:61208
-          updateInterval: 5
-        id: 0_644_glcurrentcpu
-      - type: gl-current-mem
-        options:
-          hostname: http://localhost:61208
-          updateInterval: 5
-        id: 1_644_glcurrentmem
-      - type: gl-network-interfaces
-        options:
-          hostname: http://localhost:61208
-          updateInterval: 5
-        id: 2_644_glnetworkinterfaces
-      - type: gl-system-load
-        options:
-          hostname: http://localhost:61208
-          updateInterval: 5
-        id: 3_644_glsystemload
-  - name: Localhost
-    icon: fab fa-ioxhost
-    displayData:
-      sortBy: default
-      rows: 3
-      cols: 5
-      collapsed: false
-      hideForGuests: true
-    items:
-      - title: Traefik
-        icon: fas fa-route
-        url: http://proxy.localhost
-        target: newtab
-        id: 0_937_traefik
-        statusCheck: true
-        statusCheckAllowInsecure: true
-      - title: IT Tools
-        icon: fas fa-tools
-        url: http://tools.localhost
-        target: newtab
-        id: 1_937_ittools
-        statusCheck: true
-        statusCheckAllowInsecure: true
-      - title: Whoami
-        icon: fas fa-question
-        url: http://who.localhost
-        target: newtab
-        id: 2_937_whoami
-        statusCheck: true
-        statusCheckAllowInsecure: true
-      - title: Glances
-        icon: fas fa-search
-        url: http://glance.localhost
-        target: newtab
-        id: 3_937_glances
-        statusCheck: true
-        statusCheckAllowInsecure: true
-      - title: Uptime
-        icon: fas fa-signal
-        url: http://uptime.localhost
-        target: newtab
-        id: 4_937_uptime
-        statusCheck: true
-        statusCheckAllowInsecure: true
-      - title: Notes
-        description: Trilium
-        icon: fas fa-sticky-note
-        url: http://notes.localhost
-        target: newtab
-        id: 5_937_notes
-        statusCheck: true
-        statusCheckAllowInsecure: true
-      - title: Icons
-        description: Font Awesome Icons
-        icon: fab fa-font-awesome
-        url: https://fontawesome.com/search?ic=free
-        id: 6_937_icons
-        statusCheck: true
-        statusCheckAllowInsecure: true
-      - title: DB Viewer
-        icon: fas fa-database
-        url: http://dbviewer.localhost
-        target: newtab
-        id: 7_937_dbviewer
-        statusCheck: false
-        statusCheckAllowInsecure: true
-      - title: AppSmith
-        icon: fas fa-list
-        url: http://lowui.localhost
-        target: newtab
-        id: 8_937_appsmith
-        statusCheck: false
-        statusCheckAllowInsecure: true
-      - title: Directus
-        icon: fas fa-bars
-        url: http://lowdb.localhost
-        target: newtab
-        id: 9_937_directus
-        statusCheck: false
-        statusCheckAllowInsecure: true
-      - title: Monica
-        icon: fas fa-users
-        url: http://people.localhost/
-        target: newtab
-        id: 10_937_monica
-        statusCheck: true
-        statusCheckAllowInsecure: true
-      - title: Papermerge
-        icon: fas fa-paste
-        url: http://paper.localhost/
-        target: newtab
-        id: 11_937_papermerge
-      - title: Focalboard
-        icon: fas fa-tasks
-        url: http://board.localhost/
-        target: newtab
-        statusCheck: false
-        statusCheckAllowInsecure: true
-        id: 12_937_focalboard
-      - title: Grocy
-        icon: fas fa-utensils
-        url: http://grocy.localhost/
-        target: newtab
-        statusCheck: false
-        statusCheckAllowInsecure: true
-        id: 13_937_grocy
-      - title: Wiki
-        description: WikiJS
-        icon: fab fa-wikipedia-w
-        url: http://wiki.localhost
-        target: newtab
-        statusCheck: false
-        statusCheckAllowInsecure: true
-        id: 14_937_wiki
-      - title: Wordle
-        description: Worlde
-        icon: fas fa-chess-board
-        url: http://wordle.localhost
-        target: newtab
-        statusCheck: false
-        statusCheckAllowInsecure: true
-        id: 15_937_wordle
-      - title: File Browser
-        description: Remote File Browser
-        icon: fas fa-folder-tree
-        url: http://file.localhost
-        target: newtab
-        id: 16_937_filebrowser
-        statusCheck: false
-        statusCheckAllowInsecure: true
-      - title: OnlyOffice
-        description: Remote office tools
-        icon: fas fa-briefcase
-        url: http://office.localhost
-        target: newtab
-        id: 17_937_onlyoffice
-        statusCheck: false
-        statusCheckAllowInsecure: true
-      - title: PXE
-        description: Remote pxe file browser
-        icon: fas fa-network-wired
-        url: http://pxe.localhost
-        target: newtab
-        id: 18_937_pxe
-        statusCheck: false
-        statusCheckAllowInsecure: true
-      - title: DrawIO
-        icon: fas fa-pencil
-        url: http://drawio.localhost/
-        target: newtab
-        statusCheck: true
-        statusCheckAllowInsecure: true
-        id: 19_937_drawio
-      - title: Gitea
-        icon: fab fa-git
-        url: http://git.localhost/
-        target: newtab
-        statusCheck: false
-        statusCheckAllowInsecure: true
-        id: 20_937_gitea
-      - title: Jenkins
-        icon: fab fa-jenkins
-        url: http://jenkins.localhost/
-        target: newtab
-        statusCheck: false
-        statusCheckAllowInsecure: true
-        id: 21_937_jenkins
-      - title: PiHole
-        icon: fab fa-raspberry-pi
-        url: http://jenkins.localhost/
-        target: newtab
-        statusCheck: false
-        statusCheckAllowInsecure: true
-        id: 22_937_pihole
-      - title: GoPeed
-        icon: fas fa-download
-        url: http://jenkins.localhost/
-        target: newtab
-        statusCheck: false
-        statusCheckAllowInsecure: true
-        id: 23_937_gopeed
-      - title: Socket
-        icon: fas fa-ethernet
-        url: http://jenkins.localhost/
-        target: newtab
-        statusCheck: false
-        statusCheckAllowInsecure: true
-        id: 24_937_socket
-      - title: Calibre
-        icon: fas fa-book
-        url: http://jenkins.localhost/
-        target: newtab
-        statusCheck: false
-        statusCheckAllowInsecure: true
-        id: 25_937_calibre
-      - title: Kavita
-        icon: fas fa-book-open
-        url: http://jenkins.localhost/
-        target: newtab
-        statusCheckAllowInsecure: false
-        id: 26_937_kavita
-      - title: PDF Tools
-        icon: fas fa-file-pdf
-        url: http://pdf.localhost
-        target: newtab
-        statusCheck: true
-        statusCheckAllowInsecure: true
-        id: 27_937_pdftools
-      - title: OliveTin
-        description: CMDs from the browser
-        icon: fas fa-terminal
-        url: http://cmd.localhost
-        target: newtab
-        statusCheck: true
-        statusCheckAllowInsecure: true
-        id: 28_937_olivetin
-      - title: NetAlertX
-        description: Network Tracing and Monitoring
-        icon: fas fa-network-wired
-        url: http://net.localhost
-        target: newtab
-        statusCheck: true
-        statusCheckAllowInsecure: true
-        id: 29_937_netalertx
-      - title: Change Detection
-        description: Website change watcher
-        icon: fas fa-clock
-        url: http://change.localhost
-        target: newtab
-        statusCheck: true
-        statusCheckAllowInsecure: true
-        id: 30_937_changedetection
-appConfig:
-  theme: crayola
-  layout: horizontal
-  iconSize: medium
+# version: '3.9'
+services:
+  drawio:
+    image: jgraph/drawio
+    # ports:
+    #     - '8443:8443'
+    #     - '8080:8080'
+    container_name: drawio
+    restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.drawio.rule=Host(`drawio.$HOST`)
+      - traefik.http.routers.drawio.entrypoints=http
+      - traefik.http.services.drawio.loadbalancer.server.port=8080
+    environment:
+      - DRAWIO_SELF_CONTAINED=1
+      - EXPORT_URL=http://export.$HOST/
+      - DRAWIO_BASE_URL=draw.$HOST
+    depends_on:
+      - image-export
+  image-export:
+    container_name: image-export
+    image: jgraph/export-server
+    # ports:
+    # - "8000:8000"
+    environment:
+      - DRAWIO_BASE_URL=draw.$HOST
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.export.rule=Host(`export.$HOST`)
+      - traefik.http.routers.export.entrypoints=http
+      - traefik.http.services.export.loadbalancer.server.port=8000
