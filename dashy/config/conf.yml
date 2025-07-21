@@ -5,7 +5,7 @@ pages:
     path: conf-dev.yml
 pageInfo:
   title: System Dashboard
-  description: ""
+  description: Main dashboard for self hosted containers
   navLinks:
     - title: Documentation
       path: https://dashy.to/docs
@@ -64,6 +64,7 @@ sections:
       hideForGuests: true
     items:
       - title: Traefik
+        description: Reverse Proxy
         icon: fas fa-route
         url: http://proxy.localhost
         target: newtab
@@ -71,6 +72,7 @@ sections:
         statusCheck: true
         statusCheckAllowInsecure: true
       - title: IT Tools
+        description: Collection of useful tools
         icon: fas fa-tools
         url: http://tools.localhost
         target: newtab
@@ -78,6 +80,7 @@ sections:
         statusCheck: true
         statusCheckAllowInsecure: true
       - title: Whoami
+        description: Test container
         icon: fas fa-question
         url: http://who.localhost
         target: newtab
@@ -85,6 +88,7 @@ sections:
         statusCheck: true
         statusCheckAllowInsecure: true
       - title: Glances
+        description: System Monitor
         icon: fas fa-search
         url: http://glance.localhost
         target: newtab
@@ -92,6 +96,7 @@ sections:
         statusCheck: true
         statusCheckAllowInsecure: true
       - title: Uptime
+        description: Network uptime monitor
         icon: fas fa-signal
         url: http://uptime.localhost
         target: newtab
@@ -114,6 +119,7 @@ sections:
         statusCheck: true
         statusCheckAllowInsecure: true
       - title: DB Viewer
+        description: PHP admin
         icon: fas fa-database
         url: http://dbviewer.localhost
         target: newtab
@@ -121,6 +127,7 @@ sections:
         statusCheck: false
         statusCheckAllowInsecure: true
       - title: AppSmith
+        description: Low code builder
         icon: fas fa-list
         url: http://lowui.localhost
         target: newtab
@@ -128,6 +135,7 @@ sections:
         statusCheck: false
         statusCheckAllowInsecure: true
       - title: Directus
+        description: Low code builder, the second
         icon: fas fa-bars
         url: http://lowdb.localhost
         target: newtab
@@ -135,6 +143,7 @@ sections:
         statusCheck: false
         statusCheckAllowInsecure: true
       - title: Monica
+        description: People relationship manager
         icon: fas fa-users
         url: http://people.localhost/
         target: newtab
@@ -142,11 +151,13 @@ sections:
         statusCheck: true
         statusCheckAllowInsecure: true
       - title: Papermerge
+        description: Document manager
         icon: fas fa-paste
         url: http://paper.localhost/
         target: newtab
         id: 11_937_papermerge
       - title: Focalboard
+        description: Ticketing system (likely to be swapped)
         icon: fas fa-tasks
         url: http://board.localhost/
         target: newtab
@@ -154,6 +165,7 @@ sections:
         statusCheckAllowInsecure: true
         id: 12_937_focalboard
       - title: Grocy
+        description: Food tracking
         icon: fas fa-utensils
         url: http://grocy.localhost/
         target: newtab
@@ -169,7 +181,7 @@ sections:
         statusCheckAllowInsecure: true
         id: 14_937_wiki
       - title: Wordle
-        description: Worlde
+        description: Worlde clone
         icon: fas fa-chess-board
         url: http://wordle.localhost
         target: newtab
@@ -201,6 +213,7 @@ sections:
         statusCheck: false
         statusCheckAllowInsecure: true
       - title: DrawIO
+        description: Diagram making software
         icon: fas fa-pencil
         url: http://drawio.localhost/
         target: newtab
@@ -208,6 +221,7 @@ sections:
         statusCheckAllowInsecure: true
         id: 19_937_drawio
       - title: Gitea
+        description: Local Gitlab
         icon: fab fa-git
         url: http://git.localhost/
         target: newtab
@@ -215,6 +229,7 @@ sections:
         statusCheckAllowInsecure: true
         id: 20_937_gitea
       - title: Jenkins
+        description: Build pipeline
         icon: fab fa-jenkins
         url: http://jenkins.localhost/
         target: newtab
@@ -222,40 +237,46 @@ sections:
         statusCheckAllowInsecure: true
         id: 21_937_jenkins
       - title: PiHole
+        description: Ad Blocker
         icon: fab fa-raspberry-pi
-        url: http://jenkins.localhost/
+        url: http://pihole.localhost/
         target: newtab
         statusCheck: false
         statusCheckAllowInsecure: true
         id: 22_937_pihole
       - title: GoPeed
+        description: URL Downloader (may get swapped)
         icon: fas fa-download
-        url: http://jenkins.localhost/
+        url: http://go.localhost/
         target: newtab
         statusCheck: false
         statusCheckAllowInsecure: true
         id: 23_937_gopeed
       - title: Socket
+        description: Docker socket security
         icon: fas fa-ethernet
-        url: http://jenkins.localhost/
+        url: http://socket.localhost/
         target: newtab
         statusCheck: false
         statusCheckAllowInsecure: true
         id: 24_937_socket
       - title: Calibre
+        description: Book manager
         icon: fas fa-book
-        url: http://jenkins.localhost/
+        url: http://calibre.localhost/
         target: newtab
         statusCheck: false
         statusCheckAllowInsecure: true
         id: 25_937_calibre
       - title: Kavita
+        description: Book manager, the second
         icon: fas fa-book-open
-        url: http://jenkins.localhost/
+        url: http://kavita.localhost/
         target: newtab
         statusCheckAllowInsecure: false
         id: 26_937_kavita
       - title: PDF Tools
+        description: Collection of useful PDF tools
         icon: fas fa-file-pdf
         url: http://pdf.localhost
         target: newtab
@@ -267,7 +288,7 @@ sections:
         icon: fas fa-terminal
         url: http://cmd.localhost
         target: newtab
-        statusCheck: true
+        statusCheck: false
         statusCheckAllowInsecure: true
         id: 28_937_olivetin
       - title: NetAlertX
@@ -286,6 +307,68 @@ sections:
         statusCheck: true
         statusCheckAllowInsecure: true
         id: 30_937_changedetection
+      - title: PHP IPAM
+        description: Address management software
+        icon: fas fa-globe
+        url: http://php.localhost
+        target: newtab
+        statusCheck: false
+        statusCheckAllowInsecure: true
+        id: 31_937_phpipam
+      - title: AdventureLog
+        description: Trip tracking
+        icon: fas fa-map
+        url: http://trip.localhost
+        target: newtab
+        statusCheck: false
+        statusCheckAllowInsecure: true
+        id: 32_937_adventurelog
+      - title: AirTrail
+        description: Air travel tracking
+        icon: fas fa-plane
+        url: http://air.localhost
+        target: newtab
+        statusCheck: false
+        statusCheckAllowInsecure: true
+        id: 33_937_airtrail
+      - title: DocMost
+        description: Local Confluence wiki
+        icon: fas fa-monument
+        url: http://doc.localhost
+        target: newtab
+        statusCheck: false
+        statusCheckAllowInsecure: true
+        id: 34_937_docmost
+      - title: Firefly3
+        description: Financial software
+        icon: fas fa-coins
+        url: http://fire.localhost
+        target: newtab
+        statusCheck: false
+        statusCheckAllowInsecure: true
+        id: 35_937_firefly
+      - title: NextCloud
+        description: Local Google Drive
+        icon: fas fa-warehouse
+        url: http://next.localhost
+        target: newtab
+        statusCheck: false
+        statusCheckAllowInsecure: true
+        id: 36_937_nextcloud
+      - title: Watch Tower
+        description: Docker container monitor and updater (no website)
+        icon: fas fa-moon
+        url: "---"
+        target: newtab
+        statusCheck: false
+        statusCheckAllowInsecure: true
+        id: 37_937_watchtower
+      - title: Lazy Docker
+        description: Terminal based Docker Desktop (no website)
+        icon: fas fa-couch
+        url: "---"
+        statusCheckAllowInsecure: true
+        id: 38_937_lazydocker
 appConfig:
   theme: crayola
   layout: horizontal
