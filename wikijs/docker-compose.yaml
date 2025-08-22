@@ -36,4 +36,4 @@ services:
 volumes:
   wiki-data:
     name: wiki-data
-    external: true
+    external: false

@@ -80,4 +80,4 @@ x-casaos:
 networks:
   default:
     name: proxy
-    external: true
+    external: false

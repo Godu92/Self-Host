@@ -3,7 +3,7 @@ networks:
   default:
     driver: bridge
     name: proxy
-    external: true
+    external: false
   # socket_proxy:
   #   name: socket_proxy
   #   driver: bridge

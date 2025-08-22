@@ -28,4 +28,4 @@ services:
 volumes:
   up-data:
     name: up-data
-    external: true
+    external: false

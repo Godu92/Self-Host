@@ -37,7 +37,7 @@ services:
 volumes:
   data:
     name: data
-    external: true
+    external: false
   mysql:
     name: mysql
-    external: true
+    external: false

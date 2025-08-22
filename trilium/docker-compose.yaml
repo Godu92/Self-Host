@@ -19,4 +19,4 @@ services:
 volumes:
   tril-data:
     name: tril-data
-    external: true
+    external: false
