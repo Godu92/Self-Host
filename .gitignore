@@ -5,6 +5,7 @@
 *.zip
 *.gz
 *.bak
+*.sql
 
 ## App specific ignores
 pihole/etc-pihole
