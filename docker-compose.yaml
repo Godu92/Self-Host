@@ -22,16 +22,18 @@ include:
   # - socket/docker-compose.yaml
 
   ### Testing
-  - whoami/docker-compose.yaml
+  # - whoami/docker-compose.yaml
   # - testing/docker-compose.yaml
 
   ### Admininstration
   # - lazydocker/docker-compose.yaml
   # - watchtower/docker-compose.yaml
+  # - tenable/docker-compose.yaml
   #### Tools
   # - adminer/docker-compose.yaml
   - ittools/docker-compose.yaml
   # - olivetin/docker-compose.yaml
+  # - n8n/docker-compose.yaml
   #### Monitors
   - glances/docker-compose.yaml
   - uptime/docker-compose.yaml
@@ -53,11 +55,11 @@ include:
   ### Management
   # - focalboard/docker-compose.yaml
   #### People CRM
-  - monica/docker-compose.yaml
+  # - monica/docker-compose.yaml
   #### Office tools
   # - papermerge/docker-compose.yaml
-  - drawio/docker-compose.yaml
-  - stirlingpdf/docker-compose.yaml
+  # - drawio/docker-compose.yaml
+  # - stirlingpdf/docker-compose.yaml
   ### File management
   # - filebrowser/docker-compose.yaml
   # - nextcloud/docker-compose.yaml
