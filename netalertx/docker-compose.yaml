@@ -11,6 +11,8 @@ services:
       - ./netalertx/db:/app/db
       - ./netalertx/config:/app/config
     network_mode: host
+    ports:
+      - 20211:20211
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.net.rule=Host(`net.$HOST`)"

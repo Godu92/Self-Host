@@ -11,7 +11,7 @@ services:
       - ./data:/data
     ports:
       - 443:443
-    restart: unless-stopped
+    restart: always
     labels:
       - traefik.enable=true
       # - traefik.http.routers.next.rule=Host(`next.$HOST`)

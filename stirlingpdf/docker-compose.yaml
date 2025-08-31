@@ -3,7 +3,7 @@ services:
   stirling-pdf:
     image: docker.stirlingpdf.com/stirlingtools/stirling-pdf:latest
     container_name: stirling-pdf
-    restart: unless-stopped
+    restart: always
     # ports:
     #   - '8080:8080'
     volumes:

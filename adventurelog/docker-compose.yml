@@ -3,7 +3,7 @@ services:
     #build: ./frontend/
     image: ghcr.io/seanmorley15/adventurelog-frontend:latest
     container_name: adventurelog-frontend
-    restart: unless-stopped
+    restart: always
     environment:
       - PUBLIC_SERVER_URL=http://server:8000 # Should be the service name of the backend with port 8000, even if you change the port in the backend service
       - ORIGIN=http://localhost:8015
@@ -21,7 +21,7 @@ services:
   adventure-db:
     image: postgis/postgis:15-3.3
     container_name: adventurelog-db
-    restart: unless-stopped
+    restart: always
     environment:
       POSTGRES_DB: database
       POSTGRES_USER: adventure
@@ -35,7 +35,7 @@ services:
     #build: ./backend/
     image: ghcr.io/seanmorley15/adventurelog-backend:latest
     container_name: adventurelog-backend
-    restart: unless-stopped
+    restart: always
     environment:
       - PGHOST=db
       - PGDATABASE=database

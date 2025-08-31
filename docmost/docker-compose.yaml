@@ -14,7 +14,7 @@ services:
       REDIS_URL: "redis://docmost-redis:6379"
     # ports:
     # - "3000:3000"
-    restart: unless-stopped
+    restart: always
     volumes:
       - docmost:/app/data/storage
     labels:
@@ -30,7 +30,7 @@ services:
       POSTGRES_DB: docmost
       POSTGRES_USER: docmost
       POSTGRES_PASSWORD: strongerdbpassword
-    restart: unless-stopped
+    restart: always
     expose:
       - 5432
     volumes:
@@ -41,7 +41,7 @@ services:
   docmost-redis:
     image: redis:7.2-alpine
     container_name: docmost-redis
-    restart: unless-stopped
+    restart: always
     expose:
       - 6379
     volumes:
