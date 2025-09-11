@@ -12,7 +12,8 @@ services:
     volumes:
       - ${MONICA_DIR:-data}:/var/www/html/storage
     depends_on:
-      - monica-db
+      monica-db:
+        condition: service_healthy
     restart: always
     labels:
       - traefik.enable=true
@@ -21,7 +22,7 @@ services:
       - traefik.http.services.people.loadbalancer.server.port=80
 
   monica-db:
-    image: mariadb:11
+    image: mariadb:10.11
     container_name: monica-db
     environment:
       - MYSQL_RANDOM_ROOT_PASSWORD=true
@@ -31,6 +32,16 @@ services:
     volumes:
       - ${MONICA_DB_DIR:-mysql}:/var/lib/mysql
     restart: always
+    command: >
+      --innodb-force-recovery=1
+      --skip-grant-tables
+      --skip-networking=false
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      timeout: 20s
+      retries: 10
+      interval: 30s
+      start_period: 60s
     labels:
       - traefik.enable=true
 

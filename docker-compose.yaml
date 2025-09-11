@@ -56,7 +56,7 @@ include:
   ### Management
   # - focalboard/docker-compose.yaml
   #### People CRM
-  # - monica/docker-compose.yaml
+  - monica/docker-compose.yaml
   #### Office tools
   # - papermerge/docker-compose.yaml
   # - drawio/docker-compose.yaml
