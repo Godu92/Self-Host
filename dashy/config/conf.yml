@@ -22,7 +22,7 @@ sections:
         id: 0_513_clock
       - type: iframe
         options:
-          url: http://uptime.localhost/status/main
+          url: http://localhost:3001/status/main
           frameHeight: 150
         id: 1_513_iframe
   - name: Status
