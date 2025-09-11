@@ -37,6 +37,7 @@ include:
   #### Monitors
   - glances/docker-compose.yaml
   - uptime/docker-compose.yaml
+  # - autokuma/docker-compose.yaml
   # - pihole/docker-compose.yaml
   - netalertx/docker-compose.yaml
   - changedetect/docker-compose.yaml

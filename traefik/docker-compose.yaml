@@ -27,3 +27,7 @@ services:
       - traefik.http.routers.proxy.rule=Host(`proxy.$HOST`)
       - traefik.http.routers.proxy.entrypoints=http
       - traefik.http.services.proxy.loadbalancer.server.port=8080
+      - kuma.mygroup.group.name='This is a Group'
+      - kuma.mymonitor.http.name='This is a Monitor assigned to a Group'
+      - kuma.mymonitor.http.parent_name='mygroup'
+      - kuma.mymonitor.http.url='http://proxy.$HOST'

@@ -1,0 +1,41 @@
+# version: "3"
+
+services:
+  autokuma:
+    image: ghcr.io/bigboot/autokuma:latest
+    restart: unless-stopped
+    container_name: autokuma
+    environment:
+      AUTOKUMA__KUMA__URL: http://localhost:3001
+      # AUTOKUMA__KUMA__USERNAME: admin
+      # AUTOKUMA__KUMA__PASSWORD: admin1
+      # AUTOKUMA__KUMA__MFA_TOKEN: <token>
+      # AUTOKUMA__KUMA__HEADERS: "<header1_key>=<header1_value>,<header2_key>=<header2_value>,..."
+      # AUTOKUMA__KUMA__CALL_TIMEOUT: 5
+      # AUTOKUMA__KUMA__CONNECT_TIMEOUT: 5
+      # AUTOKUMA__TAG_NAME: AutoKuma
+      # AUTOKUMA__TAG_COLOR: "#42C0FB"
+      # AUTOKUMA__DEFAULT_SETTINGS: |-
+      #   docker.docker_container: {{container_name}}
+      #   http.max_redirects: 10
+      #   *.max_retries: 3
+      # AUTOKUMA__SNIPPETS__WEB: |-
+      #   {{container_name}}_http.http.name: {{container_name}} HTTP
+      #   {{container_name}}_http.http.url: https://{{@0}}:{{@1}}
+      #   {{container_name}}_docker.docker.name: {{container_name}} Docker
+      #   {{container_name}}_docker.docker.docker_container: {{container_name}}
+      # AUTOKUMA__DOCKER__HOSTS: unix:///var/run/docker.sock
+      AUTOKUMA__DOCKER__LABEL_PREFIX: kuma
+      AUTOKUMA__DOCKER__EXCLUDE_CONTAINER_PATTERNS: "^[a-f0-9]{12}_.*_" # Exclude Docker Compose temporary containers
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - autokuma-data:/data
+    labels:
+      - traefik.enable=true
+      # - traefik.http.routers.kuma.rule=Host(`kuma.$HOST`)
+      # - traefik.http.routers.kuma.entrypoints=http
+      # - traefik.http.services.kuma.loadbalancer.server.port=3001
+
+volumes:
+  autokuma-data:
