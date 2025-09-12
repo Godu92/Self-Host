@@ -1,11 +1,12 @@
 ## General ignores
 *.nfs*
-*.env
+.env
 *.db
 *.zip
 *.gz
 *.bak
 *.sql
+*_data
 
 ## App specific ignores
 pihole/etc-pihole

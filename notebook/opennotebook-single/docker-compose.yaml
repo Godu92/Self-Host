@@ -1,0 +1,57 @@
+services:
+  # Single container with everything built-in (eliminates networking issues)
+  open-notebook-single:
+    image: lfnovo/open_notebook:latest-single
+    container_name: open-notebook-single
+    restart: unless-stopped
+    volumes:
+      - ./notebook_data:/app/data
+      - ./surreal_data:/mydata
+      # - ./certs/tls-ca-bundle.pem:/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem:ro
+    env_file:
+      - ./docker.env
+    ports:
+      - "8502:8502" # Streamlit UI
+      - "5055:5055" # FastAPI backend
+    # networks:
+    #   - proxy
+    # labels:
+    #   - traefik.enable=true
+    #   - traefik.http.routers.notebook.rule=Host(`notebook.${HOST}`)
+    #   - traefik.http.routers.notebook.entrypoints=http
+    #   - traefik.http.services.notebook.loadbalancer.server.port=8502
+
+  # Keep Ollama separate (still needed for AI)
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - 11434:11434
+    volumes:
+      - ./ollama_data:/root/.ollama
+      # - ./certs/tls-ca-bundle.pem:/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem:ro
+    env_file:
+      - ./docker.env
+    # networks:
+    #   - proxy
+    # labels:
+    #   - traefik.enable=true
+    #   - traefik.http.routers.ollama.rule=Host(`ollama.${HOST}`)
+    #   - traefik.http.routers.ollama.entrypoints=http
+    #   - traefik.http.services.ollama.loadbalancer.server.port=11434
+
+# networks:
+#   proxy:
+#     external: true
+
+volumes:
+  notebook_data:
+    name: notebook_data
+    external: false
+  surreal_data:
+    name: surreal_data
+    external: false
+  ollama_data:
+    name: ollama_data
+    external: false
