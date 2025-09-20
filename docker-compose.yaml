@@ -42,6 +42,7 @@ include:
   - netalertx/docker-compose.yaml
   - changedetect/docker-compose.yaml
   # - phpipam/docker-compose.yaml
+  - gotify/docker-compose.yaml
   #### Downloaders
   # - gopeed/docker-compose.yaml
 

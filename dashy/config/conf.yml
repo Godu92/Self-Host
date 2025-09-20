@@ -358,7 +358,7 @@ sections:
       - title: Watch Tower
         description: Docker container monitor and updater (no website)
         icon: fas fa-moon
-        url: "---"
+        url: '---'
         target: newtab
         statusCheck: false
         statusCheckAllowInsecure: true
@@ -366,9 +366,17 @@ sections:
       - title: Lazy Docker
         description: Terminal based Docker Desktop (no website)
         icon: fas fa-couch
-        url: "---"
+        url: '---'
         statusCheckAllowInsecure: true
         id: 38_937_lazydocker
+      - title: Gotify
+        description: Notification server
+        icon: fas fa-flag
+        url: http://notice.localhost
+        target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 39_937_gotify
 appConfig:
   theme: crayola
   layout: horizontal

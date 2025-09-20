@@ -1,0 +1,18 @@
+# version: '3.9'
+services:
+  gotify:
+    image: gotify/server
+    environment:
+      - TZ=America/New_York
+    ports:
+      - "8081:80"
+    restart: always
+    container_name: gotify
+    volumes:
+      - ./data:/app/data
+      - ./config.yml:/app/data/config.yml
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.notice.rule=Host(`notice.$HOST`)
+      - traefik.http.routers.notice.entrypoints=http
+      - traefik.http.services.notice.loadbalancer.server.port=80
