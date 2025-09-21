@@ -31,8 +31,3 @@ services:
 volumes:
   pihole_etc:
     name: pihole_etc
-
-networks:
-  default:
-    name: proxy
-    external: false

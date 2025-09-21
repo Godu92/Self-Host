@@ -76,8 +76,3 @@ x-casaos:
   title:
     custom: Gopeed (9999)
     en_us: Gopeed
-
-networks:
-  default:
-    name: proxy
-    external: false
