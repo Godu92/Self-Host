@@ -377,6 +377,22 @@ sections:
         statusCheck: true
         statusCheckAllowInsecure: true
         id: 39_937_gotify
+      - title: N8N
+        description: Automation Pipeline
+        icon: fas fa-bezier-curve
+        url: http://n8n.localhost
+        target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 40_937_nn
+      - title: OpenNotebook
+        description: NotebookLM
+        icon: fas fa-book
+        url: http://notebook.localhost
+        target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 41_937_opennotebook
 appConfig:
   theme: crayola
   layout: horizontal

@@ -33,12 +33,12 @@ include:
   # - adminer/docker-compose.yaml
   - ittools/docker-compose.yaml
   # - olivetin/docker-compose.yaml
-  # - n8n/docker-compose.yaml
+  - n8n/docker-compose.yaml
   #### Monitors
   - glances/docker-compose.yaml
   - uptime/docker-compose.yaml
   # - autokuma/docker-compose.yaml
-  # - pihole/docker-compose.yaml
+  - pihole/docker-compose.yaml
   - netalertx/docker-compose.yaml
   - changedetect/docker-compose.yaml
   # - phpipam/docker-compose.yaml
