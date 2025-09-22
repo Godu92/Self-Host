@@ -50,6 +50,8 @@ include:
   # - wikijs/docker-compose.yaml
   - trilium/docker-compose.yaml
   # - docmost/docker-compose.yaml
+  #### AI
+  - notebook/opennotebook-single/docker-compose.yaml
 
   ### Dashboard
   - dashy/docker-compose.yaml
