@@ -124,7 +124,7 @@ sections:
         url: http://dbviewer.localhost
         target: newtab
         id: 7_937_dbviewer
-        statusCheck: false
+        statusCheck: true
         statusCheckAllowInsecure: true
       - title: AppSmith
         description: Low code builder
@@ -132,7 +132,7 @@ sections:
         url: http://lowui.localhost
         target: newtab
         id: 8_937_appsmith
-        statusCheck: false
+        statusCheck: true
         statusCheckAllowInsecure: true
       - title: Directus
         description: Low code builder, the second
@@ -140,7 +140,7 @@ sections:
         url: http://lowdb.localhost
         target: newtab
         id: 9_937_directus
-        statusCheck: false
+        statusCheck: true
         statusCheckAllowInsecure: true
       - title: Monica
         description: People relationship manager
@@ -155,13 +155,15 @@ sections:
         icon: fas fa-paste
         url: http://paper.localhost/
         target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
         id: 11_937_papermerge
       - title: Focalboard
         description: Ticketing system (likely to be swapped)
         icon: fas fa-tasks
         url: http://board.localhost/
         target: newtab
-        statusCheck: false
+        statusCheck: true
         statusCheckAllowInsecure: true
         id: 12_937_focalboard
       - title: Grocy
@@ -169,7 +171,7 @@ sections:
         icon: fas fa-utensils
         url: http://grocy.localhost/
         target: newtab
-        statusCheck: false
+        statusCheck: true
         statusCheckAllowInsecure: true
         id: 13_937_grocy
       - title: Wiki
@@ -177,7 +179,7 @@ sections:
         icon: fab fa-wikipedia-w
         url: http://wiki.localhost
         target: newtab
-        statusCheck: false
+        statusCheck: true
         statusCheckAllowInsecure: true
         id: 14_937_wiki
       - title: Wordle
@@ -185,7 +187,7 @@ sections:
         icon: fas fa-chess-board
         url: http://wordle.localhost
         target: newtab
-        statusCheck: false
+        statusCheck: true
         statusCheckAllowInsecure: true
         id: 15_937_wordle
       - title: File Browser
@@ -194,7 +196,7 @@ sections:
         url: http://file.localhost
         target: newtab
         id: 16_937_filebrowser
-        statusCheck: false
+        statusCheck: true
         statusCheckAllowInsecure: true
       - title: OnlyOffice
         description: Remote office tools
@@ -202,7 +204,7 @@ sections:
         url: http://office.localhost
         target: newtab
         id: 17_937_onlyoffice
-        statusCheck: false
+        statusCheck: true
         statusCheckAllowInsecure: true
       - title: PXE
         description: Remote pxe file browser
@@ -210,7 +212,7 @@ sections:
         url: http://pxe.localhost
         target: newtab
         id: 18_937_pxe
-        statusCheck: false
+        statusCheck: true
         statusCheckAllowInsecure: true
       - title: DrawIO
         description: Diagram making software
@@ -225,7 +227,7 @@ sections:
         icon: fab fa-git
         url: http://git.localhost/
         target: newtab
-        statusCheck: false
+        statusCheck: true
         statusCheckAllowInsecure: true
         id: 20_937_gitea
       - title: Jenkins
@@ -233,7 +235,7 @@ sections:
         icon: fab fa-jenkins
         url: http://jenkins.localhost/
         target: newtab
-        statusCheck: false
+        statusCheck: true
         statusCheckAllowInsecure: true
         id: 21_937_jenkins
       - title: PiHole
@@ -241,7 +243,7 @@ sections:
         icon: fab fa-raspberry-pi
         url: http://pihole.localhost/
         target: newtab
-        statusCheck: false
+        statusCheck: true
         statusCheckAllowInsecure: true
         id: 22_937_pihole
       - title: GoPeed
@@ -249,7 +251,7 @@ sections:
         icon: fas fa-download
         url: http://go.localhost/
         target: newtab
-        statusCheck: false
+        statusCheck: true
         statusCheckAllowInsecure: true
         id: 23_937_gopeed
       - title: Socket
@@ -257,7 +259,7 @@ sections:
         icon: fas fa-ethernet
         url: http://socket.localhost/
         target: newtab
-        statusCheck: false
+        statusCheck: true
         statusCheckAllowInsecure: true
         id: 24_937_socket
       - title: Calibre
@@ -265,7 +267,7 @@ sections:
         icon: fas fa-book
         url: http://calibre.localhost/
         target: newtab
-        statusCheck: false
+        statusCheck: true
         statusCheckAllowInsecure: true
         id: 25_937_calibre
       - title: Kavita
@@ -273,7 +275,8 @@ sections:
         icon: fas fa-book-open
         url: http://kavita.localhost/
         target: newtab
-        statusCheckAllowInsecure: false
+        statusCheck: true
+        statusCheckAllowInsecure: true
         id: 26_937_kavita
       - title: PDF Tools
         description: Collection of useful PDF tools
@@ -288,7 +291,7 @@ sections:
         icon: fas fa-terminal
         url: http://cmd.localhost
         target: newtab
-        statusCheck: false
+        statusCheck: true
         statusCheckAllowInsecure: true
         id: 28_937_olivetin
       - title: NetAlertX
@@ -312,7 +315,7 @@ sections:
         icon: fas fa-globe
         url: http://php.localhost
         target: newtab
-        statusCheck: false
+        statusCheck: true
         statusCheckAllowInsecure: true
         id: 31_937_phpipam
       - title: AdventureLog
@@ -320,7 +323,7 @@ sections:
         icon: fas fa-map
         url: http://trip.localhost
         target: newtab
-        statusCheck: false
+        statusCheck: true
         statusCheckAllowInsecure: true
         id: 32_937_adventurelog
       - title: AirTrail
@@ -328,7 +331,7 @@ sections:
         icon: fas fa-plane
         url: http://air.localhost
         target: newtab
-        statusCheck: false
+        statusCheck: true
         statusCheckAllowInsecure: true
         id: 33_937_airtrail
       - title: DocMost
@@ -336,7 +339,7 @@ sections:
         icon: fas fa-monument
         url: http://doc.localhost
         target: newtab
-        statusCheck: false
+        statusCheck: true
         statusCheckAllowInsecure: true
         id: 34_937_docmost
       - title: Firefly3
@@ -344,7 +347,7 @@ sections:
         icon: fas fa-coins
         url: http://fire.localhost
         target: newtab
-        statusCheck: false
+        statusCheck: true
         statusCheckAllowInsecure: true
         id: 35_937_firefly
       - title: NextCloud
@@ -352,7 +355,7 @@ sections:
         icon: fas fa-warehouse
         url: http://next.localhost
         target: newtab
-        statusCheck: false
+        statusCheck: true
         statusCheckAllowInsecure: true
         id: 36_937_nextcloud
       - title: Watch Tower
@@ -360,7 +363,7 @@ sections:
         icon: fas fa-moon
         url: '---'
         target: newtab
-        statusCheck: false
+        statusCheck: true
         statusCheckAllowInsecure: true
         id: 37_937_watchtower
       - title: Lazy Docker
@@ -371,7 +374,7 @@ sections:
         id: 38_937_lazydocker
       - title: Gotify
         description: Notification server
-        icon: fas fa-flag
+        icon: fas fa-bell
         url: http://notice.localhost
         target: newtab
         statusCheck: true
