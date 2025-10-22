@@ -4,11 +4,12 @@ services:
     container_name: pihole
     image: pihole/pihole:latest
     # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
-    # ports:
-    # - "53:53/tcp"
-    # - "53:53/udp"
-    # - "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
-    # - "88:80/tcp"
+    # network_mode: host
+    ports:
+      # - "53:53/tcp"
+      # - "53:53/udp"
+      # - "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
+      # - "88:80/tcp"
     environment:
       TZ: "America/Chicago"
       INTERFACE: "eno1"
@@ -17,7 +18,9 @@ services:
       VIRTUAL_HOST: pihole.$HOST
     # Volumes store your data between container upgrades
     volumes:
-      - pihole_etc:/etc/pihole
+      # - ./pihole_data/adlists.list:/etc/pihole/manual-lists/adlists.list
+      - ./pihole_data:/etc/pihole
+      # - ./certs:/etc/ssl/certs/ # Uncomment if certs are needed
       # - "./etc-dnsmasq.d:/etc/dnsmasq.d"
     #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
     # cap_add:
@@ -27,7 +30,3 @@ services:
       traefik.enable: "true"
       traefik.http.routers.pihole.rule: Host(`pihole.$HOST`)
       traefik.http.services.pihole.loadbalancer.server.port: "80"
-
-volumes:
-  pihole_etc:
-    name: pihole_etc
