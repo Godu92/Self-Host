@@ -22,7 +22,7 @@ include:
   # - socket/docker-compose.yaml
 
   ### Testing
-  # - whoami/docker-compose.yaml
+  - whoami/docker-compose.yaml
   # - testing/docker-compose.yaml
 
   ### Admininstration
@@ -31,35 +31,36 @@ include:
   # - tenable/docker-compose.yaml
   #### Tools
   # - adminer/docker-compose.yaml
-  - ittools/docker-compose.yaml
+  # - ittools/docker-compose.yaml
   # - olivetin/docker-compose.yaml
-  - n8n/docker-compose.yaml
+  # - n8n/docker-compose.yaml
   #### Monitors
   - glances/docker-compose.yaml
   - uptime/docker-compose.yaml
   # - autokuma/docker-compose.yaml
-  - pihole/docker-compose.yaml
-  - netalertx/docker-compose.yaml
-  - changedetect/docker-compose.yaml
+  # - pihole/docker-compose.yaml
+  # - netalertx/docker-compose.yaml
+  # - changedetect/docker-compose.yaml
   # - phpipam/docker-compose.yaml
-  - gotify/docker-compose.yaml
+  # - gotify/docker-compose.yaml
   #### Downloaders
   # - gopeed/docker-compose.yaml
 
   ### Notes
   # - wikijs/docker-compose.yaml
-  - trilium/docker-compose.yaml
+  # - trilium/docker-compose.yaml
   # - docmost/docker-compose.yaml
   #### AI
-  - notebook/opennotebook-single/docker-compose.yaml
+  # - notebook/opennotebook-single/docker-compose.yaml
 
   ### Dashboard
   - dashy/docker-compose.yaml
 
   ### Management
   # - focalboard/docker-compose.yaml
+  # - super-prod/docker-compose.yaml
   #### People CRM
-  - monica/docker-compose.yaml
+  # - monica/docker-compose.yaml
   #### Office tools
   # - papermerge/docker-compose.yaml
   # - drawio/docker-compose.yaml
