@@ -396,6 +396,14 @@ sections:
         statusCheck: true
         statusCheckAllowInsecure: true
         id: 41_937_opennotebook
+      - title: Super Productivity
+        description: Todo list and Kanban
+        icon: fas fa-clipboard-list
+        url: http://super.localhost
+        target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 42_937_superproductivity
 appConfig:
   theme: crayola
   layout: horizontal

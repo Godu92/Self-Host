@@ -1,0 +1,17 @@
+# version: "3.8"
+services:
+  superproductivity:
+    container_name: super-prod
+    image: johannesjo/super-productivity:latest
+    # ports:
+    #   - "80:80" # Maps host port 80 to container port 80
+    # Optional: Add volumes for persistent data if needed, e.g., for WebDAV sync config
+    volumes:
+      - ./data:/app/data
+    restart: always
+    environment:
+      - TZ=America/New_York
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.super.rule: Host(`super.$HOST`)
+      traefik.http.services.super.loadbalancer.server.port: "80"
