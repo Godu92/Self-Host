@@ -1,19 +1,35 @@
+# version: '3.9'
 services:
   jenkins:
-    image: 'jenkinsci/blueocean:latest'
+    image: "local/jenkins:latest"
+    restart: always
     container_name: jenkins
-    # ports:
-    #   - '${JENKINS_HTTP_PORT}:8080'
-    #   - '${JENKINS_HTTPS_PORT}:8443'
     volumes:
-      - 'jenkins_data:/var/jenkins_home'
+      - ./data:/var/jenkins_home
+      # - ./certs:/usr/local/share/ca-certificates/ # Uncomment if extra certs are needed
     environment:
-      - 'JENKINS_OPTS=--httpPort=8080 --httpsPort=8443'
+      - DOCKER_HOST=tcp://docker:2376
+      - DOCKER_CERT_PATH=/certs/client
+      - DOCKER_TLS_VERIFY=1
     labels:
       - traefik.enable=true
       - traefik.http.routers.jenkins.rule=Host(`jenkins.$HOST`)
       - traefik.http.routers.jenkins.entrypoints=http
       - traefik.http.services.jenkins.loadbalancer.server.port=8080
-volumes:
-  jenkins_data:
-    driver: local
+
+  # Use this to install/update plugins
+  jenkins-updates:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: "local/jenkins:latest"
+    network_mode: "host"
+    container_name: jenkins
+    restart: always
+    volumes:
+      - ./data:/var/jenkins_home
+      # - ./certs:/usr/local/share/ca-certificates/ # Uncomment if extra certs are needed
+    profiles:
+      - updates
+    # Optional: override entrypoint to keep it running
+    # command: tail -f /dev/null
