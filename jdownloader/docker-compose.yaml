@@ -1,0 +1,20 @@
+services:
+  jdownloader:
+    image: jlesage/jdownloader-2
+    container_name: jdownloader
+    restart: always
+    environment:
+      - TZ=America/New_York
+      - MYJDOWNLOADER_EMAIL=your-email@example.com
+      - MYJDOWNLOADER_PASSWORD=your-password
+      - MYJDOWNLOADER_DEVICE_NAME=n8n-downloader
+    volumes:
+      - ./config:/config
+      - ./downloads:/output
+    # ports:
+    #   - "5800:5800"  # WebUI
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.jdown.rule=Host(`jdown.$HOST`)
+      - traefik.http.routers.jdown.entrypoints=http
+      - traefik.http.services.jdown.loadbalancer.server.port=5800

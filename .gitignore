@@ -38,18 +38,16 @@ netalertx/netalertx
 olivetin/config/entities
 olivetin/config/ssh
 
-# Specifically tracking envs for test purposes
-## TODO: Delete later
-!firefly/*.env
-!airtrail/*.env
+pxe/assets
+pxe/config
+
+jdownloader/config
+jdownloader/downloads
 
 ## Any containers that just "data" as a folder
 ### Should probably make this easier by making everything:
 #### "assets" "data" "config"
 data
 certs
-
-pxe/assets
-pxe/config
 
 ## TODO: dockerignores
