@@ -45,6 +45,7 @@ include:
   # - gotify/docker-compose.yaml
   #### Downloaders
   # - gopeed/docker-compose.yaml
+  # - jdownloader/docker-compose.yaml
 
   ### Notes
   # - wikijs/docker-compose.yaml
@@ -61,6 +62,7 @@ include:
   # - super-prod/docker-compose.yaml
   #### People CRM
   # - monica/docker-compose.yaml
+  # - freeipa/docker-compose.yaml
   #### Office tools
   # - papermerge/docker-compose.yaml
   # - drawio/docker-compose.yaml
