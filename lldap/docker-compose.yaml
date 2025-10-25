@@ -1,0 +1,28 @@
+services:
+  lldap:
+    image: lldap/lldap:stable
+    container_name: lldap
+    restart: always
+
+    expose:
+      - 3890 # LDAP port
+
+    ports:
+      - 17170:17170
+
+    volumes:
+      - ./data:/data
+
+    environment:
+      - TZ=America/New_York
+      - LLDAP_JWT_SECRET=BeY3t6PYRl5Hr7OE+dnK3npG2sRjOnCWKHS5i+Vqb1k=
+      - LLDAP_LDAP_USER_PASS=admin123
+      - LLDAP_LDAP_BASE_DN=dc=localhost
+      - LLDAP_LDAP_USER_DN=admin
+      - LLDAP_LDAP_USER_EMAIL=admin@localhost
+
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.ldap.rule=Host(`ldap.${HOST}`)
+      - traefik.http.routers.ldap.entrypoints=http
+      - traefik.http.services.ldap.loadbalancer.server.port=17170

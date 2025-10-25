@@ -388,22 +388,30 @@ sections:
         statusCheck: true
         statusCheckAllowInsecure: true
         id: 40_937_nn
-      - title: OpenNotebook
+      - title: NotebookLM
         description: NotebookLM
         icon: fas fa-book
         url: http://notebook.localhost
         target: newtab
         statusCheck: true
         statusCheckAllowInsecure: true
-        id: 41_937_opennotebook
-      - title: Super Productivity
+        id: 41_937_notebooklm
+      - title: Productivity
         description: Todo list and Kanban
         icon: fas fa-clipboard-list
         url: http://super.localhost
         target: newtab
         statusCheck: true
         statusCheckAllowInsecure: true
-        id: 42_937_superproductivity
+        id: 42_937_productivity
+      - title: FreeIPA
+        description: User authentication
+        icon: fas fa-lock
+        url: http://ipa.localhost
+        target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 43_937_freeipa
 appConfig:
   theme: crayola
   layout: horizontal

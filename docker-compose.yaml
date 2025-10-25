@@ -62,7 +62,9 @@ include:
   # - super-prod/docker-compose.yaml
   #### People CRM
   # - monica/docker-compose.yaml
+  #### Account management
   # - freeipa/docker-compose.yaml
+  - lldap/docker-compose.yaml
   #### Office tools
   # - papermerge/docker-compose.yaml
   # - drawio/docker-compose.yaml
