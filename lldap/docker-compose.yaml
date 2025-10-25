@@ -4,11 +4,12 @@ services:
     container_name: lldap
     restart: always
 
-    expose:
-      - 3890 # LDAP port
+    # expose:
+    #   - 3890 # LDAP port
 
     ports:
       - 17170:17170
+      - 3890:3890
 
     volumes:
       - ./data:/data
