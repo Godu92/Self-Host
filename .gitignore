@@ -3,6 +3,7 @@
 .env
 *.db
 *.zip
+*.tar
 *.gz
 *.bak
 *.sql

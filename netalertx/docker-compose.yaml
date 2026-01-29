@@ -14,7 +14,7 @@ services:
     # ports:
     #   - 20211:20211
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.net.rule=Host(`net.$HOST`)"
-      - "traefik.http.routers.net.entrypoints=http"
-      - "traefik.http.services.net.loadbalancer.server.url=http://172.18.0.1:20211"
+      - traefik.enable=true
+      - traefik.http.routers.net.rule=Host(`net.$HOST`)
+      - traefik.http.routers.net.entrypoints=http
+      - traefik.http.services.net.loadbalancer.server.port=20211

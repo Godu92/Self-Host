@@ -412,6 +412,22 @@ sections:
         statusCheck: true
         statusCheckAllowInsecure: true
         id: 43_937_freeipa
+      - title: LLDAP
+        description: Simple LDAP
+        icon: fas fa-unlock
+        url: http://ldap.localhost
+        target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 44_937_lldap
+      - title: Registry
+        description: Docker Registry
+        icon: fab fa-docker
+        url: http://dock.localhost
+        target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 45_937_registry
 appConfig:
   theme: crayola
   layout: horizontal

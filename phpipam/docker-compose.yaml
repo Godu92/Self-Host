@@ -1,33 +1,68 @@
-# version: '2'
+# version: '3'
 
 services:
-  mysql:
-    image: mysql:5.6
-    container_name: mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=my-secret-pw
-    restart: always
-    ports:
-      - "3306:3306"
-    volumes:
-      - php_db_data:/var/lib/mysql
-  phpipam:
-    depends_on:
-      - mysql
-    image: pierrecdn/phpipam
-    container_name: phpipam
-    volumes:
-      - ./SCHEMA.sql:/var/www/html/db/SCHEMA.sql
-    environment:
-      - MYSQL_ENV_MYSQL_USER=root
-      - MYSQL_ENV_MYSQL_ROOT_PASSWORD=my-secret-pw
-      - MYSQL_ENV_MYSQL_HOST=mysql
+  phpipam-web:
+    container_name: phpipam-web
+    image: phpipam/phpipam-www:latest
     # ports:
-    # - "80:80"
+    #   - "80:80"
+    environment:
+      - TZ=America/New_York
+      - IPAM_DATABASE_HOST=phpipam-mariadb
+      - IPAM_DATABASE_PASS=my_secret_phpipam_pass
+      - IPAM_DATABASE_WEBHOST=%
+      - IPAM_DATABASE_USER=phpipam
+    restart: unless-stopped
+    volumes:
+      - phpipam-logo:/phpipam/css/images/logo
+      - phpipam-ca:/usr/local/share/ca-certificates:ro
+    depends_on:
+      - phpipam-mariadb
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
     labels:
       - traefik.enable=true
       - traefik.http.routers.php.rule=Host(`php.$HOST`)
       - traefik.http.routers.php.entrypoints=http
       - traefik.http.services.php.loadbalancer.server.port=80
+
+  phpipam-cron:
+    container_name: phpipam-cron
+    image: phpipam/phpipam-cron:latest
+    environment:
+      - TZ=America/New_York
+      - IPAM_DATABASE_HOST=phpipam-mariadb
+      - IPAM_DATABASE_PASS=my_secret_phpipam_pass
+      - SCAN_INTERVAL=1h
+    restart: unless-stopped
+    volumes:
+      - phpipam-ca:/usr/local/share/ca-certificates:ro
+    depends_on:
+      - phpipam-mariadb
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+
+  phpipam-mariadb:
+    container_name: phpipam-mariadb
+    image: mariadb:11.2.3
+    environment:
+      - MYSQL_ROOT_PASSWORD=my_secret_mysql_root_pass
+      - MYSQL_DATABASE=phpipam
+      - MYSQL_USER=phpipam
+      - MYSQL_PASSWORD=my_secret_phpipam_pass
+    restart: unless-stopped
+    volumes:
+      - phpipam-db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      timeout: 20s
+      retries: 10
+      interval: 30s
+      start_period: 60s
+
 volumes:
-  php_db_data:
+  phpipam-db-data:
+  phpipam-logo:
+  phpipam-ca:

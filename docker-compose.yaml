@@ -87,6 +87,7 @@ include:
   # - pxe/docker-compose.yaml
   # - jenkins/docker-compose.yaml
   # - gitea/docker-compose.yaml
+  # - registry/docker-compose.yaml
 
   ### Books
   # - calibre/docker-compose.yaml
