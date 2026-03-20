@@ -1,0 +1,14 @@
+---
+services:
+  dozzle:
+    container_name: dozzle
+    image: amir20/dozzle:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    # ports:
+    #   - 8080:8080
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.logs.rule=Host(`logs.$HOST`)
+      - traefik.http.routers.logs.entrypoints=http
+      - traefik.http.services.logs.loadbalancer.server.port=8080

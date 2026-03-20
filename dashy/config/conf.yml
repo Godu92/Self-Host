@@ -428,6 +428,14 @@ sections:
         statusCheck: true
         statusCheckAllowInsecure: true
         id: 45_937_registry
+      - title: Dozzle
+        description: Docker logs
+        icon: fa fa-blog
+        url: http://logs.localhost
+        target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 46_937_dozzle
 appConfig:
   theme: crayola
   layout: horizontal

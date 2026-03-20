@@ -34,6 +34,7 @@ include:
   # - ittools/docker-compose.yaml
   # - olivetin/docker-compose.yaml
   # - n8n/docker-compose.yaml
+  # - dozzle/docker-compose.yaml
   #### Monitors
   - glances/docker-compose.yaml
   - uptime/docker-compose.yaml
