@@ -23,6 +23,6 @@ services:
 
     labels:
       - traefik.enable=true
-      - traefik.http.routers.glance.rule=Host(`glance.$HOST`)
+      - traefik.http.routers.glance.rule=Host(`glance.$HOST`) || Host(`glance.$HOSTNAME`)
       - traefik.http.routers.glance.entrypoints=http
       - traefik.http.services.glance.loadbalancer.server.port=61208

@@ -9,6 +9,6 @@ services:
     #   - 8080:8080
     labels:
       - traefik.enable=true
-      - traefik.http.routers.logs.rule=Host(`logs.$HOST`)
+      - traefik.http.routers.logs.rule=Host(`logs.$HOST`) || Host(`logs.$HOSTNAME`)
       - traefik.http.routers.logs.entrypoints=http
       - traefik.http.services.logs.loadbalancer.server.port=8080

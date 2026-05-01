@@ -14,9 +14,10 @@ services:
       # Maximum height of screenshots, default is 16000 px, screenshots will be clipped to this if exceeded.
       # RAM usage will be higher if you increase this.
       - SCREENSHOT_MAX_HEIGHT=16000
+      - ALLOW_IANA_RESTRICTED_ADDRESSES=true
     labels:
       - traefik.enable=true
-      - traefik.http.routers.change.rule=Host(`change.$HOST`)
+      - traefik.http.routers.change.rule=Host(`change.$HOST`) || Host(`change.$HOSTNAME`)
       - traefik.http.routers.change.entrypoints=http
       - traefik.http.services.change.loadbalancer.server.port=5000
 
@@ -47,3 +48,8 @@ services:
       - SCREEN_HEIGHT=1024
       - SCREEN_DEPTH=16
       - MAX_CONCURRENT_CHROME_PROCESSES=10
+    labels:
+      - traefik.enable=true
+      # - traefik.http.routers.chrome.rule=Host(`chrome.$HOST`) || Host(`chrome.$HOSTNAME`)
+      # - traefik.http.routers.chrome.entrypoints=http
+      # - traefik.http.services.chrome.loadbalancer.server.port=3000

@@ -11,6 +11,6 @@ services:
       - "./config:/app/user-data"
     labels:
       - traefik.enable=true
-      - traefik.http.routers.dash.rule=Host(`$HOST`)
+      - traefik.http.routers.dash.rule=Host(`$HOST`) || Host(`$HOSTNAME`)
       - traefik.http.routers.dash.entrypoints=http
       - traefik.http.services.dash.loadbalancer.server.port=8080

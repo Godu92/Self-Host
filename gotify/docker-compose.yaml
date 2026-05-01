@@ -13,6 +13,6 @@ services:
       - ./config.yml:/app/data/config.yml
     labels:
       - traefik.enable=true
-      - traefik.http.routers.notice.rule=Host(`notice.$HOST`)
+      - traefik.http.routers.notice.rule=Host(`notice.$HOST`) || Host(`notice.$HOSTNAME`)
       - traefik.http.routers.notice.entrypoints=http
       - traefik.http.services.notice.loadbalancer.server.port=80

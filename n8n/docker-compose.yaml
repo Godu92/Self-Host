@@ -24,7 +24,7 @@ services:
       retries: 10
     labels:
       - traefik.enable=true
-      # - traefik.http.routers.n8n-db.rule=Host(`n8n-db.$HOST`)
+      # - traefik.http.routers.n8n-db.rule=Host(`n8n-db.$HOST`) || Host(`n8n-db.$HOSTNAME`)
       # - traefik.http.routers.n8n-db.entrypoints=http
       # - traefik.http.services.n8n-db.loadbalancer.server.port=443
 
@@ -51,6 +51,6 @@ services:
         condition: service_healthy
     labels:
       - traefik.enable=true
-      - traefik.http.routers.n8n.rule=Host(`n8n.$HOST`)
+      - traefik.http.routers.n8n.rule=Host(`n8n.$HOST`) || Host(`n8n.$HOSTNAME`)
       - traefik.http.routers.n8n.entrypoints=http
       - traefik.http.services.n8n.loadbalancer.server.port=5678
