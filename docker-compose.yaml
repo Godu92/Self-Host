@@ -37,7 +37,7 @@ include:
   # - dozzle/docker-compose.yaml
   #### Monitors
   - glances/docker-compose.yaml
-  - uptime/docker-compose.yaml
+  # - uptime/docker-compose.yaml
   # - autokuma/docker-compose.yaml
   # - pihole/docker-compose.yaml
   # - netalertx/docker-compose.yaml
@@ -65,7 +65,7 @@ include:
   # - monica/docker-compose.yaml
   #### Account management
   # - freeipa/docker-compose.yaml
-  - lldap/docker-compose.yaml
+  # - lldap/docker-compose.yaml
   #### Office tools
   # - papermerge/docker-compose.yaml
   # - drawio/docker-compose.yaml
