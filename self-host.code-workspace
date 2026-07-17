@@ -10,8 +10,6 @@
 		}
 	],
 	"settings": {
-		"python.defaultInterpreterPath": ".venv/bin/python",
-		"python.terminal.activateEnvInCurrentTerminal": false,
 		"python.analysis.autoImportCompletions": true,
 		"autoDocstring.generateDocstringOnEnter": true,
 		"autoDocstring.guessTypes": true,
@@ -20,7 +18,8 @@
 		"python.analysis.inlayHints.callArgumentNames": "partial",
 		"python.analysis.inlayHints.functionReturnTypes": true,
 		"python.analysis.inlayHints.pytestParameters": true,
-		"python.analysis.inlayHints.variableTypes": true
+		"python.analysis.inlayHints.variableTypes": true,
+		"workspace-terminals.auto": "never",
 	},
 	"extensions": {
 		"recommendations": [
@@ -33,7 +32,6 @@
 			"ms-python.isort",
 			"davidanson.vscode-markdownlint",
 			"christian-kohler.path-intellisense",
-			"drmerfy.overtype",
 			"esbenp.prettier-vscode",
 			"nanlei.save-all",
 			"wayou.vscode-todo-highlight",
