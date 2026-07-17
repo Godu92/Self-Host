@@ -8,6 +8,7 @@
 *.bak
 *.sql
 *_data
+.claude/
 
 ## App specific ignores
 pihole/etc-pihole
