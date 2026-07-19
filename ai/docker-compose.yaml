@@ -1,0 +1,3 @@
+## Group: ai.
+include:
+  - notebook/opennotebook-single/docker-compose.yaml

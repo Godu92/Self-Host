@@ -34,7 +34,7 @@ deployment by setting a var in that service's `.env`, with no compose file edits
       all, which was silently `latest` anyway) to `${VAR:-latest}` interpolation.
 - [x] Verified against the real registries (Docker Hub, ghcr.io, docker.gitea.com,
       docker.n8n.io) rather than assumed — only
-      [freeipa/freeipa-server](freeipa/docker-compose.yaml) has **no** generic `latest` tag at
+      [identity/freeipa/freeipa-server](identity/freeipa/docker-compose.yaml) has **no** generic `latest` tag at
       all (its tags are OS-variant-specific: fedora-41/43/44, rocky-9, almalinux-9, ...). Its
       fallback stays the current pin (`fedora-41`), not `latest`.
 - [x] Tags that encode a real *variant*, not just a version, keep that variant hardcoded and
@@ -60,19 +60,19 @@ deployment by setting a var in that service's `.env`, with no compose file edits
       **not** get read for `${VAR}` substitution, so that directory needed its own separate
       plain `.env.example` just for `OPEN_NOTEBOOK_VERSION`/`OLLAMA_VERSION`.
 - [x] Found and fixed two unrelated pre-existing bugs while touching every file:
-      `calibre/docker-compose.yaml` had `<<: &common` (defines an anchor) where it meant
+      `media/calibre/docker-compose.yaml` had `<<: &common` (defines an anchor) where it meant
       `<<: *common` (dereferences one) — silently broken YAML merge, fixed to `*common`.
       papermerge's `.env.example` was missing entirely from the secrets pass (item 3) even
       though its real `.env` existed — added.
 - [ ] Not fixed (found but out of scope, pre-existing and unrelated to versioning):
-      `dailynotes/docker-compose.yaml` references `./config/.env` which doesn't exist on disk;
-      `socket/docker-compose.yaml`'s `socket-proxy` service references a `socket_proxy` network
+      `notes/dailynotes/docker-compose.yaml` references `./config/.env` which doesn't exist on disk;
+      `infra/socket/docker-compose.yaml`'s `socket-proxy` service references a `socket_proxy` network
       that's only ever defined (commented out) in the base `docker-compose.yaml` — the "eventual
       socket proxy" mentioned in README is not wired up yet.
 
 ## 3. Secrets / credentials hygiene — DONE (2026-07-19)
 
-- [x] Rotated [lldap/docker-compose.yaml](lldap/docker-compose.yaml) `LLDAP_JWT_SECRET` — the
+- [x] Rotated [identity/lldap/docker-compose.yaml](identity/lldap/docker-compose.yaml) `LLDAP_JWT_SECRET` — the
       old committed value is retired; treat it as compromised if it was ever actually deployed.
 - [x] Hardcoded placeholder passwords moved to `${VAR}` interpolation + a tracked
       `.env.example`/gitignored `.env` per directory: pihole, phpipam, monica, n8n, wikijs,
@@ -111,13 +111,13 @@ deployment by setting a var in that service's `.env`, with no compose file edits
 - [x] `remoteRhel` and `tenable` were referenced (README, `start.sh` EXCLUDED_DIRS, root
       compose comments) but no such directories exist. Purged along with `start.sh`/`stop.sh`
       and the old root compose include list (see item 1).
-- [ ] [testing/docker-compose.yaml](testing/docker-compose.yaml) still points at a defunct
+- [ ] [dev/testing/docker-compose.yaml](dev/testing/docker-compose.yaml) still points at a defunct
       `Godu92/Remote-Rhel` GitHub repo — update or remove.
 - [ ] Root-level `./data/` is live Trilium data (not dead) but is owned by a different Unix
       user (`geadmin`) than the repo owner — check for a permissions/ownership drift issue.
       There's also an odd nested duplicate `data/styles/document.db*` worth investigating.
       **Action needed on the real server**: `TRILIUM_DATA_DIR` moved from the root `.env` to
-      [trilium/.env](trilium/.env) on 2026-07-19 (there was no good reason for a
+      [notes/trilium/.env](notes/trilium/.env) on 2026-07-19 (there was no good reason for a
       trilium-specific setting to live at the repo root, and it wasn't even being read from
       there anymore — see below). Compose resolves a relative bind path in an *included* file
       relative to *that file's own directory*, so `TRILIUM_DATA_DIR=./data` now means
@@ -134,16 +134,16 @@ deployment by setting a var in that service's `.env`, with no compose file edits
 
 ## 5. Traefik / networking consistency
 
-- [ ] [firefly/docker-compose.yaml](firefly/docker-compose.yaml) defines its own isolated
+- [ ] [finance/firefly/docker-compose.yaml](finance/firefly/docker-compose.yaml) defines its own isolated
       network — not reachable via Traefik as currently configured. Fix to join `proxy`, or
       document why it's intentionally isolated.
 - [ ] Traefik provisions HTTPS (`:443`) but no service label ever uses an `https` entrypoint —
       either wire up TLS (cert resolver) or drop the unused entrypoint.
-- [ ] `traefik/docker-compose.yaml` runs `--api.insecure=true` and exposes the dashboard on
+- [ ] `infra/traefik/docker-compose.yaml` runs `--api.insecure=true` and exposes the dashboard on
       `8080` with no auth — add basic auth or bind to localhost only.
 - [ ] Two files use `.yml` instead of the otherwise-universal `.yaml`:
-      [airtrail/docker-compose.yml](airtrail/docker-compose.yml),
-      [adventurelog/docker-compose.yml](adventurelog/docker-compose.yml). Rename for consistency.
+      [home/airtrail/docker-compose.yml](home/airtrail/docker-compose.yml),
+      [home/adventurelog/docker-compose.yml](home/adventurelog/docker-compose.yml). Rename for consistency.
 - [ ] Inconsistent `restart:` policy: `always` (majority) vs `unless-stopped` (autokuma,
       phpipam, netalertx, freeipa, notebook) — pick one default.
 
@@ -191,6 +191,32 @@ own TODO comment already flags.
       databases," "set more containers to docker volumes," "add `.env` bind option for all
       mounts." Fold into this list once prioritized, or keep as long-term wishlist below.
 
+## 9. Folder/group reorganization — DONE (2026-07-19)
+
+README's Organization section had long flagged "each grouping/section can be its own sub-folder"
+as a TODO. Executed:
+
+- [x] All ~51 service directories moved into 16 category folders: `infra`, `admin-tools`,
+      `monitoring`, `network`, `identity`, `notes`, `ai`, `productivity`, `files`, `finance`,
+      `home`, `dev`, `media`, `lowcode`, `games`, `fabrication`. Each keeps its own
+      subdirectory unchanged internally (e.g. `monitoring/gotify/`), just nested one level
+      deeper than before.
+- [x] Every group got its own aggregator `<group>/docker-compose.yaml` that `include:`s all its
+      members — lets a style enable a whole category in one line
+      (`- monitoring/docker-compose.yaml`) while `compose.local.yaml` still lists every
+      individual service (finer-grained toggling stays available via
+      `- monitoring/gotify/docker-compose.yaml`).
+- [x] Root `docker-compose.yaml`, `compose.local.yaml`, `.gitignore`, `README.md`, `CLAUDE.md`
+      all updated for the new paths. `scripts/gen-secrets.sh` needed **no** changes — its path
+      handling was already generic enough for nested directories.
+- [x] Rationale explicitly wasn't about a live multi-user deployment: this repo is
+      single-operator across ~6 machines, only 2 of which have real bind-mounted data to worry
+      about, and the payoff (findability, and folders doubling as deploy-style targets) was
+      judged worth the one-time churn of every path moving at once. Don't re-litigate this
+      trade-off assuming a different (e.g. team/shared) context.
+- [ ] Not yet done: per-service override files (README's other still-open Organization TODO,
+      independent of this reorg).
+
 ---
 
 ## Longer-term wishlist (from README, not yet scoped)
@@ -198,4 +224,4 @@ own TODO comment already flags.
 - Script to auto-register a service into the root `docker-compose.yaml` `include:` list.
 - Script to auto-populate the Dashy dashboard with all services, with live status.
 - Script to auto-register services with the uptime monitor.
-- Standardize template files (Dockerfile, docker-compose.yaml) beyond the single `testing/` example.
+- Standardize template files (Dockerfile, docker-compose.yaml) beyond the single `dev/testing/` example.

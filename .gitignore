@@ -15,40 +15,38 @@
 CLAUDE.md
 
 ## App specific ignores
-pihole/etc-pihole
+network/pihole/etc-pihole
 
-dashy/config/conf-dev.yml
-dashy/config/config-backups
-dashy/bookmarks.html
+admin-tools/dashy/config/conf-dev.yml
+admin-tools/dashy/config/config-backups
+admin-tools/dashy/bookmarks.html
 
-appsmith/stacks
+lowcode/appsmith/stacks
 
-directus/uploads
-directus/extensions
+lowcode/directus/uploads
+lowcode/directus/extensions
 
-grocy/config
+home/grocy/config
 
-onlyoffice/config
+files/nextcloud/config
 
-nextcloud/config
+media/kavita/data
+media/kavita/config
 
-kavita/data
-kavita/config
+dev/gitea/gitea
 
-gitea/gitea
+productivity/stirlingpdf/StirlingPDF
 
-stirlingpdf/StirlingPDF
+monitoring/netalertx/netalertx
 
-netalertx/netalertx
+admin-tools/olivetin/config/entities
+admin-tools/olivetin/config/ssh
 
-olivetin/config/entities
-olivetin/config/ssh
+dev/pxe/assets
+dev/pxe/config
 
-pxe/assets
-pxe/config
-
-jdownloader/config
-jdownloader/downloads
+media/jdownloader/config
+media/jdownloader/downloads
 
 ## Any containers that just "data" as a folder
 ### Should probably make this easier by making everything:

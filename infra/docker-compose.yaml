@@ -1,0 +1,6 @@
+## Group: infra — core plumbing for the homelab itself.
+include:
+  - traefik/docker-compose.yaml
+  - socket/docker-compose.yaml
+  - whoami/docker-compose.yaml
+  - registry/docker-compose.yaml

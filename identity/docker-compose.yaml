@@ -1,0 +1,4 @@
+## Group: identity — account/directory management.
+include:
+  - freeipa/docker-compose.yaml
+  - lldap/docker-compose.yaml

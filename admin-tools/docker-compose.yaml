@@ -1,0 +1,9 @@
+## Group: admin-tools — dashboards and Docker/host administration.
+include:
+  - dozzle/docker-compose.yaml
+  - lazydocker/docker-compose.yaml
+  - watchtower/docker-compose.yaml
+  - adminer/docker-compose.yaml
+  - olivetin/docker-compose.yaml
+  - glances/docker-compose.yaml
+  - dashy/docker-compose.yaml

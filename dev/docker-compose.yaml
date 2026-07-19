@@ -1,0 +1,6 @@
+## Group: dev — development tooling.
+include:
+  - pxe/docker-compose.yaml
+  - jenkins/docker-compose.yaml
+  - gitea/docker-compose.yaml
+  # - testing/docker-compose.yaml

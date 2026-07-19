@@ -1,0 +1,3 @@
+## Group: fabrication — 3D printing / physical manufacturing & modeling.
+include:
+  - sketchforge/docker-compose.yaml

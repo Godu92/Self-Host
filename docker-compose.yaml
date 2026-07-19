@@ -18,8 +18,8 @@ networks:
 
 include:
   ### Routing
-  - traefik/docker-compose.yaml
-  # - socket/docker-compose.yaml
+  - infra/traefik/docker-compose.yaml
+  # - infra/socket/docker-compose.yaml
 
   ### Testing
-  - whoami/docker-compose.yaml
+  - infra/whoami/docker-compose.yaml

@@ -1,0 +1,4 @@
+## Group: files — file management/sync.
+include:
+  - filebrowser/docker-compose.yaml
+  - nextcloud/docker-compose.yaml

@@ -1,6 +1,8 @@
 ## Deploy style: local
 ## Traefik + whoami are already enabled by the base docker-compose.yaml — no need to list
 ## them here. Uncomment a line below to enable that service for this style.
+## You can also enable a whole group at once by including its aggregator file instead of
+## individual services, e.g. `- monitoring/docker-compose.yaml`.
 
 include:
   ## Services
@@ -8,72 +10,81 @@ include:
   # TODO: Merge databases ie into one PostgresQL
   # TODO: See about adding common setup stuff to this file, ie restart policy, traefik enable label, etc
 
-  ### Admininstration
-  # - lazydocker/docker-compose.yaml
-  # - watchtower/docker-compose.yaml
-  #### Tools
-  # - adminer/docker-compose.yaml
-  # - ittools/docker-compose.yaml
-  # - olivetin/docker-compose.yaml
-  # - n8n/docker-compose.yaml
-  # - dozzle/docker-compose.yaml
-  #### Monitors
-  - glances/docker-compose.yaml
-  # - uptime/docker-compose.yaml
-  # - autokuma/docker-compose.yaml
-  # - pihole/docker-compose.yaml
-  # - netalertx/docker-compose.yaml
-  # - changedetect/docker-compose.yaml
-  # - phpipam/docker-compose.yaml
-  # - gotify/docker-compose.yaml
-  #### Downloaders
-  # - gopeed/docker-compose.yaml
-  # - jdownloader/docker-compose.yaml
+  ### infra
+  # - infra/registry/docker-compose.yaml
 
-  ### Notes
-  # - wikijs/docker-compose.yaml
-  # - trilium/docker-compose.yaml
-  # - docmost/docker-compose.yaml
-  #### AI
-  # - notebook/opennotebook-single/docker-compose.yaml
+  ### admin-tools
+  # - admin-tools/lazydocker/docker-compose.yaml
+  # - admin-tools/watchtower/docker-compose.yaml
+  # - admin-tools/adminer/docker-compose.yaml
+  # - admin-tools/olivetin/docker-compose.yaml
+  # - admin-tools/dozzle/docker-compose.yaml
+  - admin-tools/glances/docker-compose.yaml
+  - admin-tools/dashy/docker-compose.yaml
 
-  ### Dashboard
-  - dashy/docker-compose.yaml
+  ### monitoring
+  # - monitoring/uptime/docker-compose.yaml
+  # - monitoring/autokuma/docker-compose.yaml
+  # - monitoring/netalertx/docker-compose.yaml
+  # - monitoring/changedetect/docker-compose.yaml
+  # - monitoring/gotify/docker-compose.yaml
 
-  ### Management
-  # - focalboard/docker-compose.yaml
-  # - super-prod/docker-compose.yaml
-  #### People CRM
-  # - monica/docker-compose.yaml
-  #### Account management
-  # - freeipa/docker-compose.yaml
-  # - lldap/docker-compose.yaml
-  #### Office tools
-  # - papermerge/docker-compose.yaml
-  # - drawio/docker-compose.yaml
-  # - stirlingpdf/docker-compose.yaml
-  ### File management
-  # - filebrowser/docker-compose.yaml
-  # - nextcloud/docker-compose.yaml
-  ### Finances
-  # - firefly/docker-compose.yaml
-  #### Food
-  # - grocy/docker-compose.yaml
-  #### Travel
-  # - airtrail/docker-compose.yml
-  # - adventurelog/docker-compose.yml
+  ### network
+  # - network/pihole/docker-compose.yaml
+  # - network/phpipam/docker-compose.yaml
 
-  ### Games
-  # - wordle/docker-compose.yaml
-  ### Development
-  # - pxe/docker-compose.yaml
-  # - jenkins/docker-compose.yaml
-  # - gitea/docker-compose.yaml
-  # - registry/docker-compose.yaml
+  ### identity
+  # - identity/freeipa/docker-compose.yaml
+  # - identity/lldap/docker-compose.yaml
 
-  ### Books
-  # - calibre/docker-compose.yaml
-  # - kavita/docker-compose.yaml
-  ### Low Code
-  # - directus/docker-compose.yaml
-  # - appsmith/docker-compose.yaml
+  ### notes
+  # - notes/wikijs/docker-compose.yaml
+  # - notes/trilium/docker-compose.yaml
+  # - notes/docmost/docker-compose.yaml
+  # - notes/dailynotes/docker-compose.yaml
+
+  ### ai
+  # - ai/notebook/opennotebook-single/docker-compose.yaml
+
+  ### productivity
+  # - productivity/focalboard/docker-compose.yaml
+  # - productivity/super-prod/docker-compose.yaml
+  # - productivity/monica/docker-compose.yaml
+  # - productivity/papermerge/docker-compose.yaml
+  # - productivity/drawio/docker-compose.yaml
+  # - productivity/stirlingpdf/docker-compose.yaml
+  # - productivity/ittools/docker-compose.yaml
+  # - productivity/n8n/docker-compose.yaml
+
+  ### files
+  # - files/filebrowser/docker-compose.yaml
+  # - files/nextcloud/docker-compose.yaml
+
+  ### finance
+  # - finance/firefly/docker-compose.yaml
+
+  ### home
+  # - home/grocy/docker-compose.yaml
+  # - home/airtrail/docker-compose.yml
+  # - home/adventurelog/docker-compose.yml
+
+  ### dev
+  # - dev/pxe/docker-compose.yaml
+  # - dev/jenkins/docker-compose.yaml
+  # - dev/gitea/docker-compose.yaml
+
+  ### media
+  # - media/calibre/docker-compose.yaml
+  # - media/kavita/docker-compose.yaml
+  # - media/gopeed/docker-compose.yaml
+  # - media/jdownloader/docker-compose.yaml
+
+  ### lowcode
+  # - lowcode/directus/docker-compose.yaml
+  # - lowcode/appsmith/docker-compose.yaml
+
+  ### games
+  # - games/wordle/docker-compose.yaml
+
+  ### fabrication
+  # - fabrication/sketchforge/docker-compose.yaml

@@ -30,7 +30,7 @@ DOCKER_DIR=/var/run/docker.sock # or wherever podman is for you
 TRILIUM_DATA_DIR=./data # optional
 ```
 
-> Sadly this does not extend to `./dashy/config` files as of yet
+> Sadly this does not extend to `./admin-tools/dashy/config` files as of yet
 
 If you use [direnv](https://direnv.net/), run `direnv allow` once — the tracked `.envrc` loads
 `.env` automatically and also fixes up `HOSTNAME` with your machine's real hostname (docker
@@ -84,7 +84,7 @@ Before enabling one of these services in a deploy style, either copy its example
 generate real random values with:
 
 ```bash
-./scripts/gen-secrets.sh <service-dir>   # e.g. ./scripts/gen-secrets.sh pihole
+./scripts/gen-secrets.sh <service-dir>   # e.g. ./scripts/gen-secrets.sh network/pihole
 ./scripts/gen-secrets.sh --style local    # every service the base file + compose.local.yaml enable
 ./scripts/gen-secrets.sh --all           # every service in the repo that has a *.env.example
 ```
@@ -105,14 +105,14 @@ service just runs the latest published image. To pin a specific version instead,
 in that service's `.env` (see its `.env.example` for the exact name(s); create the `.env` if it
 doesn't already exist for that service). A few images use a suffix that's a real variant, not a
 version — e.g. `postgres:${POSTGRES_VERSION:-latest}-alpine` — there the var only controls the
-version, the variant itself is fixed. One image ([freeipa](freeipa/docker-compose.yaml)) has no
+version, the variant itself is fixed. One image ([freeipa](identity/freeipa/docker-compose.yaml)) has no
 `latest` tag at all, so its var defaults to the current pin instead.
 
 ## Templates
 
 > TODO: Make template files for commonly used files
 
-Template Dockerfile, docker-compose.yaml can be found in `./testing`
+Template Dockerfile, docker-compose.yaml can be found in `./dev/testing`
 
 ## Storage
 
@@ -137,8 +137,8 @@ You should need to create some volumes ahead of time for the ease of launching c
 
 - tril-data
 
-> Set `TRILIUM_DATA_DIR` in `trilium/.env` to bind mount the data somewhere you control
-> directly instead of the named volume — see `trilium/.env.example`.
+> Set `TRILIUM_DATA_DIR` in `notes/trilium/.env` to bind mount the data somewhere you control
+> directly instead of the named volume — see `notes/trilium/.env.example`.
 >
 > TODO: Add this option for all mounts
 
@@ -152,9 +152,17 @@ You should need to create some volumes ahead of time for the ease of launching c
 ## Organization
 
 The base `docker-compose.yaml` + per-style `compose.<style>.yaml` override setup described
-under [Deploy styles](#deploy-styles) is implemented. Still TODO:
+under [Deploy styles](#deploy-styles) is implemented, and services are grouped into category
+sub-folders, each with its own aggregator compose file:
 
-- Group related services into their own sub-folder with a shared sub-compose file (with an
-  optional sub-network), imported up into the next level until root is reached.
+- `infra`, `admin-tools`, `monitoring`, `network`, `identity`, `notes`, `ai`, `productivity`,
+  `files`, `finance`, `home`, `dev`, `media`, `lowcode`, `games`, `fabrication`.
+- Every group has a `<group>/docker-compose.yaml` that `include:`s all of its members — enable
+  a whole category at once with `- <group>/docker-compose.yaml` in a style file, or reach into
+  a specific member directly with `- <group>/<service>/docker-compose.yaml` for finer control.
+  `compose.local.yaml` uses the fine-grained form so every individual service stays toggleable.
+
+Still TODO:
+
 - Give each individual service compose file its own override file, for per-service tweaks
   independent of deploy style.

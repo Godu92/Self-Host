@@ -1,0 +1,6 @@
+## Group: media — books and downloaders.
+include:
+  - calibre/docker-compose.yaml
+  - kavita/docker-compose.yaml
+  - gopeed/docker-compose.yaml
+  - jdownloader/docker-compose.yaml

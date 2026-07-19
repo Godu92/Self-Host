@@ -1,0 +1,5 @@
+## Group: home — household/life admin (food, travel).
+include:
+  - grocy/docker-compose.yaml
+  - airtrail/docker-compose.yml
+  - adventurelog/docker-compose.yml

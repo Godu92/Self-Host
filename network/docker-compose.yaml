@@ -1,0 +1,4 @@
+## Group: network — DNS/ad-blocking and IP address management.
+include:
+  - pihole/docker-compose.yaml
+  - phpipam/docker-compose.yaml

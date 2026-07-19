@@ -1,0 +1,6 @@
+## Group: notes — wikis, note-taking, and documents.
+include:
+  - wikijs/docker-compose.yaml
+  - trilium/docker-compose.yaml
+  - docmost/docker-compose.yaml
+  - dailynotes/docker-compose.yaml

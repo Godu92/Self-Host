@@ -5,11 +5,76 @@
 			"name": "ROOT"
 		},
 		{
+			"path": "infra",
+			"name": "Infra"
+		},
+		{
+			"path": "admin-tools",
+			"name": "Admin Tools"
+		},
+		{
+			"path": "monitoring",
+			"name": "Monitoring"
+		},
+		{
+			"path": "network",
+			"name": "Network"
+		},
+		{
+			"path": "identity",
+			"name": "Identity"
+		},
+		{
+			"path": "notes",
+			"name": "Notes"
+		},
+		{
+			"path": "ai",
+			"name": "AI"
+		},
+		{
+			"path": "productivity",
+			"name": "Productivity"
+		},
+		{
+			"path": "files",
+			"name": "Files"
+		},
+		{
+			"path": "finance",
+			"name": "Finance"
+		},
+		{
+			"path": "home",
+			"name": "Home"
+		},
+		{
+			"path": "dev",
+			"name": "Dev"
+		},
+		{
+			"path": "media",
+			"name": "Media"
+		},
+		{
+			"path": "lowcode",
+			"name": "Low Code"
+		},
+		{
+			"path": "games",
+			"name": "Games"
+		},
+		{
+			"path": "fabrication",
+			"name": "Fabrication"
+		},
+		{
 			"path": "scripts",
 			"name": "Scripts"
 		}
 	],
 	"settings": {
+		"explorer.sortOrder": "filesFirst",
 		"python.analysis.autoImportCompletions": true,
 		"autoDocstring.generateDocstringOnEnter": true,
 		"autoDocstring.guessTypes": true,

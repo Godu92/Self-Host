@@ -1,0 +1,3 @@
+## Group: finance.
+include:
+  - firefly/docker-compose.yaml

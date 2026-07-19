@@ -1,0 +1,10 @@
+## Group: productivity — task/project management, CRM, office tools, automation.
+include:
+  - focalboard/docker-compose.yaml
+  - super-prod/docker-compose.yaml
+  - monica/docker-compose.yaml
+  - papermerge/docker-compose.yaml
+  - drawio/docker-compose.yaml
+  - stirlingpdf/docker-compose.yaml
+  - ittools/docker-compose.yaml
+  - n8n/docker-compose.yaml
