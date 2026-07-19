@@ -10,8 +10,6 @@ This is a collection of local tools, originally made for`RHEL 8` using `podman`.
   - [Templates](#templates)
   - [Storage](#storage)
     - [List of Volumes](#list-of-volumes)
-      - [Monica](#monica)
-      - [Uptime](#uptime)
       - [Trilium](#trilium)
   - [TODO](#todo)
   - [Organization](#organization)
@@ -116,30 +114,33 @@ Template Dockerfile, docker-compose.yaml can be found in `./dev/testing`
 
 ## Storage
 
-TODO: Set more containers to docker volumes
+TODO: Set more containers to docker volumes (most services still just bind-mount a local
+`./config`/`./data` folder instead)
 
-You should need to create some volumes ahead of time for the ease of launching containers.
-
-> You could go change all instances of `external` to `false` if you don't want to do that
+Named volumes below are created automatically on first `up` — nothing to pre-create by hand.
 
 ### List of Volumes
 
-#### Monica
-
-- mysql
-- data
-
-#### Uptime
-
-- up-data
+- `fabrication/sketchforge`: `sketchforge-shared-projects`
+- `finance/firefly`: `firefly_iii_upload`, `firefly_iii_db`
+- `home/adventurelog`: `postgres_data`, `adventurelog_media`
+- `home/airtrail`: `db_data`
+- `monitoring/autokuma`: `autokuma-data`
+- `monitoring/uptime`: `up-data`
+- `network/phpipam`: `phpipam-db-data`, `phpipam-logo`, `phpipam-ca`
+- `notes/docmost`: `docmost`, `db_data`, `redis_data`
+- `notes/trilium`: `tril-data`
+- `notes/wikijs`: `wiki-data`
+- `productivity/focalboard`: `fbdata`
+- `productivity/monica`: `mysql`, `data`
+- `productivity/n8n`: `db_storage`, `n8n_storage`
+- `productivity/papermerge`: `postgres_data`, `index_db`, `media`
 
 #### Trilium
 
-- tril-data
+Set `TRILIUM_DATA_DIR` in `notes/trilium/.env` to bind mount the data somewhere you control
+directly instead of the named volume — see `notes/trilium/.env.example`.
 
-> Set `TRILIUM_DATA_DIR` in `notes/trilium/.env` to bind mount the data somewhere you control
-> directly instead of the named volume — see `notes/trilium/.env.example`.
->
 > TODO: Add this option for all mounts
 
 ## TODO

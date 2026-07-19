@@ -111,26 +111,35 @@ deployment by setting a var in that service's `.env`, with no compose file edits
 - [x] `remoteRhel` and `tenable` were referenced (README, `start.sh` EXCLUDED_DIRS, root
       compose comments) but no such directories exist. Purged along with `start.sh`/`stop.sh`
       and the old root compose include list (see item 1).
-- [ ] [dev/testing/docker-compose.yaml](dev/testing/docker-compose.yaml) still points at a defunct
-      `Godu92/Remote-Rhel` GitHub repo — update or remove.
-- [ ] Root-level `./data/` is live Trilium data (not dead) but is owned by a different Unix
-      user (`geadmin`) than the repo owner — check for a permissions/ownership drift issue.
-      There's also an odd nested duplicate `data/styles/document.db*` worth investigating.
-      **Action needed on the real server**: `TRILIUM_DATA_DIR` moved from the root `.env` to
-      [notes/trilium/.env](notes/trilium/.env) on 2026-07-19 (there was no good reason for a
-      trilium-specific setting to live at the repo root, and it wasn't even being read from
-      there anymore — see below). Compose resolves a relative bind path in an *included* file
-      relative to *that file's own directory*, so `TRILIUM_DATA_DIR=./data` now means
-      `trilium/data`, not the repo root. On the real server, either move the live data
-      directory to `trilium/data` or set `TRILIUM_DATA_DIR` in `trilium/.env` to an absolute
-      path pointing at wherever the old `./data` actually lives. Until that's done there,
-      starting trilium fresh would silently create a new, empty `trilium/data` instead of using
-      the existing one.
-- [ ] [jenkins/data/](jenkins/data/) holds a full real Jenkins home dir (credentials.xml,
-      secret.key, etc.) on disk next to tracked source — not git-tracked today, but consider
-      moving state outside the repo tree entirely for portability.
-- [ ] README's "Storage / List of Volumes" section only documents Monica/Uptime/Trilium even
-      though 14 compose files define named volumes — update docs to match reality.
+- [x] [dev/testing/docker-compose.yaml](dev/testing/docker-compose.yaml) pointed at a defunct
+      `Godu92/Remote-Rhel` GitHub repo and an EOL'd `debian:jessie` base image (no security
+      updates since 2020) — updated example args to the real repo (`Godu92/Self-Host`) and
+      `debian:bookworm` in both the compose file and `dev/testing/Dockerfile`'s default ARG.
+- [x] Root-level `./data/` live Trilium data / `geadmin` ownership drift / nested duplicate
+      `data/styles/document.db*` — confirmed with the repo owner this is real state on one of
+      their actual running machines, not something in any checkout this assistant has access
+      to, and is being handled by hand there. **Still true and unresolved on that machine**:
+      `TRILIUM_DATA_DIR` moved from the root `.env` to [notes/trilium/.env](notes/trilium/.env)
+      on 2026-07-19, and since Compose resolves a relative bind path in an *included* file
+      relative to *that file's own directory*, `TRILIUM_DATA_DIR=./data` now means
+      `notes/trilium/data`, not the repo root — the real server needs the data directory moved
+      (or `TRILIUM_DATA_DIR` there set to an absolute path at the old location) before starting
+      trilium fresh, or it'll silently create a new empty directory instead of using the
+      existing one.
+- [ ] [dev/jenkins/](dev/jenkins/) has no `data/` in this checkout (just `Dockerfile` +
+      `docker-compose.yaml`) — confirmed with the repo owner: same story as Trilium above, this
+      machine is clean but other machines this repo runs on are not, and `dev/jenkins/data/`
+      (real credentials.xml/secret.key etc.) is expected to exist there. **Leave this note in
+      place as a migration warning** rather than removing it as stale just because it's absent
+      here — don't delete "lives on a real machine, not this checkout" notes without confirming
+      first, since a clean checkout is exactly what you'd expect regardless of whether the note
+      is still true elsewhere. The "move state outside the repo tree for portability" suggestion
+      still stands as unaddressed.
+- [x] README's "Storage / List of Volumes" section only documented Monica/Uptime/Trilium even
+      though 14 compose files define named volumes — now lists all 14 (with their new
+      group-prefixed paths). Also dropped a stale note about changing `external: true` to
+      `false` — nothing in the repo actually sets that on a volume (the one `external: true` in
+      the repo is a *network* declaration in notebook's compose file, not a volume).
 
 ## 5. Traefik / networking consistency
 
@@ -216,6 +225,23 @@ as a TODO. Executed:
       trade-off assuming a different (e.g. team/shared) context.
 - [ ] Not yet done: per-service override files (README's other still-open Organization TODO,
       independent of this reorg).
+
+## 10. Volume declaration hygiene — not started, policy decided (2026-07-19)
+
+Of the 14 services with named volumes (see README's List of Volumes), only 4
+(monitoring/uptime, notes/trilium, notes/wikijs, productivity/monica) declare their volume
+explicitly with `name:` + `external: false`. The other 10 just declare a bare volume name with
+no attributes — functionally identical (Compose already defaults to a locally-managed volume),
+but not explicit about it.
+
+- [ ] Policy going forward: every named volume should explicitly set `external: false` (with a
+      matching `name:`). `external: true` is reserved for the one case it's actually meant for —
+      pointing at a volume that already exists from migrating a different version of this
+      project, or from some other individual/standalone launch — so it should never be the
+      silent default; explicit `false` everywhere makes that distinction visible instead of
+      implicit.
+- [ ] Not yet executed: bring the other 10 services in line with the 4 that already do this
+      correctly. Low risk/mechanical once picked up, no urgency.
 
 ---
 

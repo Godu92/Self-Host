@@ -13,15 +13,15 @@ services:
         - DESC=A test docker image for labels
         - APP_VERSION=v0.1
         - BUILD_DATE=29-10-2024
-        - DOCS=https://github.com/Godu92/Remote-Rhel/testing/README.md
+        - DOCS=https://github.com/Godu92/Self-Host/blob/master/dev/testing/README.md
         - LICENSES=N/A
         - REVISION=N/A
-        - SOURCE=https://hub.docker.com/_/debian/tags?name=jessie
-        - URL=https://github.com/Godu92/Remote-Rhel
+        - SOURCE=https://hub.docker.com/_/debian/tags?name=bookworm
+        - URL=https://github.com/Godu92/Self-Host
         - VENDOR=N/A
         ## Optional: This will set the image:tag that you want to build from
         - IMAGE_NAME=debian
-        - IMAGE_TAG=jessie
+        - IMAGE_TAG=bookworm
     # ports:
     # - 80:80
     restart: always

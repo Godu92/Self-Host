@@ -1,5 +1,5 @@
 ARG IMAGE_NAME=debian
-ARG IMAGE_TAG=jessie
+ARG IMAGE_TAG=bookworm
 FROM ${IMAGE_NAME}:${IMAGE_TAG}
 
 ## Add these lines to dockerfiles for consistent labeling
