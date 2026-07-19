@@ -3,10 +3,10 @@
 x-backend: &common
   image: papermerge/papermerge:3.0.3
   environment:
-    PAPERMERGE__SECURITY__SECRET_KEY: 12345
+    PAPERMERGE__SECURITY__SECRET_KEY: ${PAPERMERGE__SECURITY__SECRET_KEY}
     PAPERMERGE__AUTH__USERNAME: admin
-    PAPERMERGE__AUTH__PASSWORD: admin
-    PAPERMERGE__DATABASE__URL: postgresql://user:passwd@papermerge-db:5432/data
+    PAPERMERGE__AUTH__PASSWORD: ${PAPERMERGE__AUTH__PASSWORD}
+    PAPERMERGE__DATABASE__URL: postgresql://user:${POSTGRES_PASSWORD}@papermerge-db:5432/data
     PAPERMERGE__REDIS__URL: redis://papermerge-redis:6379/0
   volumes:
     - index_db:/core_app/index_db
@@ -48,7 +48,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
-      POSTGRES_PASSWORD: passwd
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: data
       POSTGRES_USER: user
     healthcheck:

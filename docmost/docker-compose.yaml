@@ -9,8 +9,8 @@ services:
       - docmost-redis
     environment:
       APP_URL: "http://doc.$HOST"
-      APP_SECRET: "reallylongpasswordthatshouldbesecurenoughforanyone"
-      DATABASE_URL: "postgresql://docmost:strongerdbpassword@docmost-db:5432/docmost?schema=public"
+      APP_SECRET: "${APP_SECRET}"
+      DATABASE_URL: "postgresql://docmost:${POSTGRES_PASSWORD}@docmost-db:5432/docmost?schema=public"
       REDIS_URL: "redis://docmost-redis:6379"
     # ports:
     # - "3000:3000"
@@ -29,7 +29,7 @@ services:
     environment:
       POSTGRES_DB: docmost
       POSTGRES_USER: docmost
-      POSTGRES_PASSWORD: strongerdbpassword
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     restart: always
     expose:
       - 5432

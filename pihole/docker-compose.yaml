@@ -14,7 +14,7 @@ services:
       TZ: "America/Chicago"
       INTERFACE: "eno1"
       WEB_PORT: 80
-      WEBPASSWORD: "heresapassword"
+      WEBPASSWORD: "${WEBPASSWORD}"
       VIRTUAL_HOST: pihole.$HOST
     # Volumes store your data between container upgrades
     volumes:

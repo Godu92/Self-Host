@@ -16,8 +16,8 @@ services:
 
     environment:
       - TZ=America/New_York
-      - LLDAP_JWT_SECRET=BeY3t6PYRl5Hr7OE+dnK3npG2sRjOnCWKHS5i+Vqb1k=
-      - LLDAP_LDAP_USER_PASS=admin123
+      - LLDAP_JWT_SECRET=${LLDAP_JWT_SECRET}
+      - LLDAP_LDAP_USER_PASS=${LLDAP_LDAP_USER_PASS}
       - LLDAP_LDAP_BASE_DN=dc=localhost
       - LLDAP_LDAP_USER_DN=admin
       - LLDAP_LDAP_USER_EMAIL=admin@localhost

@@ -7,9 +7,9 @@ services:
     env_file:
       - .env
     environment:
-      SECRET: "replace-with-secure-random-value"
-      ADMIN_EMAIL: "admin@example.com"
-      ADMIN_PASSWORD: "password"
+      SECRET: "${SECRET}"
+      ADMIN_EMAIL: "${ADMIN_EMAIL}"
+      ADMIN_PASSWORD: "${ADMIN_PASSWORD}"
       WEBSOCKETS_ENABLED: "true"
     labels:
       - traefik.enable=true

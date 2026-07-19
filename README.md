@@ -5,6 +5,7 @@ This is a collection of local tools, originally made for`RHEL 8` using `podman`.
 - [Self-Host](#self-host)
   - [Starting](#starting)
     - [Deploy styles](#deploy-styles)
+    - [Secrets](#secrets)
   - [Templates](#templates)
   - [Storage](#storage)
     - [List of Volumes](#list-of-volumes)
@@ -13,13 +14,14 @@ This is a collection of local tools, originally made for`RHEL 8` using `podman`.
       - [Trilium](#trilium)
   - [TODO](#todo)
   - [Organization](#organization)
-    - [Direnv](#direnv)
 
 ## Starting
 
-Create and edit a `./.env` file at the root of this project:
+Copy `.env.example` to `.env` at the root of this project and edit as needed:
 
-Example (also found at `./.env-dev`):
+```shell
+cp .env.example .env
+```
 
 ```shell
 HOST=localhost
@@ -28,6 +30,10 @@ TRILIUM_DATA_DIR=./data # optional
 ```
 
 > Sadly this does not extend to `./dashy/config` files as of yet
+
+If you use [direnv](https://direnv.net/), run `direnv allow` once — the tracked `.envrc` loads
+`.env` automatically and also fixes up `HOSTNAME` with your machine's real hostname (docker
+compose can't shell-evaluate `.env` values itself, so this needs a real shell).
 
 `./docker-compose.yaml` is the base file — it defines the shared `proxy` network plus Traefik
 and a `whoami` test target. It's a self-contained smoke test: after cloning the repo and
@@ -64,6 +70,27 @@ To add a new style (e.g. a media server or a work box), copy `compose.local.yaml
 `compose.<style>.yaml` and uncomment/comment the services you want for that setup. No other
 file needs to change — the base `docker-compose.yaml` and every service's own
 `docker-compose.yaml` stay untouched.
+
+### Secrets
+
+Any service directory with real credentials keeps them out of git: a tracked
+`<service>/.env.example` documents the variables (placeholder values, usually `changeme`), and
+a gitignored `<service>/.env` holds the real ones — same pattern as the root `.env`. Docker
+Compose resolves each service's `.env` relative to its own directory automatically, no extra
+config needed.
+
+Before enabling one of these services in a deploy style, either copy its example by hand or
+generate real random values with:
+
+```bash
+./scripts/gen-secrets.sh <service-dir>   # e.g. ./scripts/gen-secrets.sh pihole
+./scripts/gen-secrets.sh --all           # every service that has a *.env.example
+```
+
+It won't overwrite an existing `.env` unless you pass `--force`. See the comment header in
+[scripts/gen-secrets.sh](scripts/gen-secrets.sh) for the value rules (`changeme`,
+`base64:changeme`, and `$OTHERKEY` references for credentials shared across containers in the
+same compose file).
 
 ## Templates
 
@@ -114,9 +141,3 @@ under [Deploy styles](#deploy-styles) is implemented. Still TODO:
   optional sub-network), imported up into the next level until root is reached.
 - Give each individual service compose file its own override file, for per-service tweaks
   independent of deploy style.
-
-### Direnv
-
-TODO:
-
-- create direnv that can do some amount of setup for the environment settings/vars

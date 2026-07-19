@@ -9,7 +9,7 @@ services:
     environment:
       - TZ=America/New_York
       - IPAM_DATABASE_HOST=phpipam-mariadb
-      - IPAM_DATABASE_PASS=my_secret_phpipam_pass
+      - IPAM_DATABASE_PASS=${IPAM_DATABASE_PASS}
       - IPAM_DATABASE_WEBHOST=%
       - IPAM_DATABASE_USER=phpipam
     restart: unless-stopped
@@ -33,7 +33,7 @@ services:
     environment:
       - TZ=America/New_York
       - IPAM_DATABASE_HOST=phpipam-mariadb
-      - IPAM_DATABASE_PASS=my_secret_phpipam_pass
+      - IPAM_DATABASE_PASS=${IPAM_DATABASE_PASS}
       - SCAN_INTERVAL=1h
     restart: unless-stopped
     volumes:
@@ -48,10 +48,10 @@ services:
     container_name: phpipam-mariadb
     image: mariadb:11.2.3
     environment:
-      - MYSQL_ROOT_PASSWORD=my_secret_mysql_root_pass
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=phpipam
       - MYSQL_USER=phpipam
-      - MYSQL_PASSWORD=my_secret_phpipam_pass
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     restart: unless-stopped
     volumes:
       - phpipam-db-data:/var/lib/mysql

@@ -41,21 +41,41 @@ Roughly half of ~60 image references float. Standardize on pinned versions.
       `postgres:16`/`16-alpine`/`15-alpine`, `redis:7.2-alpine`, `registry:3`,
       `freeipa:fedora-41`.
 
-## 3. Secrets / credentials hygiene
+## 3. Secrets / credentials hygiene — DONE (2026-07-19)
 
-- [ ] Rotate/replace [lldap/docker-compose.yaml:19](lldap/docker-compose.yaml#L19)
-      `LLDAP_JWT_SECRET` — looks like a real generated secret (not an obvious placeholder),
-      committed to git.
-- [ ] Hardcoded placeholder passwords directly in compose files — move to `.env` +
-      `.env.example` convention: pihole, phpipam (x4), monica (x2), n8n (x3), wikijs,
-      papermerge (x3), adventurelog (x4), freeipa, docmost (x2), directus (x2).
-- [ ] `.env` files tracked in git despite `.gitignore` excluding `.env` — untrack and replace
-      with `.env.example`: `firefly/.env`, `firefly/.db.env`, `firefly/.importer.env`,
-      `airtrail/.env`, `notebook/opennotebook-single/docker.env`, root `.env-dev` (keep as
-      example, just confirm it has no real values).
-- [ ] Adopt a repo-wide convention: every service with secrets gets a tracked
-      `*.env.example` and a real `.env` that's actually gitignored (verify `.gitignore` is
-      doing what it claims).
+- [x] Rotated [lldap/docker-compose.yaml](lldap/docker-compose.yaml) `LLDAP_JWT_SECRET` — the
+      old committed value is retired; treat it as compromised if it was ever actually deployed.
+- [x] Hardcoded placeholder passwords moved to `${VAR}` interpolation + a tracked
+      `.env.example`/gitignored `.env` per directory: pihole, phpipam, monica, n8n, wikijs,
+      papermerge, adventurelog, freeipa, docmost, directus, lldap. Fresh random values were
+      generated for all of these (none had live data — verified no running containers/volumes
+      existed before rotating).
+- [x] Along the way, fixed a real bug this surfaced: n8n's Postgres healthcheck was checking
+      `-d changePassword` (the password, not the db name) — now `-d n8n`.
+- [x] Tracked `.env` files untracked (`git rm --cached`, kept on disk) and given `.env.example`
+      counterparts: `firefly/.env`, `firefly/.db.env`, `firefly/.importer.env`,
+      `airtrail/.env`, `notebook/opennotebook-single/docker.env`. Their actual values were
+      **not** rotated (low value for local-dev-only credentials vs. effort — they're multi-file
+      services where the same password is split across files gen-secrets.sh can't link
+      automatically). Root `.env-dev` renamed to `.env.example` for naming consistency; it only
+      ever held non-secret values (`HOST`/`DOCKER_DIR`/etc.).
+- [x] Adopted a repo-wide convention: every service with secrets gets a tracked
+      `<service>/.env.example` and a gitignored `<service>/.env`. `.gitignore`'s bare `.env`
+      rule was broadened to `*.env` (+ `!*.env.example`) since the bare form was only ever
+      catching exact-name `.env` files, not `.db.env`/`docker.env` variants — which is exactly
+      how firefly/notebook's extra env files ended up committed in the first place.
+- [x] Added [scripts/gen-secrets.sh](scripts/gen-secrets.sh) to generate a real `.env` from any
+      `.env.example`, including a `$OTHERKEY` reference syntax for credentials shared across two
+      containers in the same file. Doesn't handle cross-*file* shared credentials (see firefly
+      note above) — out of scope, do that by hand.
+- [x] Added root `.envrc` (direnv) that loads `.env` and fixes `HOSTNAME` with a real
+      shell-evaluated hostname — `.env` alone can't shell-substitute `$(hostname)`, which was a
+      latent, silently-broken value before.
+- [ ] Not addressed: git *history* still contains the old committed secret values (lldap JWT,
+      firefly/airtrail/notebook passwords, etc.). Untracking only stops *future* commits from
+      exposing them — a true purge needs history rewriting (e.g. `git filter-repo`), which is
+      disruptive enough (rewrites shas, needs a force-push, breaks other clones) that it should
+      be a deliberate, explicitly-requested follow-up, not a side effect of a cleanup pass.
 
 ## 4. Dead/stale content
 

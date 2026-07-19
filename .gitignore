@@ -1,6 +1,9 @@
 ## General ignores
 *.nfs*
-.env
+*.env
+!*.env.example
+.envrc.local
+.direnv/
 *.db
 *.zip
 *.tar
@@ -9,6 +12,7 @@
 *.sql
 *_data
 .claude/
+CLAUDE.md
 
 ## App specific ignores
 pihole/etc-pihole
