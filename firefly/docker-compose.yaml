@@ -8,7 +8,7 @@
 
 services:
   firefly:
-    image: fireflyiii/core:latest
+    image: fireflyiii/core:${FIREFLY_VERSION:-latest}
     hostname: app
     container_name: firefly_iii_core
     networks:
@@ -27,7 +27,7 @@ services:
       - traefik.http.routers.fire.entrypoints=http
       - traefik.http.services.fire.loadbalancer.server.port=8080
   firefly-db:
-    image: mariadb:lts
+    image: mariadb:${MARIADB_VERSION:-lts}
     hostname: db
     container_name: firefly_iii_db
     networks:

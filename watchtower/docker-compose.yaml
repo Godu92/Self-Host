@@ -1,6 +1,6 @@
 services:
   watchtower:
-    image: containrrr/watchtower
+    image: containrrr/watchtower:${WATCHTOWER_VERSION:-latest}
     container_name: watchtower
     restart: always
     volumes:

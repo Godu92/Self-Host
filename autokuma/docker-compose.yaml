@@ -2,7 +2,7 @@
 
 services:
   autokuma:
-    image: ghcr.io/bigboot/autokuma:latest
+    image: ghcr.io/bigboot/autokuma:${AUTOKUMA_VERSION:-latest}
     restart: unless-stopped
     container_name: autokuma
     environment:

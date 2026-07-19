@@ -1,7 +1,7 @@
 services:
   adminer:
     restart: always
-    image: docker.io/adminer
+    image: docker.io/adminer:${ADMINER_VERSION:-latest}
     container_name: adminer
     # ports:
     #   - 8080:8080

@@ -1,6 +1,6 @@
 services:
   uptime-kuma:
-    image: louislam/uptime-kuma
+    image: louislam/uptime-kuma:${UPTIME_KUMA_VERSION:-latest}
     container_name: uptime-kuma
     volumes:
       - "up-data:/app/data"

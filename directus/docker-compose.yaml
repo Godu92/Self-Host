@@ -1,6 +1,6 @@
 services:
   directus:
-    image: directus/directus:11.1.2
+    image: directus/directus:${DIRECTUS_VERSION:-latest}
     volumes:
       - ./uploads:/directus/uploads
       - ./extensions:/directus/extensions

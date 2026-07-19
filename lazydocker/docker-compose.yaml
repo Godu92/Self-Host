@@ -1,6 +1,6 @@
 services:
   lazydocker:
-    image: lazyteam/lazydocker
+    image: lazyteam/lazydocker:${LAZYDOCKER_VERSION:-latest}
     container_name: lazydocker
     stdin_open: true
     tty: true

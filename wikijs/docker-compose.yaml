@@ -1,6 +1,6 @@
 services:
   wiki-db:
-    image: postgres:15-alpine
+    image: postgres:${POSTGRES_VERSION:-latest}-alpine
     container_name: wiki-db
     environment:
       POSTGRES_DB: wiki
@@ -15,7 +15,7 @@ services:
       - traefik.enable=true
 
   wiki:
-    image: ghcr.io/requarks/wiki:2
+    image: ghcr.io/requarks/wiki:${WIKIJS_VERSION:-2}
     container_name: wiki
     depends_on:
       - wiki-db

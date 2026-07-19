@@ -1,6 +1,6 @@
 services:
   registry:
-    image: registry:3
+    image: registry:${REGISTRY_VERSION:-latest}
     container_name: registry
     restart: always
     environment:

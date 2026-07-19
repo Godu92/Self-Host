@@ -1,6 +1,6 @@
 services:
   appsmith:
-    image: index.docker.io/appsmith/appsmith-ee
+    image: index.docker.io/appsmith/appsmith-ee:${APPSMITH_VERSION:-latest}
     container_name: appsmith
     volumes:
       - ./stacks:/appsmith-stacks

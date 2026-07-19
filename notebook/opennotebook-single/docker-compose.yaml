@@ -1,7 +1,7 @@
 services:
   # Single container with everything built-in (eliminates networking issues)
   open-notebook-single:
-    image: lfnovo/open_notebook:latest-single
+    image: lfnovo/open_notebook:${OPEN_NOTEBOOK_VERSION:-latest}-single
     container_name: open-notebook-single
     restart: unless-stopped
     volumes:
@@ -23,7 +23,7 @@ services:
 
   # Keep Ollama separate (still needed for AI)
   ollama:
-    image: ollama/ollama:latest
+    image: ollama/ollama:${OLLAMA_VERSION:-latest}
     container_name: ollama
     restart: unless-stopped
     ports:

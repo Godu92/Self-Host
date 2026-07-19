@@ -8,7 +8,7 @@ services:
         limits:
           memory: 256M
     hostname: gopeed
-    image: liwei2633/gopeed:v1.5.7
+    image: liwei2633/gopeed:${GOPEED_VERSION:-latest}
     labels:
       icon: https://cdn.jsdelivr.net/gh/IceWhaleTech/CasaOS-AppStore@main/Apps/Gopeed/icon.png
       traefik.enable: "true"

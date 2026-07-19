@@ -1,6 +1,6 @@
 services:
   gitea:
-    image: docker.gitea.com/gitea:1.23.7
+    image: docker.gitea.com/gitea:${GITEA_VERSION:-latest}
     container_name: gitea
     # environment:
     #   - USER_UID=1000

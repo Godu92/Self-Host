@@ -2,7 +2,7 @@
 services:
   superproductivity:
     container_name: super-prod
-    image: johannesjo/super-productivity:latest
+    image: johannesjo/super-productivity:${SUPER_PRODUCTIVITY_VERSION:-latest}
     # ports:
     #   - "80:80" # Maps host port 80 to container port 80
     # Optional: Add volumes for persistent data if needed, e.g., for WebDAV sync config

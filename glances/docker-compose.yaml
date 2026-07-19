@@ -1,6 +1,6 @@
 services:
   glances:
-    image: "nicolargo/glances:latest"
+    image: "nicolargo/glances:${GLANCES_VERSION:-latest}"
     environment:
       - TZ=America/New_York
       - PGID=1000

@@ -1,7 +1,7 @@
 # version: "3"
 services:
   focalboard:
-    image: mattermost/focalboard
+    image: mattermost/focalboard:${FOCALBOARD_VERSION:-latest}
     container_name: focalboard
     volumes:
       - fbdata:/opt/focalboard/data

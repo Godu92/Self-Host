@@ -1,6 +1,6 @@
 services:
   it-tools:
-    image: corentinth/it-tools
+    image: corentinth/it-tools:${IT_TOOLS_VERSION:-latest}
     container_name: tools
     tty: true
     stdin_open: true

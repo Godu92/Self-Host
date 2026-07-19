@@ -22,24 +22,53 @@ Check items off as they're addressed; add new findings as they turn up.
       etc.) by copying `compose.local.yaml` to `compose.<style>.yaml` and toggling services,
       once there's a concrete need for a second style.
 
-## 2. Version pinning
+## 2. Version pinning — DONE (2026-07-19), different resolution than originally scoped
 
-Roughly half of ~60 image references float. Standardize on pinned versions.
+Original framing was "standardize on pinned versions." Actual direction taken, per explicit
+preference: standardize on **`${SERVICE_VERSION:-latest}`** everywhere instead — floats by
+default (simplicity, always-current for a homelab), but every image becomes pin-able per
+deployment by setting a var in that service's `.env`, with no compose file edits needed.
 
-- [ ] Explicit `:latest` (pin these): pxe, dozzle, nextcloud, docmost (app image), pihole,
-      jenkins (local build), notebook/opennotebook-single (open_notebook + ollama), autokuma,
-      phpipam (www + cron), netalertx, super-prod, stirlingpdf, dashy, glances, adventurelog
-      (frontend/backend), calibre (calibre-web + calibre), kavita, trilium, grocy.
-- [ ] No tag at all (defaults to latest silently — worse, since it's invisible in the file):
-      wordle, ittools, jdownloader, filebrowser, dailynotes, focalboard, lazydocker, uptime,
-      monica (app image), olivetin, watchtower, drawio (both images), whoami, gotify, appsmith,
-      socket.
-- [ ] Rolling aliases that look pinned but aren't: `mariadb:lts` (firefly), `lldap:stable`,
-      `wiki:2` (wikijs, major-only).
-- [ ] Good examples already pinned properly — use as the model: `directus:11.1.2`,
-      `traefik:v3.6`, `gitea:1.23.7`, `gopeed:v1.5.7`, `papermerge:3.0.3`,
-      `postgres:16`/`16-alpine`/`15-alpine`, `redis:7.2-alpine`, `registry:3`,
-      `freeipa:fedora-41`.
+- [x] All ~49 registry-pulled images (every `docker-compose.y*ml` except the 3 locally-built
+      ones: jenkins, sketchforge, testing/test) converted from a hardcoded tag (or no tag at
+      all, which was silently `latest` anyway) to `${VAR:-latest}` interpolation.
+- [x] Verified against the real registries (Docker Hub, ghcr.io, docker.gitea.com,
+      docker.n8n.io) rather than assumed — only
+      [freeipa/freeipa-server](freeipa/docker-compose.yaml) has **no** generic `latest` tag at
+      all (its tags are OS-variant-specific: fedora-41/43/44, rocky-9, almalinux-9, ...). Its
+      fallback stays the current pin (`fedora-41`), not `latest`.
+- [x] Tags that encode a real *variant*, not just a version, keep that variant hardcoded and
+      only the version/channel portion floats via the env var:
+      - `postgres:${POSTGRES_VERSION:-latest}-alpine` / `redis:${REDIS_VERSION:-latest}-alpine`
+        (wikijs, docmost, airtrail) — alpine vs. the default Debian-based image is a real base-OS
+        difference, not just a version bump.
+      - `postgis/postgis:${POSTGIS_VERSION:-latest}-3.3` (adventurelog) — same idea, `-3.3` is
+        the PostGIS extension version bundled with the Postgis major version.
+      - `lfnovo/open_notebook:${OPEN_NOTEBOOK_VERSION:-latest}-single` (notebook) — `-single` is
+        a different container *topology* (single container vs. multi-container), not a version.
+      - `ghcr.io/requarks/wiki:${WIKIJS_VERSION:-2}` — defaults to major-version-only `2`
+        (matches upstream's own convention), not bare `latest`, since wiki.js major bumps can
+        break things.
+      - `mariadb:${MARIADB_VERSION:-lts}` (firefly) and `lldap/lldap:${LLDAP_VERSION:-stable}` —
+        `lts`/`stable` are release *channels*, not version numbers; kept as the default rather
+        than switching to bleeding-edge `latest`.
+- [x] Every service directory (except the 3 local builds) now has a `.env.example` documenting
+      its version var(s) (commented out, since the default already works with zero config).
+      Directories that already had a `.env.example` for secrets got the version var(s) appended.
+      Caveat found along the way: Compose only auto-loads a file literally named `.env` for
+      interpolation — `notebook/opennotebook-single/docker.env` (env_file-only, app config) does
+      **not** get read for `${VAR}` substitution, so that directory needed its own separate
+      plain `.env.example` just for `OPEN_NOTEBOOK_VERSION`/`OLLAMA_VERSION`.
+- [x] Found and fixed two unrelated pre-existing bugs while touching every file:
+      `calibre/docker-compose.yaml` had `<<: &common` (defines an anchor) where it meant
+      `<<: *common` (dereferences one) — silently broken YAML merge, fixed to `*common`.
+      papermerge's `.env.example` was missing entirely from the secrets pass (item 3) even
+      though its real `.env` existed — added.
+- [ ] Not fixed (found but out of scope, pre-existing and unrelated to versioning):
+      `dailynotes/docker-compose.yaml` references `./config/.env` which doesn't exist on disk;
+      `socket/docker-compose.yaml`'s `socket-proxy` service references a `socket_proxy` network
+      that's only ever defined (commented out) in the base `docker-compose.yaml` — the "eventual
+      socket proxy" mentioned in README is not wired up yet.
 
 ## 3. Secrets / credentials hygiene — DONE (2026-07-19)
 
@@ -87,6 +116,16 @@ Roughly half of ~60 image references float. Standardize on pinned versions.
 - [ ] Root-level `./data/` is live Trilium data (not dead) but is owned by a different Unix
       user (`geadmin`) than the repo owner — check for a permissions/ownership drift issue.
       There's also an odd nested duplicate `data/styles/document.db*` worth investigating.
+      **Action needed on the real server**: `TRILIUM_DATA_DIR` moved from the root `.env` to
+      [trilium/.env](trilium/.env) on 2026-07-19 (there was no good reason for a
+      trilium-specific setting to live at the repo root, and it wasn't even being read from
+      there anymore — see below). Compose resolves a relative bind path in an *included* file
+      relative to *that file's own directory*, so `TRILIUM_DATA_DIR=./data` now means
+      `trilium/data`, not the repo root. On the real server, either move the live data
+      directory to `trilium/data` or set `TRILIUM_DATA_DIR` in `trilium/.env` to an absolute
+      path pointing at wherever the old `./data` actually lives. Until that's done there,
+      starting trilium fresh would silently create a new, empty `trilium/data` instead of using
+      the existing one.
 - [ ] [jenkins/data/](jenkins/data/) holds a full real Jenkins home dir (credentials.xml,
       secret.key, etc.) on disk next to tracked source — not git-tracked today, but consider
       moving state outside the repo tree entirely for portability.

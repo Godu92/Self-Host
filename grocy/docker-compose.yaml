@@ -1,6 +1,6 @@
 services:
   grocy:
-    image: lscr.io/linuxserver/grocy:latest
+    image: lscr.io/linuxserver/grocy:${GROCY_VERSION:-latest}
     container_name: grocy
     environment:
       - PUID=1000

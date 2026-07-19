@@ -1,7 +1,7 @@
 services:
   adventure-web:
     #build: ./frontend/
-    image: ghcr.io/seanmorley15/adventurelog-frontend:latest
+    image: ghcr.io/seanmorley15/adventurelog-frontend:${ADVENTURELOG_FRONTEND_VERSION:-latest}
     container_name: adventurelog-frontend
     restart: always
     environment:
@@ -19,7 +19,7 @@ services:
       - traefik.http.services.adventure.loadbalancer.server.port=3000
 
   adventure-db:
-    image: postgis/postgis:15-3.3
+    image: postgis/postgis:${POSTGIS_VERSION:-latest}-3.3
     container_name: adventurelog-db
     restart: always
     environment:
@@ -33,7 +33,7 @@ services:
 
   adventure-server:
     #build: ./backend/
-    image: ghcr.io/seanmorley15/adventurelog-backend:latest
+    image: ghcr.io/seanmorley15/adventurelog-backend:${ADVENTURELOG_BACKEND_VERSION:-latest}
     container_name: adventurelog-backend
     restart: always
     environment:

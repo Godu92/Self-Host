@@ -6,6 +6,7 @@ This is a collection of local tools, originally made for`RHEL 8` using `podman`.
   - [Starting](#starting)
     - [Deploy styles](#deploy-styles)
     - [Secrets](#secrets)
+    - [Versions](#versions)
   - [Templates](#templates)
   - [Storage](#storage)
     - [List of Volumes](#list-of-volumes)
@@ -84,13 +85,28 @@ generate real random values with:
 
 ```bash
 ./scripts/gen-secrets.sh <service-dir>   # e.g. ./scripts/gen-secrets.sh pihole
-./scripts/gen-secrets.sh --all           # every service that has a *.env.example
+./scripts/gen-secrets.sh --style local    # every service the base file + compose.local.yaml enable
+./scripts/gen-secrets.sh --all           # every service in the repo that has a *.env.example
 ```
 
-It won't overwrite an existing `.env` unless you pass `--force`. See the comment header in
+`--style` is the one to reach for when standing up a style with a lot of services at once —
+it only touches what that style actually turns on, so you're not hunting through 50 directories
+to figure out which ones need a `.env`. Files that are pure documentation (nothing to actually
+generate — e.g. a service with only a version-pin comment, no secrets) are skipped silently,
+and it won't overwrite an existing `.env` unless you pass `--force`. See the comment header in
 [scripts/gen-secrets.sh](scripts/gen-secrets.sh) for the value rules (`changeme`,
 `base64:changeme`, and `$OTHERKEY` references for credentials shared across containers in the
 same compose file).
+
+### Versions
+
+Every image tag is `${SERVICE_VERSION:-latest}` — nothing to configure by default, every
+service just runs the latest published image. To pin a specific version instead, set the var
+in that service's `.env` (see its `.env.example` for the exact name(s); create the `.env` if it
+doesn't already exist for that service). A few images use a suffix that's a real variant, not a
+version — e.g. `postgres:${POSTGRES_VERSION:-latest}-alpine` — there the var only controls the
+version, the variant itself is fixed. One image ([freeipa](freeipa/docker-compose.yaml)) has no
+`latest` tag at all, so its var defaults to the current pin instead.
 
 ## Templates
 
@@ -121,7 +137,8 @@ You should need to create some volumes ahead of time for the ease of launching c
 
 - tril-data
 
-> Also has a possible `.env` bind in the event you want it set somewhere but not tracked
+> Set `TRILIUM_DATA_DIR` in `trilium/.env` to bind mount the data somewhere you control
+> directly instead of the named volume — see `trilium/.env.example`.
 >
 > TODO: Add this option for all mounts
 

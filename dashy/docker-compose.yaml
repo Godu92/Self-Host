@@ -1,6 +1,6 @@
 services:
   dashy:
-    image: "lissy93/dashy:latest"
+    image: "lissy93/dashy:${DASHY_VERSION:-latest}"
     restart: always
     container_name: dashy
     environment:

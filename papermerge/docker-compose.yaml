@@ -1,7 +1,7 @@
 # version: "3.9"
 
 x-backend: &common
-  image: papermerge/papermerge:3.0.3
+  image: papermerge/papermerge:${PAPERMERGE_VERSION:-latest}
   environment:
     PAPERMERGE__SECURITY__SECRET_KEY: ${PAPERMERGE__SECURITY__SECRET_KEY}
     PAPERMERGE__AUTH__USERNAME: admin
@@ -32,7 +32,7 @@ services:
     command: worker
     container_name: papermerge-worker
   papermerge-redis:
-    image: redis:6
+    image: redis:${REDIS_VERSION:-latest}
     container_name: papermerge-redis
     healthcheck:
       test: redis-cli --raw incr ping
@@ -43,7 +43,7 @@ services:
     labels:
       - traefik.enable=true
   papermerge-db:
-    image: postgres:16.1
+    image: postgres:${POSTGRES_VERSION:-latest}
     container_name: papermerge-db
     volumes:
       - postgres_data:/var/lib/postgresql/data/

@@ -1,6 +1,6 @@
 services:
   changedetection:
-    image: dgtlmoon/changedetection.io
+    image: dgtlmoon/changedetection.io:${CHANGEDETECTION_VERSION:-latest}
     container_name: changedetection
     volumes:
       - "./data:/datastore"
@@ -35,7 +35,7 @@ services:
   # RECOMMENDED FOR FETCHING PAGES WITH CHROME, be sure to enable the "PLAYWRIGHT_DRIVER_URL" env variable in the main changedetection container
   browser-sockpuppet-chrome:
     hostname: browser-sockpuppet-chrome
-    image: dgtlmoon/sockpuppetbrowser:latest
+    image: dgtlmoon/sockpuppetbrowser:${SOCKPUPPETBROWSER_VERSION:-latest}
     container_name: browser-sockpuppet-chrome
     ports:
       - "3000:3000"

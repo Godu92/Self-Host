@@ -1,6 +1,6 @@
 services:
   whoami:
-    image: traefik/whoami
+    image: traefik/whoami:${WHOAMI_VERSION:-latest}
     container_name: whoami
     # ports:
     #   - 81:80

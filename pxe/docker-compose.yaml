@@ -1,6 +1,6 @@
 services:
   netbootxyz:
-    image: lscr.io/linuxserver/netbootxyz:latest
+    image: lscr.io/linuxserver/netbootxyz:${NETBOOTXYZ_VERSION:-latest}
     container_name: netbootxyz
     environment:
       - PUID=1000

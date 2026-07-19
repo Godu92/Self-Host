@@ -1,7 +1,7 @@
 # version: '3.9'
 services:
   drawio:
-    image: jgraph/drawio
+    image: jgraph/drawio:${DRAWIO_VERSION:-latest}
     # ports:
     #     - '8443:8443'
     #     - '8080:8080'
@@ -20,7 +20,7 @@ services:
       - image-export
   image-export:
     container_name: image-export
-    image: jgraph/export-server
+    image: jgraph/export-server:${EXPORT_SERVER_VERSION:-latest}
     # ports:
     # - "8000:8000"
     environment:

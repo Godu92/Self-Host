@@ -1,6 +1,6 @@
 services:
   filebrowser:
-    image: "filebrowser/filebrowser"
+    image: "filebrowser/filebrowser:${FILEBROWSER_VERSION:-latest}"
     container_name: filebrowser
     # ports:
     #   - '8180:80'

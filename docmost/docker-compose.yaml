@@ -2,7 +2,7 @@
 
 services:
   docmost:
-    image: docmost/docmost:latest
+    image: docmost/docmost:${DOCMOST_VERSION:-latest}
     container_name: docmost
     depends_on:
       - docmost-db
@@ -24,7 +24,7 @@ services:
       - traefik.http.services.doc.loadbalancer.server.port=3000
 
   docmost-db:
-    image: postgres:16-alpine
+    image: postgres:${POSTGRES_VERSION:-latest}-alpine
     container_name: docmost-db
     environment:
       POSTGRES_DB: docmost
@@ -39,7 +39,7 @@ services:
       - traefik.enable=true
 
   docmost-redis:
-    image: redis:7.2-alpine
+    image: redis:${REDIS_VERSION:-latest}-alpine
     container_name: docmost-redis
     restart: always
     expose:

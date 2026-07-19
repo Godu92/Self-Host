@@ -8,8 +8,8 @@ x-settings: &common
 
 services:
   calibre-web:
-    <<: &common 
-    image: lscr.io/linuxserver/calibre-web:latest
+    <<: *common
+    image: lscr.io/linuxserver/calibre-web:${CALIBRE_WEB_VERSION:-latest}
     container_name: calibre-web
     volumes:
       - /path/to/data:/config
@@ -23,8 +23,8 @@ services:
       - traefik.http.services.books.loadbalancer.server.port=8083
 
   calibre:
-    <<: &common 
-    image: lscr.io/linuxserver/calibre:latest
+    <<: *common
+    image: lscr.io/linuxserver/calibre:${CALIBRE_VERSION:-latest}
     container_name: calibre
     volumes:
       - /path/to/calibre/config:/config

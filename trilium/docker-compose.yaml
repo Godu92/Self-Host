@@ -1,6 +1,6 @@
 services:
   trilium:
-    image: triliumnext/notes:latest
+    image: triliumnext/notes:${TRILIUM_VERSION:-latest}
     container_name: trilium
     restart: always
     # environment:

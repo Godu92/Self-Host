@@ -1,6 +1,6 @@
 services:
   freeipa:
-    image: freeipa/freeipa-server:fedora-41
+    image: freeipa/freeipa-server:${FREEIPA_VERSION:-fedora-41}
     container_name: freeipa
     hostname: ipa.lab.localhost
     restart: unless-stopped

@@ -3,7 +3,7 @@
 services:
   phpipam-web:
     container_name: phpipam-web
-    image: phpipam/phpipam-www:latest
+    image: phpipam/phpipam-www:${PHPIPAM_VERSION:-latest}
     # ports:
     #   - "80:80"
     environment:
@@ -29,7 +29,7 @@ services:
 
   phpipam-cron:
     container_name: phpipam-cron
-    image: phpipam/phpipam-cron:latest
+    image: phpipam/phpipam-cron:${PHPIPAM_VERSION:-latest}
     environment:
       - TZ=America/New_York
       - IPAM_DATABASE_HOST=phpipam-mariadb
@@ -46,7 +46,7 @@ services:
 
   phpipam-mariadb:
     container_name: phpipam-mariadb
-    image: mariadb:11.2.3
+    image: mariadb:${MARIADB_VERSION:-latest}
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=phpipam

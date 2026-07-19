@@ -1,7 +1,7 @@
 services:
   olivetin:
     container_name: olivetin
-    image: jamesread/olivetin
+    image: jamesread/olivetin:${OLIVETIN_VERSION:-latest}
     volumes:
       - ./config:/config # replace host path or volume as needed
       - "$DOCKER_DIR:/var/run/docker.sock:ro"

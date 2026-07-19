@@ -1,7 +1,7 @@
 # version: '3.9'
 services:
   dailynotes:
-    image: m0ngr31/dailynotes
+    image: m0ngr31/dailynotes:${DAILYNOTES_VERSION:-latest}
     container_name: dailynotes
     volumes:
       - "./config:/app/config"

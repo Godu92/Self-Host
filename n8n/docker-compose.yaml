@@ -5,7 +5,7 @@ volumes:
 
 services:
   n8n-db:
-    image: postgres:16
+    image: postgres:${POSTGRES_VERSION:-latest}
     container_name: n8n-db
     restart: always
     environment:
@@ -29,7 +29,7 @@ services:
       # - traefik.http.services.n8n-db.loadbalancer.server.port=443
 
   n8n:
-    image: docker.n8n.io/n8nio/n8n
+    image: docker.n8n.io/n8nio/n8n:${N8N_VERSION:-latest}
     container_name: n8n
     restart: always
     environment:

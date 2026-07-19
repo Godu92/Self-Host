@@ -1,6 +1,6 @@
 services:
   jdownloader:
-    image: jlesage/jdownloader-2
+    image: jlesage/jdownloader-2:${JDOWNLOADER_VERSION:-latest}
     container_name: jdownloader
     restart: always
     environment:

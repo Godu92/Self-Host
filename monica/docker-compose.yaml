@@ -1,6 +1,6 @@
 services:
   monica:
-    image: monica
+    image: monica:${MONICA_VERSION:-latest}
     container_name: monica
     # ports:
     #   - 8081:80
@@ -22,7 +22,7 @@ services:
       - traefik.http.services.people.loadbalancer.server.port=80
 
   monica-db:
-    image: mariadb:10.11
+    image: mariadb:${MARIADB_VERSION:-latest}
     container_name: monica-db
     environment:
       - MYSQL_RANDOM_ROOT_PASSWORD=true
