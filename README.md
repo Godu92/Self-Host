@@ -4,7 +4,7 @@ This is a collection of local tools, originally made for`RHEL 8` using `podman`.
 
 - [Self-Host](#self-host)
   - [Starting](#starting)
-    - [Example](#example)
+    - [Deploy styles](#deploy-styles)
   - [Templates](#templates)
   - [Storage](#storage)
     - [List of Volumes](#list-of-volumes)
@@ -12,6 +12,8 @@ This is a collection of local tools, originally made for`RHEL 8` using `podman`.
       - [Uptime](#uptime)
       - [Trilium](#trilium)
   - [TODO](#todo)
+  - [Organization](#organization)
+    - [Direnv](#direnv)
 
 ## Starting
 
@@ -27,25 +29,41 @@ TRILIUM_DATA_DIR=./data # optional
 
 > Sadly this does not extend to `./dashy/config` files as of yet
 
-Can be started either via the `./scripts/start.sh` or the root level `./docker-compose.yaml` file.
-
-> Note: certain services are not started automatically for one reason or another. Check what is in `EXCLUDED_DIRS` or what is commented out.
-
-### Example
-
-- `./scripts/start.sh`
+`./docker-compose.yaml` is the base file — it defines the shared `proxy` network plus Traefik
+and a `whoami` test target. It's a self-contained smoke test: after cloning the repo and
+setting up `.env`, you can confirm your setup works with nothing but:
 
 ```bash
-EXCLUDED_DIRS=("adminer" "appsmith" "directus" "remoteRhel" "testing" "wordle")
+docker compose up -d
 ```
 
-- `./docker-compose.yaml`
+Then visit `whoami.<HOST>` to confirm Traefik routing works end to end.
 
-```yaml
-#### Tools
-# - adminer/docker-compose.yaml
-- ittools/docker-compose.yaml
+Everything beyond that smoke test is opt-in via a **deploy style** override, layered on top
+with Compose's `-f` flag:
+
+```bash
+docker compose -f docker-compose.yaml -f compose.local.yaml up -d
 ```
+
+To stop everything for a style:
+
+```bash
+docker compose -f docker-compose.yaml -f compose.local.yaml down
+```
+
+### Deploy styles
+
+A deploy style is just a `compose.<style>.yaml` file at the repo root containing an
+`include:` list of which additional service directories to turn on, on top of the base file's
+Traefik + whoami — everything not listed (or commented out) simply isn't started.
+`compose.local.yaml` is the only style defined today; it adds glances and dashy on top of the
+base smoke test.
+
+To add a new style (e.g. a media server or a work box), copy `compose.local.yaml` to
+`compose.<style>.yaml` and uncomment/comment the services you want for that setup. No other
+file needs to change — the base `docker-compose.yaml` and every service's own
+`docker-compose.yaml` stay untouched.
 
 ## Templates
 
@@ -85,3 +103,20 @@ You should need to create some volumes ahead of time for the ease of launching c
 - Would be neat to have a script that could auto add to the top level compose file
 - also a script that could put all services into the dashboard, with running ones getting status lights
 - And while we're at it, add them to the uptime monitor
+  - or look more into the "autokuma" thing
+
+## Organization
+
+The base `docker-compose.yaml` + per-style `compose.<style>.yaml` override setup described
+under [Deploy styles](#deploy-styles) is implemented. Still TODO:
+
+- Group related services into their own sub-folder with a shared sub-compose file (with an
+  optional sub-network), imported up into the next level until root is reached.
+- Give each individual service compose file its own override file, for per-service tweaks
+  independent of deploy style.
+
+### Direnv
+
+TODO:
+
+- create direnv that can do some amount of setup for the environment settings/vars

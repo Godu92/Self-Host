@@ -4,28 +4,23 @@ Living checklist from the 2026-07-16 repo audit. Goal: turn this into a well-org
 "swiss army knife" toolkit where the right compose file gets used for the right setup.
 Check items off as they're addressed; add new findings as they turn up.
 
-## 1. Reconcile the two competing launch mechanisms (highest priority)
+## 1. Reconcile the two competing launch mechanisms (highest priority) — DONE (2026-07-19)
 
-There is currently no single source of truth for "what's running":
-
-- [ ] Decide on ONE mechanism: root [docker-compose.yaml](docker-compose.yaml) `include:` list
-      vs. [scripts/start.sh](scripts/start.sh)/[stop.sh](scripts/stop.sh) per-directory loop.
-- [ ] `start.sh`/`stop.sh` launch each service dir as an independent Compose project, so each
-      gets its own isolated Docker network instead of joining the shared `proxy` network Traefik
-      lives on — label-based routing likely doesn't work through this path at all. Fix or retire it.
-- [ ] Three drifting `EXCLUDED_DIRS`/enabled-service lists disagree with each other:
-      README example, `start.sh`'s array, and the root compose file's commented-out includes.
-      Converge to one list.
-- [ ] `start.sh` creates a docker network named `main` that no service ever references — dead step.
-- [ ] `scripts/start.sh`/`stop.sh` assume being run from inside `scripts/` (`../*/`), no
-      `cd "$(dirname "$0")"` guard; uses `eval` on hardcoded strings; no `set -e`/error handling.
-- [ ] **Preferred direction:** ditch the custom shell scripts and the single giant
-      commented-in/out root compose file in favor of native Compose overrides — one base
-      `docker-compose.yaml` (shared network, common services) plus per-deploy-style override
-      files merged at launch time (`docker compose -f docker-compose.yaml -f compose.<style>.yaml up -d`).
-      Candidate styles to define: `local`/dev, `work-server`, `family-server`, etc. Each override
-      just lists which service files to `include:`/enable for that style — no more editing the
-      shared file or maintaining drifting `EXCLUDED_DIRS` arrays across scripts/README.
+- [x] Decided on ONE mechanism: base [docker-compose.yaml](docker-compose.yaml) (networks only)
+      plus a per-deploy-style override, e.g. [compose.local.yaml](compose.local.yaml), merged at
+      launch (`docker compose -f docker-compose.yaml -f compose.local.yaml up -d`). See README.
+- [x] `scripts/start.sh`/`stop.sh` retired entirely (deleted) — no more independent per-dir
+      Compose projects bypassing the shared `proxy` network.
+- [x] Drifting `EXCLUDED_DIRS`/enabled-service lists converged to one list: whatever's
+      uncommented in the active `compose.<style>.yaml`.
+- [x] The `main` docker network step is gone along with `start.sh`.
+- [x] `set -e`/`eval`/cwd-assumption bugs are moot — the scripts no longer exist.
+- [x] Base `docker-compose.yaml` now enables Traefik + whoami directly, making it a
+      self-contained smoke test (`docker compose up -d` with no `-f` flags). `compose.local.yaml`
+      layers glances + dashy on top for a small local/dev setup.
+- [ ] Only `local` style is defined so far. Add more styles (`work-server`, `family-server`,
+      etc.) by copying `compose.local.yaml` to `compose.<style>.yaml` and toggling services,
+      once there's a concrete need for a second style.
 
 ## 2. Version pinning
 
@@ -64,8 +59,9 @@ Roughly half of ~60 image references float. Standardize on pinned versions.
 
 ## 4. Dead/stale content
 
-- [ ] `remoteRhel` and `tenable` are referenced (README, `start.sh` EXCLUDED_DIRS, root
-      compose comments) but no such directories exist. Either recreate or purge references.
+- [x] `remoteRhel` and `tenable` were referenced (README, `start.sh` EXCLUDED_DIRS, root
+      compose comments) but no such directories exist. Purged along with `start.sh`/`stop.sh`
+      and the old root compose include list (see item 1).
 - [ ] [testing/docker-compose.yaml](testing/docker-compose.yaml) still points at a defunct
       `Godu92/Remote-Rhel` GitHub repo — update or remove.
 - [ ] Root-level `./data/` is live Trilium data (not dead) but is owned by a different Unix
@@ -129,8 +125,8 @@ own TODO comment already flags.
 
 ## 8. Documentation
 
-- [ ] README's `EXCLUDED_DIRS` example doesn't match `scripts/start.sh`'s actual array —
-      keep in sync going forward (or generate one from the other).
+- [x] README's `EXCLUDED_DIRS` example vs. `scripts/start.sh`'s array — moot, both gone; the
+      enabled-service list now lives in one place, `compose.<style>.yaml` (see item 1).
 - [ ] README TODOs still open: "template files for commonly used files," "script to auto-add
       to top-level compose," "script to add services to dashboard + uptime monitor," "merge
       databases," "set more containers to docker volumes," "add `.env` bind option for all
