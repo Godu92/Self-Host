@@ -16,7 +16,7 @@ services:
     # - "3000:3000"
     restart: always
     volumes:
-      - docmost:/app/data/storage
+      - ${DOCMOST_DATA_DIR:-docmost}:/app/data/storage
     labels:
       - traefik.enable=true
       - traefik.http.routers.doc.rule=Host(`doc.$HOST`)
@@ -34,7 +34,7 @@ services:
     expose:
       - 5432
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - ${DOCMOST_DB_DIR:-db_data}:/var/lib/postgresql/data
     labels:
       - traefik.enable=true
 
@@ -45,11 +45,17 @@ services:
     expose:
       - 6379
     volumes:
-      - redis_data:/data
+      - ${DOCMOST_REDIS_DIR:-redis_data}:/data
     labels:
       - traefik.enable=true
 
 volumes:
   docmost:
+    name: docmost_data
+    external: false
   db_data:
+    name: docmost_db_data
+    external: false
   redis_data:
+    name: docmost_redis_data
+    external: false

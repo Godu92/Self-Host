@@ -10,7 +10,6 @@ This is a collection of local tools, originally made for`RHEL 8` using `podman`.
   - [Templates](#templates)
   - [Storage](#storage)
     - [List of Volumes](#list-of-volumes)
-      - [Trilium](#trilium)
   - [TODO](#todo)
   - [Organization](#organization)
 
@@ -118,6 +117,10 @@ TODO: Set more containers to docker volumes (most services still just bind-mount
 `./config`/`./data` folder instead)
 
 Named volumes below are created automatically on first `up` — nothing to pre-create by hand.
+Every one of them can be redirected to a bind mount instead (e.g. if you'd rather the data live
+under a directory you control, such as an NFS-mounted home dir that should carry the data with
+it) by setting the matching `*_DIR` var in that service's `.env` — see its `.env.example` for
+the exact name(s).
 
 ### List of Volumes
 
@@ -135,13 +138,6 @@ Named volumes below are created automatically on first `up` — nothing to pre-c
 - `productivity/monica`: `mysql`, `data`
 - `productivity/n8n`: `db_storage`, `n8n_storage`
 - `productivity/papermerge`: `postgres_data`, `index_db`, `media`
-
-#### Trilium
-
-Set `TRILIUM_DATA_DIR` in `notes/trilium/.env` to bind mount the data somewhere you control
-directly instead of the named volume — see `notes/trilium/.env.example`.
-
-> TODO: Add this option for all mounts
 
 ## TODO
 

@@ -2,9 +2,17 @@ services:
   olivetin:
     container_name: olivetin
     image: jamesread/olivetin:${OLIVETIN_VERSION:-latest}
+    networks:
+      default:
+      socket_proxy:
+    environment:
+      # OliveTin's image bundles the docker CLI, which respects this env var —
+      # connect through the socket-proxy (infra/socket) instead of mounting
+      # docker.sock directly. Needed for any action that shells out to
+      # `docker ...` (e.g. start/stop buttons).
+      - DOCKER_HOST=tcp://socket-proxy:2375
     volumes:
       - ./config:/config # replace host path or volume as needed
-      - "$DOCKER_DIR:/var/run/docker.sock:ro"
     user: root
     # ports:
     #   - "1337:1337"
@@ -14,3 +22,4 @@ services:
       - traefik.http.routers.cmd.rule=Host(`cmd.$HOST`)
       - traefik.http.routers.cmd.entrypoints=http
       - traefik.http.services.cmd.loadbalancer.server.port=1337
+      - traefik.docker.network=proxy

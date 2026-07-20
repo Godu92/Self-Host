@@ -4,24 +4,24 @@ services:
     image: traefik:${TRAEFIK_VERSION:-latest}
     container_name: traefik
     restart: always
-    # Enables the web UI and tells Traefik to listen to docker
+    # Enables the web UI and tells Traefik to listen to docker via the
+    # socket-proxy (infra/socket) instead of mounting docker.sock directly.
     command:
       - "--api.insecure=true"
       - "--api.dashboard=true"
       - "--providers.docker=true"
+      - "--providers.docker.endpoint=tcp://socket-proxy:2375"
       - "--entryPoints.http.address=:80"
       - "--entryPoints.https.address=:443"
+    networks:
+      default:
+      socket_proxy:
     ports:
       # The HTTP port
       - "80:80"
       - "443:443"
       # The Web UI (enabled by --api.insecure=true)
       - "8080:8080"
-    volumes:
-      # So that Traefik can listen to the Docker events
-      - $DOCKER_DIR:/var/run/docker.sock:z
-      # - /var/run/docker.sock:/var/run/docker.sock:z
-      # - /run/podman/podman.sock:/var/run/docker.sock:Z
     labels:
       - traefik.enable=true
       - traefik.http.routers.proxy.rule=Host(`proxy.$HOST`) || Host(`proxy.$HOSTNAME`)

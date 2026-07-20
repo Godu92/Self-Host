@@ -226,22 +226,104 @@ as a TODO. Executed:
 - [ ] Not yet done: per-service override files (README's other still-open Organization TODO,
       independent of this reorg).
 
-## 10. Volume declaration hygiene — not started, policy decided (2026-07-19)
+## 10. Volume declaration hygiene — DONE (2026-07-19)
 
-Of the 14 services with named volumes (see README's List of Volumes), only 4
-(monitoring/uptime, notes/trilium, notes/wikijs, productivity/monica) declare their volume
-explicitly with `name:` + `external: false`. The other 10 just declare a bare volume name with
-no attributes — functionally identical (Compose already defaults to a locally-managed volume),
-but not explicit about it.
+Original framing was just "make `external: false` explicit everywhere." Revised after
+discussion: the repo owner strongly prefers bind mounts over Docker-managed named volumes in
+general — burned before by named volumes not traveling with an NFS-mounted home directory
+across machines, unlike a bind mount under that same home dir. Final approach implemented:
 
-- [ ] Policy going forward: every named volume should explicitly set `external: false` (with a
-      matching `name:`). `external: true` is reserved for the one case it's actually meant for —
-      pointing at a volume that already exists from migrating a different version of this
-      project, or from some other individual/standalone launch — so it should never be the
-      silent default; explicit `false` everywhere makes that distinction visible instead of
-      implicit.
-- [ ] Not yet executed: bring the other 10 services in line with the 4 that already do this
-      correctly. Low risk/mechanical once picked up, no urgency.
+- [x] Every one of the 14 services with named volumes (see README's List of Volumes) now uses
+      the same pattern already established for Trilium/Monica: `${SERVICE_DATA_DIR:-volume-name}`
+      on the service's volume mount line, so it defaults to a Docker-managed named volume with
+      zero config, but can be redirected to any bind mount path by setting one var in that
+      service's `.env` (documented, commented out, in each `.env.example`).
+- [x] Every named volume also now explicitly declares `name:` + `external: false` (the original
+      item 2 ask) — done as part of the same pass since both touch the same lines.
+- [x] Found and fixed a real bug this surfaced, not just a style issue: `postgres_data` was
+      used as the literal volume key by *both* home/adventurelog and productivity/papermerge,
+      and `db_data` by *both* home/airtrail and notes/docmost. Without an explicit unique
+      `name:`, two unrelated services could have collided onto the same actual Docker volume —
+      renamed to `adventurelog_postgres_data`/`papermerge_postgres_data` and
+      `airtrail_db_data`/`docmost_db_data` respectively. Verified no other name collisions exist
+      repo-wide after the fix.
+- [ ] **Migration note for any of these 10 services if actually deployed elsewhere** (this
+      machine is clean, but per the Trilium/jenkins precedent, other machines may not be): 10 of
+      the 14 previously declared a *bare* volume name with no explicit `name:` at all, which
+      means Compose was auto-generating the actual volume name from whatever project name was
+      in effect at launch time — a value that isn't even guaranteed to be the same every time
+      given this repo's multiple launch paths (base+style, a group aggregator alone, or a single
+      service alone all can compute a different implicit project name). If any of these 10 are
+      running with real data on another machine, check what Docker volume they're actually
+      using (`docker inspect <container>` or `docker volume ls`) before pulling this change and
+      confirm it matches the new explicit name here, or the next `up` will silently create a
+      fresh empty volume instead of finding the existing one.
+
+## 11. Docker socket exposure — DONE (2026-07-19)
+
+Raised while discussing network segmentation ("VLANs"): 8 services mounted the raw
+`/var/run/docker.sock` directly (dozzle, glances, lazydocker, olivetin, watchtower, autokuma,
+uptime-kuma, plus traefik itself). Docker socket access is root-equivalent host control —
+network segmentation between groups does nothing to contain a compromised container that has
+it, since it can just launch a new privileged container regardless of which network it's on.
+Judged higher-value to fix than the VLAN idea (see item 12), which is deferred.
+
+- [x] [infra/socket](infra/socket/docker-compose.yaml) (`tecnativa/docker-socket-proxy`) is now
+      actually wired in — was fully defined before but never included anywhere (`socket_proxy`
+      network was commented out, its own `include:` line was commented out). Now included in
+      the base `docker-compose.yaml` alongside Traefik.
+- [x] Every one of the 8 consumers switched from mounting `docker.sock` directly to connecting
+      through the proxy over the network at `tcp://socket-proxy:2375`, verified per-app since
+      the mechanism differs by tool (none of this was guessed — see chat history for the actual
+      docs/source lines checked):
+      - `DOCKER_HOST=tcp://socket-proxy:2375`: watchtower, lazydocker, glances (`docker.from_env()`
+        respects it), olivetin (bundles the real `docker` CLI in its image, confirmed from its
+        Dockerfile — needed for any button that shells out to `docker ...`).
+      - `DOZZLE_REMOTE_HOST=tcp://socket-proxy:2375`: dozzle — its own var, **not** `DOCKER_HOST`.
+      - `AUTOKUMA__DOCKER__HOSTS=tcp://socket-proxy:2375`: autokuma — its own var.
+      - `--providers.docker.endpoint=tcp://socket-proxy:2375`: traefik.
+      - uptime-kuma: **not a compose-level change at all** — its Docker Host config is stored in
+        its own DB via the Settings UI, not an env var. Docker.sock mount removed; to use it,
+        add a Docker Host of type `tcp` pointing at `tcp://socket-proxy:2375` through the UI.
+- [x] Every switched service got an explicit `networks: [default, socket_proxy]` (previously
+      relied on implicit-only `default`) plus a `traefik.docker.network=proxy` label on any
+      service with an active route, needed now that Traefik has two networks to choose between
+      for routing to a multi-homed container.
+- [x] Found and fixed two small unrelated bugs while touching these exact files:
+      `infra/socket/docker-compose.yaml` had `$DOCKER_DIR.sock` (an erroneous extra `.sock`
+      suffix on a var that's already the full path — would have resolved to
+      `/var/run/docker.sock.sock`); `monitoring/uptime/docker-compose.yaml` had
+      `traefik.docker.network=main`, a stale reference to the `main` network `start.sh` used to
+      create (removed along with `start.sh` itself back in item 1) — both fixed.
+- [x] Dropped the non-functional Traefik labels on `socket-proxy` itself (it was only ever on
+      the `socket_proxy` network, never `proxy`, so they could never have routed anything) —
+      also not something a raw Docker API endpoint should be web-exposed through in the first
+      place.
+- [ ] Found but explicitly out of scope for this pass: `admin-tools/watchtower` and
+      `admin-tools/lazydocker` both have Traefik routing labels despite neither tool having an
+      HTTP UI to route to (watchtower's is also missing a `loadbalancer.server.port` label,
+      lazydocker's targets a typo'd `lazy.locahost` host) — these routes were already
+      non-functional before this change and remain so; only the socket connectivity was in
+      scope here. lazydocker in particular is normally an interactive `docker run -it` tool, not
+      really designed to run as a persistent background service — worth reconsidering whether
+      it belongs in this stack at all, separate from this item.
+- [ ] Not addressed: whether `monitoring/netalertx` (needs `network_mode: host` for ARP
+      scanning, per its own compose file) actually works correctly was raised in passing and not
+      investigated — separate from docker socket exposure, flagging so it isn't lost.
+- [ ] EXEC is still `0` on the socket-proxy, so lazydocker's "shell into a container" feature
+      won't work through it — left restricted by default per the file's existing security
+      stance; revisit if that feature turns out to matter in practice.
+
+## 12. Network segmentation ("VLANs") — discussed, deferred
+
+Explored putting groups (or specific sensitive services) on isolated Docker networks so a
+compromised container in one group can't reach another's containers/database. Not implemented
+yet — deferred after realizing identity services (freeipa/lldap) would need broad reachability
+across groups anyway to actually serve auth for everything else, which cuts against isolating
+`identity` specifically, and that the docker-socket-exposure problem (item 11, now fixed) was
+judged the bigger actual risk for this repo's threat model. Revisit if/when specific groups
+still feel worth isolating despite the added complexity of every service needing an explicit
+`networks:` list (today everything implicitly shares one flat `proxy` network).
 
 ---
 

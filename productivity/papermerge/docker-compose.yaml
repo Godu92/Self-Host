@@ -9,8 +9,8 @@ x-backend: &common
     PAPERMERGE__DATABASE__URL: postgresql://user:${POSTGRES_PASSWORD}@papermerge-db:5432/data
     PAPERMERGE__REDIS__URL: redis://papermerge-redis:6379/0
   volumes:
-    - index_db:/core_app/index_db
-    - media:/core_app/media
+    - ${PAPERMERGE_INDEX_DIR:-index_db}:/core_app/index_db
+    - ${PAPERMERGE_MEDIA_DIR:-media}:/core_app/media
 services:
   web:
     <<: *common
@@ -46,7 +46,7 @@ services:
     image: postgres:${POSTGRES_VERSION:-latest}
     container_name: papermerge-db
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - ${PAPERMERGE_DB_DIR:-postgres_data}:/var/lib/postgresql/data/
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: data
@@ -62,5 +62,11 @@ services:
 
 volumes:
   postgres_data:
+    name: papermerge_postgres_data
+    external: false
   index_db:
+    name: papermerge_index_db
+    external: false
   media:
+    name: papermerge_media
+    external: false

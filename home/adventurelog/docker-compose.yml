@@ -27,7 +27,7 @@ services:
       POSTGRES_USER: adventure
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - ${ADVENTURELOG_DB_DIR:-postgres_data}:/var/lib/postgresql/data/
     labels:
       - traefik.enable=true
 
@@ -54,10 +54,14 @@ services:
     depends_on:
       - adventure-db
     volumes:
-      - adventurelog_media:/code/media/
+      - ${ADVENTURELOG_MEDIA_DIR:-adventurelog_media}:/code/media/
     labels:
       - traefik.enable=true
 
 volumes:
   postgres_data:
+    name: adventurelog_postgres_data
+    external: false
   adventurelog_media:
+    name: adventurelog_media
+    external: false

@@ -15,7 +15,7 @@ services:
       - firefly_iii
     restart: always
     volumes:
-      - firefly_iii_upload:/var/www/html/storage/upload
+      - ${FIREFLY_UPLOAD_DIR:-firefly_iii_upload}:/var/www/html/storage/upload
     env_file: .env
     ports:
     - '84:8080'
@@ -35,7 +35,7 @@ services:
     restart: always
     env_file: .db.env
     volumes:
-      - firefly_iii_db:/var/lib/mysql
+      - ${FIREFLY_DB_DIR:-firefly_iii_db}:/var/lib/mysql
     labels:
       - traefik.enable=true
 
@@ -76,7 +76,11 @@ services:
 
 volumes:
   firefly_iii_upload:
+    name: firefly_iii_upload
+    external: false
   firefly_iii_db:
+    name: firefly_iii_db
+    external: false
 
 networks:
   firefly_iii:

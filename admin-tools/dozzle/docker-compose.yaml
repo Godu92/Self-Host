@@ -3,8 +3,13 @@ services:
   dozzle:
     container_name: dozzle
     image: amir20/dozzle:${DOZZLE_VERSION:-latest}
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      default:
+      socket_proxy:
+    environment:
+      # Dozzle's own var (not generic DOCKER_HOST) for connecting through the
+      # socket-proxy (infra/socket) instead of mounting docker.sock directly.
+      - DOZZLE_REMOTE_HOST=tcp://socket-proxy:2375
     # ports:
     #   - 8080:8080
     labels:
@@ -12,3 +17,4 @@ services:
       - traefik.http.routers.logs.rule=Host(`logs.$HOST`) || Host(`logs.$HOSTNAME`)
       - traefik.http.routers.logs.entrypoints=http
       - traefik.http.services.logs.loadbalancer.server.port=8080
+      - traefik.docker.network=proxy

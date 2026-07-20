@@ -2,11 +2,14 @@ services:
   uptime-kuma:
     image: louislam/uptime-kuma:${UPTIME_KUMA_VERSION:-latest}
     container_name: uptime-kuma
+    networks:
+      default:
+      socket_proxy:
+    # No docker.sock mount needed — if you want a "Docker Container" monitor,
+    # add a Docker Host in Settings > Docker Hosts with type "tcp" and
+    # "tcp://socket-proxy:2375" (infra/socket) instead of "socket".
     volumes:
-      - "up-data:/app/data"
-      - $DOCKER_DIR:/var/run/docker.sock
-      # - /var/run/docker.sock:/var/run/docker.sock
-      # - /run/podman/podman.sock:/var/run/docker.sock
+      - "${UPTIME_DATA_DIR:-up-data}:/app/data"
     ports:
       - "3001:3001"
     restart: always
@@ -22,7 +25,7 @@ services:
       - traefik.http.routers.uptime.rule=Host(`uptime.$HOST`)
       - traefik.http.routers.uptime.entrypoints=http
       - traefik.http.services.uptime.loadbalancer.server.port=3001
-      - traefik.docker.network=main
+      - traefik.docker.network=proxy
 ## See this for more config information: https://www.smarthomebeginner.com/uptime-kuma-docker-compose-guide/
 
 volumes:

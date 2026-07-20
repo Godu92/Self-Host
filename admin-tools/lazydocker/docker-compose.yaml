@@ -4,12 +4,19 @@ services:
     container_name: lazydocker
     stdin_open: true
     tty: true
+    networks:
+      default:
+      socket_proxy:
+    environment:
+      # Connect through the socket-proxy (infra/socket) instead of mounting
+      # docker.sock directly. Note: EXEC is off by default on the proxy, so
+      # lazydocker's "shell into a container" feature won't work through it.
+      - DOCKER_HOST=tcp://socket-proxy:2375
     volumes:
-      - $DOCKER_DIR:/var/run/docker.sock
-      # - /var/run/docker.sock:/var/run/docker.sock
       - ./config:/.config/jesseduffield/lazydocker
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.lazy.rule=Host(`lazy.locahost`)"
       - "traefik.http.routers.lazy.entrypoints=http"
       - "traefik.http.services.lazy.loadbalancer.server.port=80"
+      - "traefik.docker.network=proxy"

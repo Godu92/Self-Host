@@ -1,11 +1,17 @@
 services:
   glances:
     image: "nicolargo/glances:${GLANCES_VERSION:-latest}"
+    networks:
+      default:
+      socket_proxy:
     environment:
       - TZ=America/New_York
       - PGID=1000
       - PUID=1000
       - GLANCES_OPT=-w
+      # Connect through the socket-proxy (infra/socket) instead of mounting
+      # docker.sock directly (glances' docker plugin uses docker.from_env()).
+      - DOCKER_HOST=tcp://socket-proxy:2375
     privileged: true
     pid: host
     deploy:
@@ -14,10 +20,6 @@ services:
           memory: 512m
     ports:
       - "61208:61208"
-    volumes:
-      - "$DOCKER_DIR:/var/run/docker.sock:ro"
-      # - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      # - '/var/run/podman/podman.sock:/var/run/podman/podman.sock:ro'
     restart: always
     container_name: glances
 
@@ -26,3 +28,4 @@ services:
       - traefik.http.routers.glance.rule=Host(`glance.$HOST`) || Host(`glance.$HOSTNAME`)
       - traefik.http.routers.glance.entrypoints=http
       - traefik.http.services.glance.loadbalancer.server.port=61208
+      - traefik.docker.network=proxy

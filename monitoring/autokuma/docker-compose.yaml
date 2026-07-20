@@ -5,6 +5,9 @@ services:
     image: ghcr.io/bigboot/autokuma:${AUTOKUMA_VERSION:-latest}
     restart: unless-stopped
     container_name: autokuma
+    networks:
+      default:
+      socket_proxy:
     environment:
       AUTOKUMA__KUMA__URL: http://localhost:3001
       # AUTOKUMA__KUMA__USERNAME: admin
@@ -24,13 +27,14 @@ services:
       #   {{container_name}}_http.http.url: https://{{@0}}:{{@1}}
       #   {{container_name}}_docker.docker.name: {{container_name}} Docker
       #   {{container_name}}_docker.docker.docker_container: {{container_name}}
-      # AUTOKUMA__DOCKER__HOSTS: unix:///var/run/docker.sock
+      # Connect through the socket-proxy (infra/socket) instead of mounting
+      # docker.sock directly.
+      AUTOKUMA__DOCKER__HOSTS: tcp://socket-proxy:2375
       AUTOKUMA__DOCKER__LABEL_PREFIX: kuma
       AUTOKUMA__DOCKER__EXCLUDE_CONTAINER_PATTERNS: "^[a-f0-9]{12}_.*_" # Exclude Docker Compose temporary containers
 
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - autokuma-data:/data
+      - ${AUTOKUMA_DATA_DIR:-autokuma-data}:/data
     labels:
       - traefik.enable=true
       # - traefik.http.routers.kuma.rule=Host(`kuma.$HOST`)
@@ -39,3 +43,5 @@ services:
 
 volumes:
   autokuma-data:
+    name: autokuma-data
+    external: false

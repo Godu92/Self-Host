@@ -10,7 +10,7 @@ services:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - ${AIRTRAIL_DB_DIR:-db_data}:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE_NAME}"]
       interval: 5s
@@ -35,3 +35,5 @@ services:
 
 volumes:
   db_data:
+    name: airtrail_db_data
+    external: false

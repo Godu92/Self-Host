@@ -14,8 +14,8 @@ services:
       - IPAM_DATABASE_USER=phpipam
     restart: unless-stopped
     volumes:
-      - phpipam-logo:/phpipam/css/images/logo
-      - phpipam-ca:/usr/local/share/ca-certificates:ro
+      - ${PHPIPAM_LOGO_DIR:-phpipam-logo}:/phpipam/css/images/logo
+      - ${PHPIPAM_CA_DIR:-phpipam-ca}:/usr/local/share/ca-certificates:ro
     depends_on:
       - phpipam-mariadb
     cap_add:
@@ -37,7 +37,7 @@ services:
       - SCAN_INTERVAL=1h
     restart: unless-stopped
     volumes:
-      - phpipam-ca:/usr/local/share/ca-certificates:ro
+      - ${PHPIPAM_CA_DIR:-phpipam-ca}:/usr/local/share/ca-certificates:ro
     depends_on:
       - phpipam-mariadb
     cap_add:
@@ -54,7 +54,7 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     restart: unless-stopped
     volumes:
-      - phpipam-db-data:/var/lib/mysql
+      - ${PHPIPAM_DB_DIR:-phpipam-db-data}:/var/lib/mysql
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       timeout: 20s
@@ -64,5 +64,11 @@ services:
 
 volumes:
   phpipam-db-data:
+    name: phpipam-db-data
+    external: false
   phpipam-logo:
+    name: phpipam-logo
+    external: false
   phpipam-ca:
+    name: phpipam-ca
+    external: false

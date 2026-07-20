@@ -1,5 +1,9 @@
 services:
-  # Docker Socket Proxy - Security Enchanced Proxy for Docker Socket
+  # Docker Socket Proxy - restricted read-mostly proxy in front of the real
+  # docker.sock, consumed (over the socket_proxy network, tcp://socket-proxy:2375)
+  # by: traefik, dozzle, watchtower, lazydocker, glances, autokuma, olivetin,
+  # and uptime-kuma (added manually as a "tcp" Docker Host in its Settings UI).
+  # None of those mount the real docker.sock directly anymore.
   socket-proxy:
     container_name: socket-proxy
     image: tecnativa/docker-socket-proxy:${SOCKET_PROXY_VERSION:-latest}
@@ -13,15 +17,10 @@ services:
     privileged: true # true for VM. false for unprivileged LXC container on Proxmox.
     ports:
       - "127.0.0.1:2375:2375" # Do not expose this to the internet with port forwarding
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.socket.rule=Host(`socket.$HOST`)
-      - traefik.http.routers.socket.entrypoints=http
-      - traefik.http.services.socket.loadbalancer.server.port=2375
     volumes:
       # - "/run/podman/podman.sock:/var/run/docker.sock"
       # - "/var/run/docker.sock:/var/run/docker.sock"
-      - "$DOCKER_DIR.sock:/var/run/docker.sock"
+      - "$DOCKER_DIR:/var/run/docker.sock"
     environment:
       - LOG_LEVEL=info # debug,info,notice,warning,err,crit,alert,emerg
       ## Variables match the URL prefix (i.e. AUTH blocks access to /auth/* parts of the API, etc.).

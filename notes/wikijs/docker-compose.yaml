@@ -10,7 +10,7 @@ services:
       driver: none
     restart: always
     volumes:
-      - wiki-data:/var/lib/postgresql/data
+      - ${WIKIJS_DB_DIR:-wiki-data}:/var/lib/postgresql/data
     labels:
       - traefik.enable=true
 
