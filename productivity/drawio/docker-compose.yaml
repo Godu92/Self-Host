@@ -12,6 +12,8 @@ services:
       - traefik.http.routers.drawio.rule=Host(`drawio.$HOST`)
       - traefik.http.routers.drawio.entrypoints=http
       - traefik.http.services.drawio.loadbalancer.server.port=8080
+      - kuma.drawio.http.name=Draw.io
+      - kuma.drawio.http.url=http://drawio:8080
     environment:
       - DRAWIO_SELF_CONTAINED=1
       - EXPORT_URL=http://export.$HOST/
@@ -30,3 +32,5 @@ services:
       - traefik.http.routers.export.rule=Host(`export.$HOST`)
       - traefik.http.routers.export.entrypoints=http
       - traefik.http.services.export.loadbalancer.server.port=8000
+      - kuma.export.http.name=Draw.io Export
+      - kuma.export.http.url=http://image-export:8000

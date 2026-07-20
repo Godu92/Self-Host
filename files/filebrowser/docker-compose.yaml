@@ -12,7 +12,9 @@ services:
       - "./data/filebrowser.db:/database/filebrowser.db"
       - ~/Self-Host/:/files
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.file.rule=Host(`file.$HOST`)"
-      - "traefik.http.routers.file.entrypoints=http"
-      - "traefik.http.services.file.loadbalancer.server.port=80"
+      - traefik.enable=true
+      - traefik.http.routers.file.rule=Host(`file.$HOST`)
+      - traefik.http.routers.file.entrypoints=http
+      - traefik.http.services.file.loadbalancer.server.port=80
+      - kuma.file.http.name=File Browser
+      - kuma.file.http.url=http://filebrowser:80

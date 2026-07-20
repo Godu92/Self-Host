@@ -16,3 +16,5 @@ services:
       - traefik.http.routers.notice.rule=Host(`notice.$HOST`) || Host(`notice.$HOSTNAME`)
       - traefik.http.routers.notice.entrypoints=http
       - traefik.http.services.notice.loadbalancer.server.port=80
+      - kuma.notice.http.name=Gotify
+      - kuma.notice.http.url=http://gotify:80

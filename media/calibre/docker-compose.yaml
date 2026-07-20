@@ -3,8 +3,6 @@ x-settings: &common
     - PUID=1000
     - PGID=1000
     - TZ=Etc/UTC
-  labels:
-    - traefik.enable=true
 
 services:
   calibre-web:
@@ -18,9 +16,12 @@ services:
     #   - 8083:8083
     restart: always
     labels:
+      - traefik.enable=true
       - traefik.http.routers.books.rule=Host(`books.$HOST`)
       - traefik.http.routers.books.entrypoints=http
       - traefik.http.services.books.loadbalancer.server.port=8083
+      - kuma.books.http.name=Calibre-Web
+      - kuma.books.http.url=http://calibre-web:8083
 
   calibre:
     <<: *common
@@ -34,6 +35,9 @@ services:
     #   - 8081:8081
     restart: always
     labels:
+      - traefik.enable=true
       - traefik.http.routers.books-db.rule=Host(`books-db.$HOST`)
       - traefik.http.routers.books-db.entrypoints=http
       - traefik.http.services.books-db.loadbalancer.server.port=8080
+      - kuma.books-db.http.name=Calibre
+      - kuma.books-db.http.url=http://calibre:8080

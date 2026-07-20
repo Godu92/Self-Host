@@ -11,3 +11,5 @@ services:
       - traefik.http.routers.lowui.rule=Host(`lowui.$HOST`)
       - traefik.http.routers.lowui.entrypoints=http
       - traefik.http.services.lowui.loadbalancer.server.port=80
+      - kuma.lowui.http.name=Appsmith
+      - kuma.lowui.http.url=http://appsmith:80

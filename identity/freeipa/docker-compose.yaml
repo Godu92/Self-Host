@@ -32,6 +32,8 @@ services:
       - traefik.http.routers.ipa.rule=Host(`ipa.lab.${HOST}`)
       - traefik.http.routers.ipa.entrypoints=http
       - traefik.http.services.ipa.loadbalancer.server.port=80
+      - kuma.ipa.http.name=FreeIPA
+      - kuma.ipa.http.url=http://freeipa:80
 
       # Optional: HTTPS service
       # - traefik.http.routers.ipa-secure.rule=Host(`ipa.lab.${HOST}`)

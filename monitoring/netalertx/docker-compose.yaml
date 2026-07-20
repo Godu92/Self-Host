@@ -82,3 +82,8 @@ services:
       - traefik.http.routers.net.rule=Host(`net.$HOST`) || Host(`net.$HOSTNAME`)
       - traefik.http.routers.net.entrypoints=http
       - traefik.http.services.net.loadbalancer.server.port=20211
+      # No kuma.* monitor label: this container runs with network_mode: host (needed for ARP
+      # scanning), so it has no container-name DNS entry on the shared `proxy` network for
+      # autokuma/uptime-kuma to reach — would need the host's actual LAN address instead,
+      # which varies per machine. Same host-networking caveat already noted elsewhere for
+      # this service (CLEANUP.md item 12).

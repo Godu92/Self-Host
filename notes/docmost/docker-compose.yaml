@@ -22,6 +22,8 @@ services:
       - traefik.http.routers.doc.rule=Host(`doc.$HOST`)
       - traefik.http.routers.doc.entrypoints=http
       - traefik.http.services.doc.loadbalancer.server.port=3000
+      - kuma.doc.http.name=Docmost
+      - kuma.doc.http.url=http://docmost:3000
 
   docmost-db:
     image: postgres:${POSTGRES_VERSION:-latest}-alpine
@@ -35,8 +37,6 @@ services:
       - 5432
     volumes:
       - ${DOCMOST_DB_DIR:-db_data}:/var/lib/postgresql/data
-    labels:
-      - traefik.enable=true
 
   docmost-redis:
     image: redis:${REDIS_VERSION:-latest}-alpine
@@ -46,8 +46,6 @@ services:
       - 6379
     volumes:
       - ${DOCMOST_REDIS_DIR:-redis_data}:/data
-    labels:
-      - traefik.enable=true
 
 volumes:
   docmost:

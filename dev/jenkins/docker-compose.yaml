@@ -16,6 +16,8 @@ services:
       - traefik.http.routers.jenkins.rule=Host(`jenkins.$HOST`)
       - traefik.http.routers.jenkins.entrypoints=http
       - traefik.http.services.jenkins.loadbalancer.server.port=8080
+      - kuma.jenkins.http.name=Jenkins
+      - kuma.jenkins.http.url=http://jenkins:8080
 
   # Use this to install/update plugins
   jenkins-updates:

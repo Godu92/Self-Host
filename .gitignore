@@ -12,7 +12,6 @@
 *.sql
 *_data
 .claude/
-CLAUDE.md
 
 ## App specific ignores
 network/pihole/etc-pihole

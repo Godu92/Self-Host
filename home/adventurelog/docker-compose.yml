@@ -17,6 +17,8 @@ services:
       - traefik.http.routers.adventure.rule=Host(`adventure.$HOST`)
       - traefik.http.routers.adventure.entrypoints=http
       - traefik.http.services.adventure.loadbalancer.server.port=3000
+      - kuma.adventure.http.name=AdventureLog
+      - kuma.adventure.http.url=http://adventurelog-frontend:3000
 
   adventure-db:
     image: postgis/postgis:${POSTGIS_VERSION:-latest}-3.3
@@ -28,8 +30,6 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - ${ADVENTURELOG_DB_DIR:-postgres_data}:/var/lib/postgresql/data/
-    labels:
-      - traefik.enable=true
 
   adventure-server:
     #build: ./backend/
@@ -55,8 +55,6 @@ services:
       - adventure-db
     volumes:
       - ${ADVENTURELOG_MEDIA_DIR:-adventurelog_media}:/code/media/
-    labels:
-      - traefik.enable=true
 
 volumes:
   postgres_data:

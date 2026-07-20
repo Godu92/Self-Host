@@ -10,10 +10,13 @@ services:
     hostname: gopeed
     image: liwei2633/gopeed:${GOPEED_VERSION:-latest}
     labels:
-      icon: https://cdn.jsdelivr.net/gh/IceWhaleTech/CasaOS-AppStore@main/Apps/Gopeed/icon.png
-      traefik.enable: "true"
-      traefik.http.routers.gopeed.rule: Host(`gopeed.universe-sal.duckdns.org`)
-      traefik.http.services.gopeed.loadbalancer.server.port: "9999"
+      - icon=https://cdn.jsdelivr.net/gh/IceWhaleTech/CasaOS-AppStore@main/Apps/Gopeed/icon.png
+      - traefik.enable=true
+      - traefik.http.routers.gopeed.rule=Host(`gopeed.$HOST`)
+      - traefik.http.routers.gopeed.entrypoints=http
+      - traefik.http.services.gopeed.loadbalancer.server.port=9999
+      - kuma.gopeed.http.name=Gopeed
+      - kuma.gopeed.http.url=http://gopeed:9999
     # ports:
     #   - target: 9999
     #     published: "9999"

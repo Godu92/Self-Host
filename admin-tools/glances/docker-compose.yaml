@@ -29,3 +29,5 @@ services:
       - traefik.http.routers.glance.entrypoints=http
       - traefik.http.services.glance.loadbalancer.server.port=61208
       - traefik.docker.network=proxy
+      - kuma.glance.http.name=Glances
+      - kuma.glance.http.url=http://glances:61208

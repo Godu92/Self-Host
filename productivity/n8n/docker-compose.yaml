@@ -26,11 +26,10 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
-    labels:
-      - traefik.enable=true
-      # - traefik.http.routers.n8n-db.rule=Host(`n8n-db.$HOST`) || Host(`n8n-db.$HOSTNAME`)
-      # - traefik.http.routers.n8n-db.entrypoints=http
-      # - traefik.http.services.n8n-db.loadbalancer.server.port=443
+    # No Traefik labels: postgres has no HTTP interface to route to. The commented block that
+    # used to live here (a router pointed at port 443) was copy-pasted from an unrelated
+    # service and never made sense for a database container — removed rather than kept as a
+    # misleading template.
 
   n8n:
     image: docker.n8n.io/n8nio/n8n:${N8N_VERSION:-latest}
@@ -58,3 +57,5 @@ services:
       - traefik.http.routers.n8n.rule=Host(`n8n.$HOST`) || Host(`n8n.$HOSTNAME`)
       - traefik.http.routers.n8n.entrypoints=http
       - traefik.http.services.n8n.loadbalancer.server.port=5678
+      - kuma.n8n.http.name=n8n
+      - kuma.n8n.http.url=http://n8n:5678

@@ -22,3 +22,5 @@ services:
       - traefik.http.routers.dock.rule=Host(`dock.$HOST`)
       - traefik.http.routers.dock.entrypoints=http
       - traefik.http.services.dock.loadbalancer.server.port=5000
+      - kuma.dock.http.name=Docker Registry
+      - kuma.dock.http.url=http://registry:5000

@@ -15,7 +15,6 @@ services:
       INTERFACE: "eno1"
       WEB_PORT: 80
       WEBPASSWORD: "${WEBPASSWORD}"
-      VIRTUAL_HOST: pihole.$HOST
     # Volumes store your data between container upgrades
     volumes:
       # - ./pihole_data/adlists.list:/etc/pihole/manual-lists/adlists.list
@@ -27,6 +26,9 @@ services:
     # - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
     restart: always
     labels:
-      traefik.enable: "true"
-      traefik.http.routers.pihole.rule: Host(`pihole.$HOST`)
-      traefik.http.services.pihole.loadbalancer.server.port: "80"
+      - traefik.enable=true
+      - traefik.http.routers.pihole.rule=Host(`pihole.$HOST`)
+      - traefik.http.routers.pihole.entrypoints=http
+      - traefik.http.services.pihole.loadbalancer.server.port=80
+      - kuma.pihole.http.name=Pi-hole
+      - kuma.pihole.http.url=http://pihole:80

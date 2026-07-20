@@ -10,3 +10,5 @@ services:
       - traefik.http.routers.dbviewer.rule=Host(`dbviewer.$HOST`)
       - traefik.http.routers.dbviewer.entrypoints=http
       - traefik.http.services.dbviewer.loadbalancer.server.port=8080
+      - kuma.dbviewer.http.name=Adminer
+      - kuma.dbviewer.http.url=http://adminer:8080

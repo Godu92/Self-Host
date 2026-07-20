@@ -27,3 +27,5 @@ services:
       - traefik.http.routers.ldap.rule=Host(`ldap.${HOST}`)
       - traefik.http.routers.ldap.entrypoints=http
       - traefik.http.services.ldap.loadbalancer.server.port=17170
+      - kuma.ldap.http.name=LLDAP
+      - kuma.ldap.http.url=http://lldap:17170

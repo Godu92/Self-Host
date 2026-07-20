@@ -11,11 +11,6 @@ services:
       # docker.sock directly.
       - DOCKER_HOST=tcp://socket-proxy:2375
     command: --interval 3600 # Check for updates every hour (3600s)
-    # Note: watchtower has no HTTP UI, so this route was never functional even
-    # before this change (also missing a loadbalancer.server.port label) —
-    # left as-is beyond fixing the invalid entrypoints value, not in scope here.
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.watch.rule=Host(`watch.$HOST`)
-      - traefik.http.routers.watch.entrypoints=http
-      - traefik.docker.network=proxy
+    # No Traefik labels: watchtower has no HTTP UI, so a route here would always be dead
+    # weight (previously carried one anyway, missing a loadbalancer.server.port label —
+    # removed rather than completed).

@@ -10,3 +10,5 @@ services:
       - traefik.http.routers.wordle.rule=Host(`wordle.$HOST`)
       - traefik.http.routers.wordle.entrypoints=http
       - traefik.http.services.wordle.loadbalancer.server.port=80
+      - kuma.wordle.http.name=Wordle
+      - kuma.wordle.http.url=http://wxrdle:80

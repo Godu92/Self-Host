@@ -14,9 +14,7 @@ services:
       - DOCKER_HOST=tcp://socket-proxy:2375
     volumes:
       - ./config:/.config/jesseduffield/lazydocker
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.lazy.rule=Host(`lazy.locahost`)"
-      - "traefik.http.routers.lazy.entrypoints=http"
-      - "traefik.http.services.lazy.loadbalancer.server.port=80"
-      - "traefik.docker.network=proxy"
+    # No Traefik labels: lazydocker is an interactive terminal UI (stdin_open/tty), it has no
+    # HTTP server to route to. Previously carried a dead route pointing at a typo'd
+    # `lazy.locahost` — removed rather than fixed, since there was never anything for it to
+    # route to in the first place.

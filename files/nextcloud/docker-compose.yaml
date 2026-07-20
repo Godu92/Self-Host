@@ -12,8 +12,10 @@ services:
     ports:
       - 443:443
     restart: always
-    labels:
-      - traefik.enable=true
-      # - traefik.http.routers.next.rule=Host(`next.$HOST`)
-      # - traefik.http.routers.next.entrypoints=http
-      # - traefik.http.services.next.loadbalancer.server.port=443
+    # No Traefik labels currently — nextcloud is reached directly via its published :443 port,
+    # not proxied. To route it through Traefik instead, add:
+    #   labels:
+    #     - traefik.enable=true
+    #     - traefik.http.routers.next.rule=Host(`next.$HOST`)
+    #     - traefik.http.routers.next.entrypoints=http
+    #     - traefik.http.services.next.loadbalancer.server.port=443

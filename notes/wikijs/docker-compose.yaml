@@ -11,8 +11,6 @@ services:
     restart: always
     volumes:
       - ${WIKIJS_DB_DIR:-wiki-data}:/var/lib/postgresql/data
-    labels:
-      - traefik.enable=true
 
   wiki:
     image: ghcr.io/requarks/wiki:${WIKIJS_VERSION:-2}
@@ -32,6 +30,8 @@ services:
       - traefik.http.routers.wiki.rule=Host(`wiki.$HOST`)
       - traefik.http.routers.wiki.entrypoints=http
       - traefik.http.services.wiki.loadbalancer.server.port=3000
+      - kuma.wiki.http.name=Wiki.js
+      - kuma.wiki.http.url=http://wiki:3000
 
 volumes:
   wiki-data:

@@ -20,6 +20,8 @@ services:
       - traefik.http.routers.change.rule=Host(`change.$HOST`) || Host(`change.$HOSTNAME`)
       - traefik.http.routers.change.entrypoints=http
       - traefik.http.services.change.loadbalancer.server.port=5000
+      - kuma.change.http.name=Changedetection.io
+      - kuma.change.http.url=http://changedetection:5000
 
       # Used for fetching pages via WebDriver+Chrome where you need Javascript support.
       # Now working on arm64 (needs testing on rPi - tested on Oracle ARM instance)
@@ -48,8 +50,9 @@ services:
       - SCREEN_HEIGHT=1024
       - SCREEN_DEPTH=16
       - MAX_CONCURRENT_CHROME_PROCESSES=10
-    labels:
-      - traefik.enable=true
-      # - traefik.http.routers.chrome.rule=Host(`chrome.$HOST`) || Host(`chrome.$HOSTNAME`)
-      # - traefik.http.routers.chrome.entrypoints=http
-      # - traefik.http.services.chrome.loadbalancer.server.port=3000
+    # No Traefik labels currently. To expose this browser helper directly, add:
+    #   labels:
+    #     - traefik.enable=true
+    #     - traefik.http.routers.chrome.rule=Host(`chrome.$HOST`) || Host(`chrome.$HOSTNAME`)
+    #     - traefik.http.routers.chrome.entrypoints=http
+    #     - traefik.http.services.chrome.loadbalancer.server.port=3000

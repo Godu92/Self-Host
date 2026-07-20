@@ -18,3 +18,5 @@ services:
       - traefik.http.routers.logs.entrypoints=http
       - traefik.http.services.logs.loadbalancer.server.port=8080
       - traefik.docker.network=proxy
+      - kuma.logs.http.name=Dozzle
+      - kuma.logs.http.url=http://dozzle:8080

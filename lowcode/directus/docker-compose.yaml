@@ -16,3 +16,5 @@ services:
       - traefik.http.routers.lowdb.rule=Host(`lowdb.$HOST`)
       - traefik.http.routers.lowdb.entrypoints=http
       - traefik.http.services.lowdb.loadbalancer.server.port=8055
+      - kuma.lowdb.http.name=Directus
+      - kuma.lowdb.http.url=http://directus:8055

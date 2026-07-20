@@ -26,3 +26,5 @@ services:
       - traefik.http.routers.pxe.rule=Host(`pxe.$HOST`)
       - traefik.http.routers.pxe.entrypoints=http
       - traefik.http.services.pxe.loadbalancer.server.port=3000
+      - kuma.pxe.http.name=netboot.xyz
+      - kuma.pxe.http.url=http://netbootxyz:3000

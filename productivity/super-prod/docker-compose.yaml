@@ -12,6 +12,9 @@ services:
     environment:
       - TZ=America/New_York
     labels:
-      traefik.enable: "true"
-      traefik.http.routers.super.rule: Host(`super.$HOST`)
-      traefik.http.services.super.loadbalancer.server.port: "80"
+      - traefik.enable=true
+      - traefik.http.routers.super.rule=Host(`super.$HOST`)
+      - traefik.http.routers.super.entrypoints=http
+      - traefik.http.services.super.loadbalancer.server.port=80
+      - kuma.super.http.name=Super Productivity
+      - kuma.super.http.url=http://super-prod:80

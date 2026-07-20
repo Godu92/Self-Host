@@ -18,3 +18,5 @@ services:
       - traefik.http.routers.jdown.rule=Host(`jdown.$HOST`)
       - traefik.http.routers.jdown.entrypoints=http
       - traefik.http.services.jdown.loadbalancer.server.port=5800
+      - kuma.jdown.http.name=JDownloader
+      - kuma.jdown.http.url=http://jdownloader:5800

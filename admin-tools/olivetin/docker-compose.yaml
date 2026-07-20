@@ -23,3 +23,5 @@ services:
       - traefik.http.routers.cmd.entrypoints=http
       - traefik.http.services.cmd.loadbalancer.server.port=1337
       - traefik.docker.network=proxy
+      - kuma.cmd.http.name=OliveTin
+      - kuma.cmd.http.url=http://olivetin:1337

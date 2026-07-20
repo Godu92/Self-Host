@@ -20,3 +20,5 @@ services:
       - traefik.http.routers.pdf.rule=Host(`pdf.$HOST`)
       - traefik.http.routers.pdf.entrypoints=http
       - traefik.http.services.pdf.loadbalancer.server.port=8080
+      - kuma.pdf.http.name=Stirling PDF
+      - kuma.pdf.http.url=http://stirling-pdf:8080

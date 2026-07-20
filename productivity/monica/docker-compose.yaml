@@ -20,6 +20,8 @@ services:
       - traefik.http.routers.people.rule=Host(`people.$HOST`)
       - traefik.http.routers.people.entrypoints=http
       - traefik.http.services.people.loadbalancer.server.port=80
+      - kuma.people.http.name=Monica
+      - kuma.people.http.url=http://monica:80
 
   monica-db:
     image: mariadb:${MARIADB_VERSION:-latest}
@@ -42,8 +44,6 @@ services:
       retries: 10
       interval: 30s
       start_period: 60s
-    labels:
-      - traefik.enable=true
 
 volumes:
   data:

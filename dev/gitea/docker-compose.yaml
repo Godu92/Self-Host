@@ -20,3 +20,5 @@ services:
       - traefik.http.routers.git.rule=Host(`git.$HOST`)
       - traefik.http.routers.git.entrypoints=http
       - traefik.http.services.git.loadbalancer.server.port=3000
+      - kuma.git.http.name=Gitea
+      - kuma.git.http.url=http://gitea:3000

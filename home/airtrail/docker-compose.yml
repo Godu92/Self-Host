@@ -32,6 +32,8 @@ services:
       - traefik.http.routers.air.rule=Host(`air.$HOST`)
       - traefik.http.routers.air.entrypoints=http
       - traefik.http.services.air.loadbalancer.server.port=3000
+      - kuma.air.http.name=AirTrail
+      - kuma.air.http.url=http://airtrail:3000
 
 volumes:
   db_data:

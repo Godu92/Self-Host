@@ -9,9 +9,11 @@ services:
       default:
       socket_proxy:
     environment:
-      AUTOKUMA__KUMA__URL: http://localhost:3001
-      # AUTOKUMA__KUMA__USERNAME: admin
-      # AUTOKUMA__KUMA__PASSWORD: admin1
+      # uptime-kuma has no env-based initial-admin setup — create the account once via its
+      # own first-run web UI (monitoring/uptime), then set these two to match.
+      AUTOKUMA__KUMA__URL: http://uptime-kuma:3001
+      AUTOKUMA__KUMA__USERNAME: ${AUTOKUMA_KUMA_USERNAME}
+      AUTOKUMA__KUMA__PASSWORD: ${AUTOKUMA_KUMA_PASSWORD}
       # AUTOKUMA__KUMA__MFA_TOKEN: <token>
       # AUTOKUMA__KUMA__HEADERS: "<header1_key>=<header1_value>,<header2_key>=<header2_value>,..."
       # AUTOKUMA__KUMA__CALL_TIMEOUT: 5
@@ -35,11 +37,10 @@ services:
 
     volumes:
       - ${AUTOKUMA_DATA_DIR:-autokuma-data}:/data
-    labels:
-      - traefik.enable=true
-      # - traefik.http.routers.kuma.rule=Host(`kuma.$HOST`)
-      # - traefik.http.routers.kuma.entrypoints=http
-      # - traefik.http.services.kuma.loadbalancer.server.port=3001
+    # No Traefik labels: AutoKuma is a background sync daemon with no HTTP server of its own
+    # (it only connects out to Uptime Kuma). The commented block that used to live here pointed
+    # at port 3001 — that's Uptime Kuma's own port, copy-pasted in error — removed rather than
+    # kept as a misleading template.
 
 volumes:
   autokuma-data:

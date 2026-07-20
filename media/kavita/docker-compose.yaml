@@ -17,3 +17,5 @@ services:
       - traefik.http.routers.read.rule=Host(`read.$HOST`)
       - traefik.http.routers.read.entrypoints=http
       - traefik.http.services.read.loadbalancer.server.port=5000
+      - kuma.read.http.name=Kavita
+      - kuma.read.http.url=http://kavita:5000

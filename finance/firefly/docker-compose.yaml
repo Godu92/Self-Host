@@ -26,6 +26,10 @@ services:
       - traefik.http.routers.fire.rule=Host(`fire.$HOST`)
       - traefik.http.routers.fire.entrypoints=http
       - traefik.http.services.fire.loadbalancer.server.port=8080
+      # No kuma.* monitor label: firefly sits on its own isolated `firefly_iii` network, not
+      # the shared `proxy` network autokuma/uptime-kuma live on — a monitor here would never
+      # actually reach it. Same root cause as the Traefik route already being non-functional
+      # (see CLEANUP.md item 5). Add one once that's resolved.
   firefly-db:
     image: mariadb:${MARIADB_VERSION:-lts}
     hostname: db
@@ -36,8 +40,6 @@ services:
     env_file: .db.env
     volumes:
       - ${FIREFLY_DB_DIR:-firefly_iii_db}:/var/lib/mysql
-    labels:
-      - traefik.enable=true
 
   # firefly-importer:
   #   image: fireflyiii/data-importer:latest

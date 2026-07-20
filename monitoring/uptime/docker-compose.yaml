@@ -25,6 +25,8 @@ services:
       - traefik.http.routers.uptime.rule=Host(`uptime.$HOST`)
       - traefik.http.routers.uptime.entrypoints=http
       - traefik.http.services.uptime.loadbalancer.server.port=3001
+      - kuma.uptime.http.name=Uptime Kuma
+      - kuma.uptime.http.url=http://uptime-kuma:3001
       - traefik.docker.network=proxy
 ## See this for more config information: https://www.smarthomebeginner.com/uptime-kuma-docker-compose-guide/
 
