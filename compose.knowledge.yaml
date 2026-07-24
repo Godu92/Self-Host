@@ -1,0 +1,39 @@
+## Deploy style: knowledge
+## Thought-experiment slice of a "living memory" idea: write durable notes in Docmost,
+## then ask questions about them via Open Notebook's local-LLM RAG layer. No automation
+## wired up yet — for now, sources get added to Open Notebook by hand. The point of this
+## style is just to test whether the human-writes / AI-queries loop is actually useful
+## before investing in anything below.
+
+include:
+  ### notes — durable, human-reviewed record (e.g. incident reports, decisions)
+  - notes/docmost/docker-compose.yaml
+
+  ### ai — ask questions across whatever's been fed into it
+  - ai/notebook/opennotebook-single/docker-compose.yaml
+
+  ## --- Future potential, not wired up, don't enable blindly ---
+  #
+  # - dev/gitea/docker-compose.yaml
+  #   Code/issues as another Open Notebook source. Gitea's LDAP auth + a scripted
+  #   svc-automation token bootstrap already checked out in prior testing; still needs an
+  #   actual n8n workflow to pull commits/issues into Open Notebook.
+  #
+  # - productivity/n8n/docker-compose.yaml
+  #   Automation glue for the above once the manual version proves worthwhile. Also the
+  #   spot to script Docmost -> Open Notebook syncing (Docmost's public API story is
+  #   still unverified — check before building on it).
+  #
+  # - identity/lldap/docker-compose.yaml
+  #   Only if/when more than one app needs a shared "agent" identity. Confirmed Gitea
+  #   works with it (incl. SSH keys); Docmost unconfirmed; n8n LDAP is Enterprise-only so
+  #   skip it there regardless.
+  #
+  # - productivity/monica/docker-compose.yaml
+  #   Business/people context - "who do I know that works on X" as an agent-queryable
+  #   source alongside the technical knowledge above.
+  #
+  # - home/grocy/docker-compose.yaml
+  #   Household inventory as a source - "what filter size does the AC take again?" The
+  #   most different use case of the bunch (personal, not work), good test of whether
+  #   this pattern generalizes beyond project knowledge.
