@@ -1,6 +1,6 @@
 services:
   wiki-db:
-    image: postgres:${POSTGRES_VERSION:-latest}-alpine
+    image: postgres:${POSTGRES_VERSION:-18}-alpine
     container_name: wiki-db
     environment:
       POSTGRES_DB: wiki
@@ -10,7 +10,9 @@ services:
       driver: none
     restart: always
     volumes:
-      - ${WIKIJS_DB_DIR:-wiki-data}:/var/lib/postgresql/data
+      # Postgres 18+ moved PGDATA/its declared VOLUME to /var/lib/postgresql (not .../data)
+      # - the old path silently drops data into an untracked anonymous volume instead.
+      - ${WIKIJS_DB_DIR:-wiki-data}:/var/lib/postgresql
 
   wiki:
     image: ghcr.io/requarks/wiki:${WIKIJS_VERSION:-2}
