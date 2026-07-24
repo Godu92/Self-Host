@@ -183,3 +183,11 @@ Originally built for RHEL 8 + podman; also runs on Docker.
 See [CLEANUP.md](CLEANUP.md) for the full, prioritized audit (version pinning, secrets
 hygiene, dead content, Traefik/network consistency, shared compose fragments). Check items
 off there as they're addressed rather than re-deriving this list from scratch.
+
+## Experimental: living memory stack
+
+`compose.knowledge.yaml` stands up a proof-of-concept human-writes/AI-queries loop
+(Docmost + Open Notebook). See [KNOWLEDGE.md](KNOWLEDGE.md) before touching or extending
+it — it records why MegaMemory was rejected for this, what's been validated, real upstream
+gotchas hit along the way (Postgres 18 volume/tag changes, Open Notebook API bugs), and the
+open question of whether this holds up off of one beefy box.
