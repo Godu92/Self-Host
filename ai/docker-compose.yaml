@@ -1,3 +1,5 @@
 ## Group: ai.
 include:
+  - ollama/docker-compose.yaml
   - notebook/opennotebook-single/docker-compose.yaml
+  - webui/docker-compose.yaml

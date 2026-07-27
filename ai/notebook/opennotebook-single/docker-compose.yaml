@@ -1,3 +1,7 @@
+# Ollama moved to ai/ollama/docker-compose.yaml (2026-07-27) so it can also serve
+# ai/webui without a second instance. Include that file alongside this one — this
+# service's docker.env still just points OLLAMA_API_BASE at http://ollama:11434 by
+# container name, resolved over the shared proxy network.
 services:
   # Single container with everything built-in (eliminates networking issues)
   open-notebook-single:
@@ -28,28 +32,6 @@ services:
       - kuma.notebook.http.name=Open Notebook
       - kuma.notebook.http.url=http://open-notebook-single:8502
 
-  # Keep Ollama separate (still needed for AI)
-  ollama:
-    image: ollama/ollama:${OLLAMA_VERSION:-latest}
-    container_name: ollama
-    restart: unless-stopped
-    ports:
-      - 11434:11434
-    volumes:
-      - ./ollama_data:/root/.ollama
-      # - ./certs/tls-ca-bundle.pem:/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem:ro
-    env_file:
-      - ./docker.env
-    networks:
-      - proxy
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.ollama.rule=Host(`ollama.${HOST}`)
-      - traefik.http.routers.ollama.entrypoints=http
-      - traefik.http.services.ollama.loadbalancer.server.port=11434
-      - kuma.ollama.http.name=Ollama
-      - kuma.ollama.http.url=http://ollama:11434
-
 networks:
   proxy:
     external: true
@@ -60,7 +42,4 @@ volumes:
     external: false
   surreal_data:
     name: surreal_data
-    external: false
-  ollama_data:
-    name: ollama_data
     external: false

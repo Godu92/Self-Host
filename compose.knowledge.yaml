@@ -18,6 +18,8 @@ include:
   - notes/wikijs/docker-compose.yaml
 
   ### ai — ask questions across whatever's been fed into it
+  ### ollama moved to its own file 2026-07-27 so it can also serve ai/webui
+  - ai/ollama/docker-compose.yaml
   - ai/notebook/opennotebook-single/docker-compose.yaml
 
   ## --- Future potential, not wired up, don't enable blindly ---

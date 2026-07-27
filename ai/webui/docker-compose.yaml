@@ -1,10 +1,7 @@
-# Ollama isn't defined here — it already runs as the `ollama` service in
-# ai/notebook/opennotebook-single/docker-compose.yaml, reachable on the
-# shared proxy network at http://ollama:11434 (also routed at ollama.$HOST).
-# Open WebUI reuses that same instance instead of running a second one, so
-# this stack only serves double duty once both compose files are included
-# together. TODO: extract ollama into its own service dir so open-webui
-# doesn't implicitly depend on the notebook stack being the one that starts it.
+# Ollama isn't defined here — it lives in ai/ollama/docker-compose.yaml so it can
+# be shared with (or run without) ai/notebook/opennotebook-single. Include that
+# file alongside this one; open-webui reaches it as http://ollama:11434 (also
+# routed at ollama.$HOST) over the shared proxy network.
 services:
   open-webui:
     image: ghcr.io/open-webui/open-webui:${OPEN_WEBUI_VERSION:-main}
