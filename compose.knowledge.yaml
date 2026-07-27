@@ -1,13 +1,21 @@
 ## Deploy style: knowledge
-## Thought-experiment slice of a "living memory" idea: write durable notes in Docmost,
-## then ask questions about them via Open Notebook's local-LLM RAG layer. No automation
-## wired up yet — for now, sources get added to Open Notebook by hand. The point of this
-## style is just to test whether the human-writes / AI-queries loop is actually useful
-## before investing in anything below.
+## Thought-experiment slice of a "living memory" idea: write durable notes in Wiki.js,
+## then ask questions about them via Open Notebook's local-LLM RAG layer. Wiki.js was
+## chosen over Docmost specifically for this style because change-metadata is readable
+## with zero auth (Guests group + an anonymous `pages.list`/`pages.tree` GraphQL feed,
+## verified live 2026-07-26) — a better fit for the automated write/read loop this style
+## is testing. Actual page *content* still needs a scoped read-only account though
+## (Wiki.js pages are a client-rendered SPA, and the GraphQL query that returns raw
+## content — `pages.single` — checks view permission more strictly than `list`/`tree` do;
+## see KNOWLEDGE.md). Docmost stays in `notes/docmost` for more human-facing note-taking
+## use, just not part of this experiment. No automation wired up yet — for now, sources
+## get added to Open Notebook by hand. The point of this style is just to test whether the
+## human-writes / AI-queries loop is actually useful before investing in anything below.
 
 include:
-  ### notes — durable, human-reviewed record (e.g. incident reports, decisions)
-  - notes/docmost/docker-compose.yaml
+  ### notes — durable, human-reviewed record (e.g. incident reports, decisions);
+  ### change-metadata is readable anonymously, actual content needs a read-only account
+  - notes/wikijs/docker-compose.yaml
 
   ### ai — ask questions across whatever's been fed into it
   - ai/notebook/opennotebook-single/docker-compose.yaml
@@ -20,14 +28,22 @@ include:
   #   actual n8n workflow to pull commits/issues into Open Notebook.
   #
   # - productivity/n8n/docker-compose.yaml
-  #   Automation glue for the above once the manual version proves worthwhile. Also the
-  #   spot to script Docmost -> Open Notebook syncing (Docmost's public API story is
-  #   still unverified — check before building on it).
+  #   Automation glue for the above once the manual version proves worthwhile: schedule
+  #   trigger -> Wiki.js `pages.list(orderBy: UPDATED)` GraphQL query (anonymous) -> diff
+  #   against a saved checkpoint -> authenticated `pages.single` GraphQL call for each
+  #   changed page's raw content -> POST that content to Open Notebook as a `type: "text"`
+  #   source (a `type: "link"` source doesn't work here — Wiki.js pages are a
+  #   client-rendered SPA, see KNOWLEDGE.md). Verified the metadata/checkpoint half live;
+  #   the authenticated-fetch half needs the read-only account below and isn't wired into
+  #   an actual n8n workflow yet.
   #
   # - identity/lldap/docker-compose.yaml
-  #   Only if/when more than one app needs a shared "agent" identity. Confirmed Gitea
-  #   works with it (incl. SSH keys); Docmost unconfirmed; n8n LDAP is Enterprise-only so
-  #   skip it there regardless.
+  #   Needed regardless of whether more than one app shares an identity: a scoped
+  #   read-only Wiki.js account (or its built-in API token feature) is required for n8n to
+  #   actually pull page content (see above) — LDAP is one way to provision that account,
+  #   a plain local Wiki.js user is the other, worth comparing once this is actually built.
+  #   Confirmed Gitea works with LDAP (incl. SSH keys); Wiki.js has a first-party
+  #   open-source LDAP module too; n8n LDAP is Enterprise-only so skip it there regardless.
   #
   # - productivity/monica/docker-compose.yaml
   #   Business/people context - "who do I know that works on X" as an agent-queryable

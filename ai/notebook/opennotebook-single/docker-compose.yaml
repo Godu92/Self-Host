@@ -1,7 +1,12 @@
 services:
   # Single container with everything built-in (eliminates networking issues)
   open-notebook-single:
-    image: lfnovo/open_notebook:${OPEN_NOTEBOOK_VERSION:-latest}-single
+    # `latest-single` on Docker Hub is stale (last published 2025-10-15, ~9 months
+    # behind numbered releases as of this pin) and missing a real fix (Content
+    # Settings, e.g. the URL extraction engine choice, wasn't actually read from
+    # the database yet) — verified live 2026-07-26. Pin to a real recent release
+    # instead of trusting the floating tag here.
+    image: lfnovo/open_notebook:${OPEN_NOTEBOOK_VERSION:-1.14.0}-single
     container_name: open-notebook-single
     restart: unless-stopped
     volumes:
