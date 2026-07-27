@@ -1,34 +1,33 @@
-# This is just a placeholder for now; mostly using this to mark to come back and look at
-
+# Ollama isn't defined here — it already runs as the `ollama` service in
+# ai/notebook/opennotebook-single/docker-compose.yaml, reachable on the
+# shared proxy network at http://ollama:11434 (also routed at ollama.$HOST).
+# Open WebUI reuses that same instance instead of running a second one, so
+# this stack only serves double duty once both compose files are included
+# together. TODO: extract ollama into its own service dir so open-webui
+# doesn't implicitly depend on the notebook stack being the one that starts it.
 services:
-  ollama:
-    volumes:
-      - ollama:/root/.ollama
-    container_name: ollama
-    pull_policy: always
-    tty: true
-    restart: unless-stopped
-    image: ollama/ollama:${OLLAMA_DOCKER_TAG-latest}
-
   open-webui:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: ghcr.io/open-webui/open-webui:${WEBUI_DOCKER_TAG-main}
+    image: ghcr.io/open-webui/open-webui:${OPEN_WEBUI_VERSION:-main}
     container_name: open-webui
+    restart: always
     volumes:
-      - open-webui:/app/backend/data
-    depends_on:
-      - ollama
-    ports:
-      - ${OPEN_WEBUI_PORT-3000}:8080
+      - ${OPEN_WEBUI_DATA_DIR:-open-webui}:/app/backend/data
     environment:
-      - "OLLAMA_BASE_URL=http://ollama:11434"
-      - "WEBUI_SECRET_KEY="
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
     extra_hosts:
       - host.docker.internal:host-gateway
-    restart: unless-stopped
+    # ports:
+    #   - "3000:8080"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.chat.rule=Host(`chat.$HOST`)
+      - traefik.http.routers.chat.entrypoints=http
+      - traefik.http.services.chat.loadbalancer.server.port=8080
+      - kuma.chat.http.name=Open WebUI
+      - kuma.chat.http.url=http://open-webui:8080
 
 volumes:
-  ollama: {}
-  open-webui: {}
+  open-webui:
+    name: open_webui_data
+    external: false
