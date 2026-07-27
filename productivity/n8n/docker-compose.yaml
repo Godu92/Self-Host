@@ -55,7 +55,7 @@ services:
       # Consumed via {{ $env.WIKIJS_RO_PASSWORD }} by the imported workflow in
       # workflows/wikijs-to-opennotebook.json — not an n8n secret of its own, it's
       # the svc-wikijs-ro LLDAP account's password (see identity/lldap, KNOWLEDGE.md).
-      - WIKIJS_RO_PASSWORD=${WIKIJS_RO_PASSWORD}
+      # - WIKIJS_RO_PASSWORD=${WIKIJS_RO_PASSWORD}
     # ports:
     #   - 5678:5678
     links:
