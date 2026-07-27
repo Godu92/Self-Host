@@ -26,7 +26,19 @@ services:
       DB_USER: wikijs
       DB_PASS: ${DB_PASS}
       DB_NAME: wiki
+      # The bundled config.yml has no `offline` key/env placeholder at all in this image,
+      # so OFFLINE_ACTIVE as an env var is a no-op - offline mode only exists via a config.yml
+      # that actually sets it, hence the CONFIG_FILE override below.
+      CONFIG_FILE: data/config.yml
     restart: always
+    volumes:
+      - ./config.yml:/wiki/data/config.yml:ro
+      # Locale files can't be auto-downloaded from GitHub behind the corporate proxy
+      # (surfaces as raw i18n keys like "page.Actions" instead of translated labels) -
+      # sideload them per https://docs.requarks.io/en/install/sideload instead (requires
+      # offline: true above, since sideloader.js only runs when WIKI.config.offline is set).
+      # TODO: Need some way to load languages when behind a proxy or offline
+      - ./sideload:/wiki/data/sideload:ro
     labels:
       - traefik.enable=true
       - traefik.http.routers.wiki.rule=Host(`wiki.$HOST`)
