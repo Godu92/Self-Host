@@ -45,6 +45,17 @@ services:
       - DB_POSTGRESDB_USER=changeUser
       - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD}
       - N8N_SECURE_COOKIE=false
+      # As of n8n 2.x, $env access in node expressions is denied by default
+      # ("access to env vars denied" in container logs) - the older docs/behavior
+      # assuming it's allowed unless explicitly blocked no longer holds. Must be
+      # explicitly opted back in for workflows/wikijs-to-opennotebook.json's LDAP
+      # Login node to read WIKIJS_RO_PASSWORD via {{ $env.WIKIJS_RO_PASSWORD }} -
+      # confirmed live 2026-07-26.
+      - N8N_BLOCK_ENV_ACCESS_IN_NODE=false
+      # Consumed via {{ $env.WIKIJS_RO_PASSWORD }} by the imported workflow in
+      # workflows/wikijs-to-opennotebook.json — not an n8n secret of its own, it's
+      # the svc-wikijs-ro LLDAP account's password (see identity/lldap, KNOWLEDGE.md).
+      - WIKIJS_RO_PASSWORD=${WIKIJS_RO_PASSWORD}
     # ports:
     #   - 5678:5678
     links:

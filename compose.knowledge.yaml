@@ -28,22 +28,22 @@ include:
   #   actual n8n workflow to pull commits/issues into Open Notebook.
   #
   # - productivity/n8n/docker-compose.yaml
-  #   Automation glue for the above once the manual version proves worthwhile: schedule
-  #   trigger -> Wiki.js `pages.list(orderBy: UPDATED)` GraphQL query (anonymous) -> diff
-  #   against a saved checkpoint -> authenticated `pages.single` GraphQL call for each
-  #   changed page's raw content -> POST that content to Open Notebook as a `type: "text"`
-  #   source (a `type: "link"` source doesn't work here — Wiki.js pages are a
-  #   client-rendered SPA, see KNOWLEDGE.md). Verified the metadata/checkpoint half live;
-  #   the authenticated-fetch half needs the read-only account below and isn't wired into
-  #   an actual n8n workflow yet.
+  #   Automation glue, validated end to end 2026-07-26 (see KNOWLEDGE.md): Wiki.js
+  #   `pages.list(orderBy: UPDATED)` (anonymous) -> LLDAP-authenticated login -> `GET
+  #   /d/<path>` raw content -> POST to Open Notebook as a `type: "text"` source. Still
+  #   manual-trigger only, no checkpoint/dedup yet. Import
+  #   `productivity/n8n/workflows/wikijs-to-opennotebook.json` instead of rebuilding by
+  #   hand - it needs `WIKIJS_RO_PASSWORD` set in this service's own `.env` first (must
+  #   match the LLDAP account below) plus `N8N_BLOCK_ENV_ACCESS_IN_NODE=false` (n8n 2.x
+  #   denies node `$env` access by default - already set in this service's compose file).
   #
   # - identity/lldap/docker-compose.yaml
-  #   Needed regardless of whether more than one app shares an identity: a scoped
-  #   read-only Wiki.js account (or its built-in API token feature) is required for n8n to
-  #   actually pull page content (see above) — LDAP is one way to provision that account,
-  #   a plain local Wiki.js user is the other, worth comparing once this is actually built.
-  #   Confirmed Gitea works with LDAP (incl. SSH keys); Wiki.js has a first-party
-  #   open-source LDAP module too; n8n LDAP is Enterprise-only so skip it there regardless.
+  #   Provides the shared read-only identity the n8n workflow above actually needs: a
+  #   `svc-wikijs-ro` user in a `svc-readonly` group, wired to Wiki.js as an LDAP auth
+  #   strategy. Provisioned via LLDAP's GraphQL API + its `lldap_set_password` CLI (no
+  #   REST/GraphQL password mutation exists - see KNOWLEDGE.md). Confirmed Gitea works with
+  #   LDAP too (incl. SSH keys); n8n LDAP is Enterprise-only so n8n itself just calls
+  #   Wiki.js's HTTP API instead of speaking LDAP directly.
   #
   # - productivity/monica/docker-compose.yaml
   #   Business/people context - "who do I know that works on X" as an agent-queryable

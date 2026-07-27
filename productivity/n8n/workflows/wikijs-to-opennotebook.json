@@ -1,0 +1,152 @@
+{
+  "name": "Wiki.js -> Open Notebook (LDAP test)",
+  "nodes": [
+    {
+      "id": "trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "list_pages",
+      "name": "List Changed Pages",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://wiki:3000/graphql",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\"query\":\"{ pages { list(orderBy: UPDATED, orderByDirection: DESC, limit: 5) { id path title updatedAt } } }\"}",
+        "options": {}
+      }
+    },
+    {
+      "id": "ldap_login",
+      "name": "LDAP Login (svc-wikijs-ro)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://wiki:3000/graphql",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ query: \"mutation($u:String!,$p:String!,$s:String!){ authentication { login(username:$u,password:$p,strategy:$s){ jwt responseResult{succeeded message} } } }\", variables: { u: \"svc-wikijs-ro\", p: $env.WIKIJS_RO_PASSWORD, s: \"ldap\" } }) }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "fetch_source",
+      "name": "Fetch Page Source",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        660,
+        0
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "=http://wiki:3000/d/{{ $('List Changed Pages').item.json.data.pages.list[0].path }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $json.data.authentication.login.jwt }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "push_notebook",
+      "name": "Push to Open Notebook",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        880,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://open-notebook-single:5055/api/sources/json",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ type: \"text\", title: $('List Changed Pages').item.json.data.pages.list[0].title, content: $json.data, embed: true, async_processing: true }) }}",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "List Changed Pages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Changed Pages": {
+      "main": [
+        [
+          {
+            "node": "LDAP Login (svc-wikijs-ro)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LDAP Login (svc-wikijs-ro)": {
+      "main": [
+        [
+          {
+            "node": "Fetch Page Source",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Page Source": {
+      "main": [
+        [
+          {
+            "node": "Push to Open Notebook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "pinData": {},
+  "active": false
+}

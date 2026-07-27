@@ -136,18 +136,136 @@ won't look like that. Before this goes beyond "proof of concept":
 
 ## Next steps, roughly in order
 
-1. Set up a scoped read-only Wiki.js account (or API token) for n8n/Open Notebook to use
-   against `pages.single` — required now that anonymous access has been shown to only cover
-   metadata, not actual page content.
-2. Decide whether to actually build the n8n workflow (Wiki.js `pages.list` → authenticated
-   `pages.single` → Open Notebook `text` source sync) or keep this manual for longer while
-   more content accumulates.
-3. Test the split-hardware Ollama setup before assuming this scales past one box.
-4. Revisit Gitea as a source (LDAP + scripted token bootstrap already proven to work in
-   earlier, separate testing — just not wired into this loop yet).
-5. Only after the above feel solid: LLDAP service account for shared auth (vs. a plain local
-   Wiki.js account/token — worth comparing once there's a second consumer needing the same
-   identity), Monica/Grocy as additional sources.
+1. ~~Set up a scoped read-only Wiki.js account for n8n to use~~ — done 2026-07-26, see
+   "LLDAP + n8n test" below.
+2. ~~Wire the proven n8n workflow up to Open Notebook and validate a full write-to-answer
+   cycle~~ — done 2026-07-26, see "Full cycle validated end to end" below.
+3. Add a real schedule trigger + checkpoint-diffing logic to the n8n workflow (it currently
+   re-ingests the same fixed page on every manual run, with no dedup) — and per the
+   git-folder test below, design it as delete-old-source-then-create-new, not update, since
+   Open Notebook has no update-in-place mechanism. Import
+   `productivity/n8n/workflows/wikijs-to-opennotebook.json` as the starting point rather than
+   rebuilding from scratch (see "Exporting the n8n workflow" below).
+4. Test the split-hardware Ollama setup before assuming this scales past one box.
+5. Revisit Gitea as a source (LDAP + scripted token bootstrap already proven to work in
+   earlier, separate testing — just not wired into this loop yet), possibly using the
+   git-backed-folder pattern validated below instead of/alongside an API-based sync.
+6. Monica/Grocy as additional sources, once the above feels solid.
+
+## LLDAP + n8n test, live-tested 2026-07-26
+
+Stood up `identity/lldap` and `productivity/n8n` alongside the Wiki.js/Open Notebook stack
+(not yet added to `compose.knowledge.yaml` — tested via direct `-f` flags, same pattern as
+the earlier Wiki.js standalone test) to answer: what would a shared read-only service
+identity for this pipeline actually look like end to end?
+
+**Provisioned via LLDAP's API** (not the web UI): a `svc-readonly` group and a
+`svc-wikijs-ro` user in it, using LLDAP's GraphQL admin API (`/api/graphql`, bearer token
+from `POST /auth/simple/login`) for creation, then LLDAP's bundled `lldap_set_password` CLI
+(inside the container) to set the password — LLDAP uses the OPAQUE PAKE protocol for
+password changes, so there's no plain REST field for it; the GraphQL schema has no
+password mutation at all, only the CLI (or the web UI) can set one.
+
+**Wired Wiki.js to LLDAP as an auth provider** via GraphQL
+(`authentication.updateStrategies`), pointing at `ldap://lldap:3890` with `svc-wikijs-ro`
+as the bind DN (`uid=svc-wikijs-ro,ou=people,dc=localhost`) — deliberately using the
+read-only service account itself as the bind identity, not the LDAP admin. Two real
+gotchas hit getting this working:
+
+- Each `config` entry's `value` must be JSON-encoded as `{"v": <value>}`, not just the bare
+  value — found by reading `server/graph/resolvers/authentication.js`'s
+  `updateStrategies` resolver, which does `_.get(JSON.parse(value.value), 'v', null)`. A
+  bare `JSON.stringify(value)` round-trips fine through `JSON.parse` but then `_.get(str,
+  'v')` on a primitive returns `null`, silently dropping the value.
+- A newly-added or edited strategy needs Wiki.js to be **restarted** to take effect —
+  strategies are registered with passport at boot; a live `updateStrategies` call updates
+  the DB but not the running passport instance (confirmed by the log line
+  `Authentication Strategy LLDAP (test): [ OK ]` only appearing after a restart).
+
+**Logged in via the GraphQL `authentication.login(strategy: "ldap")` mutation** using the
+service account's real password — succeeded, issued a normal Wiki.js JWT. Confirms Wiki.js
+correctly binds to LLDAP and treats an LDAP account exactly like any other user.
+
+**The permission model needed more care than expected.** A fresh LDAP-provisioned user has
+no Wiki.js group and thus zero permissions. Assigning it to a new group with
+`read:pages`/`read:assets`/`read:comments` (mirroring the built-in Guests group) was
+_still_ not enough to read content via GraphQL `pages.single` — that resolver requires
+`manage:pages` or `delete:pages` (see the earlier note in "Alternate leg" above), which is
+an editor-tier permission, not a read-only one. The actually-correct, minimally-scoped path
+turned out to be different: Wiki.js has a dedicated `read:source` permission
+(`server/core/auth.js` line ~507) that gates a plain HTTP download route, `GET
+/d/<path>`, which returns the raw page source (frontmatter + markdown) as a file — no
+GraphQL, no SPA-rendering problem, and no edit-tier permission required. Granting the
+service account's group `read:source` (alongside the read:pages/etc. it already had) and
+hitting `GET /d/<path>` with `Authorization: Bearer <jwt>` returned the exact raw markdown
+that had been written — this supersedes the earlier "Alternate leg" plan of using
+authenticated `pages.single`; `GET /d/<path>` is simpler and more correctly scoped.
+
+**Built an actual n8n workflow** (`Wiki.js -> Open Notebook (LDAP test)`, created via n8n's
+internal REST API after logging in with `POST /rest/login`) with three chained HTTP
+Request nodes: (1) anonymous `pages.list(orderBy: UPDATED)` against Wiki.js, (2)
+`authentication.login(strategy: "ldap")` using the service account, (3) `GET
+/d/<path>` for the first page from step 1, with `Authorization: Bearer` from step 2's JWT.
+Ran it via n8n's manual-execution API — completed with `status: success` across all three
+nodes. One n8n-specific gotcha: the first version had "list pages" and "LDAP login" as
+parallel branches off the trigger, which broke — an n8n node can only reference
+`$('OtherNode')`'s output if that node is somewhere in its own upstream chain, not just
+anywhere in the workflow. Fixed by chaining all three nodes linearly.
+
+Net result: the full shared-identity chain — LLDAP account → Wiki.js LDAP login → scoped
+JWT → raw content fetch — works, is scriptable end to end, and n8n can drive all of it with
+plain HTTP Request nodes (no LDAP-specific n8n node or credential type needed, since Wiki.js
+is the only thing that actually speaks LDAP here — n8n just calls Wiki.js's own HTTP API).
+
+## Exporting the n8n workflow, done 2026-07-26
+
+n8n's workflow lives in its own Postgres DB (`n8n_db_storage` volume), not in this repo — a
+full teardown/volume wipe would otherwise mean rebuilding the whole four-node chain by hand
+every time. Exported the live workflow via `GET /rest/workflows/{id}` and committed a
+sanitized copy to `productivity/n8n/workflows/wikijs-to-opennotebook.json`.
+
+"Sanitized" mattered here: the live workflow had the `svc-wikijs-ro` LLDAP password
+hardcoded in plain text inside the LDAP Login node's JSON body (typed directly into n8n's UI
+during the test above). Replaced it with an expression, `{{ $env.WIKIJS_RO_PASSWORD }}`, and
+added that var to `productivity/n8n/docker-compose.yaml`'s environment (sourced from
+`.env`, documented in `.env.example` as "must match the LLDAP account's real password, keep
+in sync by hand" — same shape as firefly's cross-file `MYSQL_PASSWORD`/`DB_PASSWORD` case).
+
+**Real gotcha: n8n 2.x denies node access to `$env` by default.** Older assumptions (and
+older n8n docs) are that env vars are readable in expressions unless
+`N8N_BLOCK_ENV_ACCESS_IN_NODE=true` is explicitly set. Not true here — the container logged
+a plain `access to env vars denied` and the node failed, with `N8N_BLOCK_ENV_ACCESS_IN_NODE`
+left completely unset. Confirmed the default flipped by explicitly setting
+`N8N_BLOCK_ENV_ACCESS_IN_NODE=false` in the n8n service's environment, restarting, and
+re-running the workflow — went from `status: error` to `status: success`, and a new source
+landed in Open Notebook. Verify this default hasn't changed again before assuming it "just
+works" on whatever n8n version is actually pinned when this gets revisited.
+
+To restore the workflow on a clean n8n instance: log into n8n's UI or hit `POST
+/rest/workflows` with the contents of `workflows/wikijs-to-opennotebook.json` as the body,
+then make sure `WIKIJS_RO_PASSWORD` is set in `productivity/n8n/.env` to the real service
+account password before running it.
+
+## Full cycle validated end to end, 2026-07-26: Wiki.js -> n8n -> Open Notebook -> answer
+
+Extended the n8n workflow above with a fourth node, `POST
+http://open-notebook-single:5055/api/sources/json` with `{"type": "text", "title": <page
+title from step 1>, "content": <raw source from step 3>, "embed": true, "async_processing":
+true}` — i.e. push the LDAP-fetched page content straight into Open Notebook as a `text`
+source (not `link` — sidesteps the SPA-rendering problem from the "Alternate leg" section
+entirely, since n8n already has the real raw content in hand from `GET /d/<path>`).
+
+Ran the workflow via n8n's manual-execution API: all four nodes succeeded, and the source
+showed up in Open Notebook (`GET /api/sources`) with the correct title and content.
+Then asked `POST /api/search/ask` a question answerable only from that page's content —
+got back a correct answer that directly quoted the source and cited it by ID. This is the
+same validation as the original Docmost-based test (see "What was actually validated"
+above), now proven through the full new pipeline: Wiki.js write → LDAP-authenticated n8n
+fetch → Open Notebook ingest → local-LLM answer, zero manual steps once a page is written.
+
+The workflow still uses a manual trigger and re-ingests the same fixed page every run (no
+schedule, no checkpoint, no dedup against already-ingested pages) — see Next Steps above
+for what's still needed to make this actually automatic.
 
 ## Alternate leg, live-tested 2026-07-26: pull instead of push (WikiJS)
 
@@ -211,17 +329,59 @@ GraphQL `pages.list` → filter by checkpoint → authenticated `pages.single` f
 Open Notebook `/api/sources/json` as `type: "text"`), or setting up the scoped read-only
 Wiki.js account/API token itself.
 
-## Future idea: git-backed folder as an Open Notebook source
+## Git-backed folder as an Open Notebook source, live-tested 2026-07-26
 
-Instead of (or alongside) the wiki/API approaches above: bind-mount a folder containing
-both hand-written notes and a `git`-cloned project into Open Notebook's container, and
-have something (cron, n8n) periodically `git pull` it so new/changed files become
-queryable context automatically.
+Idea: bind-mount a folder containing a `git`-cloned project into Open Notebook's
+container, and have something (cron, n8n) periodically `git pull` it so new/changed files
+become queryable context automatically.
 
-Checked against Open Notebook's actual API code: the `upload` source type's `file_path`
-is explicitly restricted to `UPLOADS_FOLDER` (an LFI guard in
-`_build_content_state`) — you can't just point a source at an arbitrary bind-mounted path.
-The workable version is bind-mounting the git-tracked folder _as_ `UPLOADS_FOLDER` itself
-(so `git pull` updates land inside the allowed directory), but something would still need
-to diff the folder after each pull and call `POST /api/sources` per new/changed file —
-Open Notebook doesn't auto-scan its uploads folder. Not yet tested live.
+Tested with a throwaway git repo bind-mounted as a subdirectory of `UPLOADS_FOLDER` (the
+`upload` source type's `file_path` is restricted to that folder — an LFI guard in
+`_build_content_state` — so it has to land inside it, can't point at an arbitrary path;
+`services.open-notebook-single.volumes` needs an extra bind mount like
+`<host-path>:/app/data/uploads/<name>:ro` for this). Confirmed:
+
+- `POST /api/sources/json` with `{"type": "upload", "file_path":
+  "/app/data/uploads/<name>/<file>", "embed": true}` ingests a file already sitting in a
+  bind mount directly — no actual HTTP file upload needed, since `file_path` just has to
+  resolve inside `UPLOADS_FOLDER` (which our bind-mounted git repo now does).
+- The bind mount reflects host-side `git commit`s immediately (as expected for a bind
+  mount — Docker doesn't cache/snapshot the content).
+- **But Open Notebook's source is a one-time snapshot, not a live view.** After editing a
+  file and committing, the file inside the container updated instantly, but the
+  already-ingested source's `full_text` still held the old content. Checked the API for a
+  "re-sync from file" or "refresh" endpoint — `PUT /api/sources/{id}` (`SourceUpdate`) can
+  only edit `title`/`topics`, and `POST /api/sources/{id}/retry` is only for
+  failed/stuck jobs, not re-extracting from an already-completed source. **There is no
+  update-in-place mechanism at all** — the only way to pick up a changed file is to delete
+  the old source and create a new one from the same path, which does correctly pick up the
+  new content.
+
+Implication for any future automation (this git-folder idea, or the Wiki.js `pages.list`
+sync described above): don't design around "update this source," design around "delete
+the old source for this item, create a fresh one" whenever the underlying content changes.
+That also means whatever tracks "have I already ingested this" needs to record enough to
+find and delete the old source (e.g., a naming convention or a topic/tag), since Open
+Notebook doesn't expose changed-since/checksum metadata on sources to diff against
+automatically.
+
+**What this does and doesn't solve.** It does give a real, working way to hand Open
+Notebook a folder to reference instead of copy/pasting or uploading through the UI one
+file at a time — genuinely useful for a handful of files. It does **not** solve "mount a
+large git project and have all of it become context" as a single action: since Open
+Notebook never scans its uploads folder on its own, something still has to walk the tree
+and call `POST /api/sources/json` once per file (and, per above, delete+recreate on every
+change) — a mount alone only makes the files _reachable_, not _ingested_. That directory
+walk + diff + ingest loop is the same shape of automation the Wiki.js `pages.list` sync
+still needs (see Next Steps) — worth building once, generically, rather than twice.
+
+Two gotchas hit while testing this (both about the _test environment_, not the mechanism
+above): after the earlier `notebook_data`/`surreal_data` wipe, Open Notebook came back up
+with zero registered models and zero content-processing settings, even though the actual
+Ollama models were still present on disk (`ollama_data` was kept) — had to re-register
+both models (`POST /api/models`) and re-set the defaults (`PUT /api/models/defaults`)
+before anything would embed; sources silently stayed `embedded: false` with the log line
+"No embedding model configured" until that was done. Separately, `POST /api/sources/json`'s
+`embed` field defaults to `false` and is independent of the global `default_embedding_option`
+setting — that setting doesn't get auto-applied by the API, only by whatever UI dialog reads
+it, so any script/workflow creating sources needs to pass `"embed": true` explicitly.
