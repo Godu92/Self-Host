@@ -1,0 +1,45 @@
+# Locally built (like dev/jenkins, fabrication/sketchforge, testing/test) — ComfyUI
+# has no official version-pinned registry image that matches this GPU/CUDA setup, so
+# it's excluded from the repo's normal ${VERSION:-latest} pinning policy. The pinned
+# thing here is the `-b v0.5.1` tag baked into build/Dockerfile's git clone instead.
+#
+# ./data and ./output default to symlinks into the pre-existing
+# ~/git/stable-diffusion-webui-docker checkout (see build/extra_model_paths.yaml for
+# how ComfyUI maps that checkpoints/Lora/VAE layout), so this shares one copy of your
+# models with AUTOMATIC1111 instead of duplicating them. That's a machine-specific
+# convenience default, not a hard dependency: override COMFYUI_DATA_DIR /
+# COMFYUI_OUTPUT_DIR in .env to point at a plain bind path for any deployment that
+# doesn't have (or want) that sibling checkout.
+services:
+  comfyui:
+    container_name: comfyui
+    image: sd-comfyui:local
+    build:
+      context: ./build
+      args:
+        PUID: "1001"
+        PGID: "1001"
+    restart: always
+    stop_signal: SIGKILL
+    tty: true
+    environment:
+      - CLI_ARGS=${COMFYUI_CLI_ARGS:-}
+    volumes:
+      - ${COMFYUI_DATA_DIR:-./data}:/data
+      - ${COMFYUI_OUTPUT_DIR:-./output}:/output
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['0']
+              capabilities: [compute, utility]
+    # ports:
+    #   - "7860:7860"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.comfyui.rule=Host(`comfyui.$HOST`)
+      - traefik.http.routers.comfyui.entrypoints=http
+      - traefik.http.services.comfyui.loadbalancer.server.port=7860
+      - kuma.comfyui.http.name=ComfyUI
+      - kuma.comfyui.http.url=http://comfyui:7860

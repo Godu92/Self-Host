@@ -1,4 +1,6 @@
-## Deploy style: local
+## Deploy style: generation
+## GPU-backed image/3D generation stack (ComfyUI hooked into the existing
+## stable-diffusion-webui-docker checkout — see ai/comfyui/docker-compose.yaml).
 ## Traefik + whoami are already enabled by the base docker-compose.yaml — no need to list
 ## them here. Uncomment a line below to enable that service for this style.
 ## You can also enable a whole group at once by including its aggregator file instead of
@@ -19,8 +21,8 @@ include:
   # - admin-tools/adminer/docker-compose.yaml
   # - admin-tools/olivetin/docker-compose.yaml
   # - admin-tools/dozzle/docker-compose.yaml
-  - admin-tools/glances/docker-compose.yaml
-  - admin-tools/dashy/docker-compose.yaml
+  # - admin-tools/glances/docker-compose.yaml
+  # - admin-tools/dashy/docker-compose.yaml
 
   ### monitoring
   # - monitoring/uptime/docker-compose.yaml
@@ -45,7 +47,7 @@ include:
 
   ### ai
   # - ai/notebook/opennotebook-single/docker-compose.yaml
-  # - ai/comfyui/docker-compose.yaml
+  - ai/comfyui/docker-compose.yaml
 
   ### productivity
   # - productivity/focalboard/docker-compose.yaml

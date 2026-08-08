@@ -41,6 +41,8 @@ monitoring/netalertx/netalertx
 admin-tools/olivetin/config/entities
 admin-tools/olivetin/config/ssh
 
+ai/comfyui/output
+
 dev/pxe/assets
 dev/pxe/config
 
