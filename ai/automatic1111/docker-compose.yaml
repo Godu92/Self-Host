@@ -1,0 +1,48 @@
+# Locally built (like dev/jenkins, fabrication/sketchforge, testing/test, ai/comfyui) —
+# AUTOMATIC1111 has no official version-pinned registry image that matches this GPU/CUDA
+# setup, so it's excluded from the repo's normal ${VERSION:-latest} pinning policy. The
+# pinned thing here is the `v1.10.1` tag baked into build/Dockerfile's git clone instead.
+#
+# ./data and ./output default to symlinks into the pre-existing
+# ~/git/stable-diffusion-webui-docker checkout — the same target ai/comfyui/data and
+# ai/comfyui/output point at, so this shares one copy of your models/outputs with
+# ComfyUI instead of duplicating them (matches upstream's own layout, which mounts a
+# single ./data and ./output across every UI variant it offers). Override
+# AUTO_DATA_DIR/AUTO_OUTPUT_DIR in .env for any deployment that doesn't have (or want)
+# that sibling checkout.
+#
+# Shares one GPU with ai/comfyui — both can be included at once, but only run one of
+# them up at a time (VRAM isn't enough for both to hold a model simultaneously).
+services:
+  automatic1111:
+    container_name: automatic1111
+    image: sd-automatic1111:local
+    build:
+      context: ./build
+      args:
+        PUID: "1001"
+        PGID: "1001"
+    restart: always
+    stop_signal: SIGKILL
+    tty: true
+    environment:
+      - CLI_ARGS=${AUTO_CLI_ARGS:---allow-code --medvram --xformers --enable-insecure-extension-access --api}
+    volumes:
+      - ${AUTO_DATA_DIR:-./data}:/data
+      - ${AUTO_OUTPUT_DIR:-./output}:/output
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['0']
+              capabilities: [compute, utility]
+    # ports:
+    #   - "7860:7860"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.automatic1111.rule=Host(`auto.$HOST`)
+      - traefik.http.routers.automatic1111.entrypoints=http
+      - traefik.http.services.automatic1111.loadbalancer.server.port=7860
+      - kuma.automatic1111.http.name=AUTOMATIC1111
+      - kuma.automatic1111.http.url=http://automatic1111:7860

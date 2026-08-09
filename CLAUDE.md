@@ -107,7 +107,8 @@ Originally built for RHEL 8 + podman; also runs on Docker.
   (e.g. notebook's `docker.env`, wired via `env_file:` for app config) needs its own separate
   plain `.env`/`.env.example` just for version vars — `env_file:` and interpolation are
   unrelated mechanisms that happen to often read the same file.
-- The 4 locally-built images (jenkins, sketchforge, testing/test, ai/comfyui) are intentionally
+- The 5 locally-built images (jenkins, sketchforge, testing/test, ai/comfyui, ai/automatic1111)
+  are intentionally
   excluded — there's no registry tag to pin, they build from a local Dockerfile.
 
 ## Volumes

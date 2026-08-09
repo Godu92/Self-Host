@@ -4,3 +4,4 @@ include:
   - notebook/opennotebook-single/docker-compose.yaml
   - webui/docker-compose.yaml
   - comfyui/docker-compose.yaml
+  - automatic1111/docker-compose.yaml

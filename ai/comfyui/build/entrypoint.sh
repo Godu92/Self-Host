@@ -57,6 +57,21 @@ if [ -f "/data/config/comfy/startup.sh" ]; then
   popd
 fi
 
+# Custom nodes installed via the Manager UI live on the bind-mounted
+# custom_nodes/ dir and so survive a container recreate, but any Python
+# packages they pip-installed at runtime don't (site-packages is inside the
+# image's writable layer). Reinstall each node's requirements.txt on every
+# boot so ad-hoc UI installs become durable instead of one-shot. Pip's own
+# download cache is under ~/.cache (also bind-mounted), so repeat runs are
+# fast once a package has been fetched once.
+echo "Checking custom node requirements..."
+shopt -s nullglob
+for req in "${ROOT}/custom_nodes"/*/requirements.txt; do
+  echo "  -> ${req}"
+  pip install -r "${req}" || echo "  (failed to install ${req}, continuing)"
+done
+shopt -u nullglob
+
 chown -R $PUID:$PGID ~/.cache/
 chmod 776 ~/.cache/
 

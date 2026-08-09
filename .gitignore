@@ -42,6 +42,7 @@ admin-tools/olivetin/config/entities
 admin-tools/olivetin/config/ssh
 
 ai/comfyui/output
+ai/automatic1111/output
 
 dev/pxe/assets
 dev/pxe/config
