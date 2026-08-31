@@ -3,6 +3,7 @@ services:
   dozzle:
     container_name: dozzle
     image: amir20/dozzle:${DOZZLE_VERSION:-latest}
+    restart: unless-stopped
     networks:
       default:
       socket_proxy:
