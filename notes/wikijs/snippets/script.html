@@ -1,0 +1,172 @@
+<script type="application/javascript">
+  (async function () {
+    // Wait until Wiki.js finishes rendering the page content
+    function waitForContent() {
+      return new Promise((resolve) => {
+        const check = () => {
+          const el = document.querySelector(".children-placeholder");
+          if (el) return resolve(el);
+          requestAnimationFrame(check);
+        };
+        check();
+      });
+    }
+
+    const placeholder = await waitForContent();
+    if (!placeholder) {
+      console.log("🛈 No .children-placeholder found.");
+      return;
+    }
+
+    // Read configuration from data attributes
+    const limit = parseInt(placeholder.getAttribute("data-limit") || "100", 10);
+    const maxDepth = parseInt(placeholder.getAttribute("data-depth") || "1", 10);
+    const sortAttr = placeholder.getAttribute("data-sort") || "path:asc";
+    const debug = placeholder.getAttribute("data-debug") === "true";
+
+    const [sortField, sortDirection] = sortAttr.split(":");
+    const sortAsc = sortDirection !== "desc";
+
+    const log = (...args) => debug && console.log(...args);
+
+    // Parse current URL for locale and path
+    let fullPath = window.location.pathname;
+    let [, locale, ...pathParts] = fullPath.split("/");
+    locale = locale || "en";
+    let path = pathParts.join("/").replace(/^\/+|\/+$/g, "");
+    const basePath = path ? `${path}/` : "";
+
+    log("🌍 Locale:", locale);
+    log("🔍 Searching for subpages of path:", basePath);
+
+    placeholder.textContent = "Loading subpages…";
+
+    // GraphQL query
+    const query = {
+      query: `
+      query ($query: String!, $locale: String!) {
+        pages {
+          search(query: $query, locale: $locale) {
+            results {
+              title
+              path
+              description
+            }
+          }
+        }
+      }
+    `,
+      variables: { query: basePath, locale: locale }
+    };
+
+    try {
+      const response = await fetch("/graphql", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(query)
+      });
+
+      const json = await response.json();
+
+      if (!response.ok || json.errors) {
+        throw new Error("GraphQL error: " + JSON.stringify(json.errors));
+      }
+
+      const results = json?.data?.pages?.search?.results ?? [];
+      log(
+        "📄 Found pages:",
+        results.map((p) => p.path)
+      );
+
+      // Filter for children
+      const children = results
+        .filter((p) => p.path !== path)
+        .filter((p) => p.path.startsWith(path + "/"))
+        .sort((a, b) => {
+          const aVal = a[sortField]?.toLowerCase?.() || "";
+          const bVal = b[sortField]?.toLowerCase?.() || "";
+          if (aVal < bVal) return sortAsc ? -1 : 1;
+          if (aVal > bVal) return sortAsc ? 1 : -1;
+          return 0;
+        })
+        .slice(0, limit);
+
+      log(
+        "✅ Filtered & sorted subpages:",
+        children.map((p) => p.path)
+      );
+
+      if (children.length === 0) {
+        placeholder.innerHTML = "<em>No subpages available.</em>";
+        return;
+      }
+
+      // Build a tree
+      const tree = {};
+      children.forEach((page) => {
+        const relPath = page.path.slice(basePath.length).replace(/^\/+|\/+$/g, "");
+        const parts = relPath.split("/");
+        let node = tree;
+        parts.forEach((part, idx) => {
+          if (!node[part]) node[part] = { __meta: null, __children: {} };
+          if (idx === parts.length - 1) node[part].__meta = page;
+          node = node[part].__children;
+        });
+      });
+
+      function escapeHtml(str) {
+        return str.replace(
+          /[&<>"']/g,
+          (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[m]
+        );
+      }
+
+      function renderTree(treeObj, depth = 1) {
+        if (depth > maxDepth) return null;
+        const ul = document.createElement("ul");
+        ul.className = `children-tree level-${depth}`;
+
+        for (const key of Object.keys(treeObj)) {
+          const node = treeObj[key];
+          const hasChildren = Object.keys(node.__children).length > 0;
+          const hasMeta = !!node.__meta;
+          if (!hasMeta && !hasChildren) continue;
+
+          const li = document.createElement("li");
+          li.className = "children-item";
+
+          if (hasMeta) {
+            const p = node.__meta;
+            li.innerHTML = `
+            <a href="/${locale}/${p.path}">${escapeHtml(p.title)}</a>
+            <br><small>${escapeHtml(p.description || "")}</small>
+          `;
+          } else {
+            li.innerHTML = `<strong>${escapeHtml(key)}</strong>`;
+          }
+
+          const childList = renderTree(node.__children, depth + 1);
+          if (childList) li.appendChild(childList);
+          ul.appendChild(li);
+        }
+
+        return ul;
+      }
+
+      // Render final tree
+      const wrapper = document.createElement("div");
+      wrapper.className = "children-list";
+      const treeHtml = renderTree(tree);
+      if (treeHtml) wrapper.appendChild(treeHtml);
+
+      // Safely replace content inside placeholder
+      placeholder.innerHTML = "";
+      placeholder.appendChild(wrapper);
+
+      log("🌲 Tree structure successfully rendered.");
+    } catch (err) {
+      console.error("❌ Error loading subpages:", err);
+      placeholder.innerHTML = "<em>Error loading subpages.</em>";
+    }
+  })();
+</script>
