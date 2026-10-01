@@ -49,7 +49,7 @@ include:
 
   ### ai
   # - ai/notebook/opennotebook-single/docker-compose.yaml
-  - ai/comfyui/docker-compose.yaml
+  # - ai/comfyui/docker-compose.yaml
   # - ai/automatic1111/docker-compose.yaml
 
   ### productivity

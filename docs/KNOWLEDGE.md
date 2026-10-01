@@ -14,8 +14,8 @@ metadata (see "Alternate leg" below) fits that better than Docmost's session-coo
 
 ## The problem this is trying to solve
 
-Cross-project knowledge at work is scattered across ~100 systems and ~90 projects (50 of
-them interrelated RPMs). The question was how to make that knowledge easily accessible to
+Cross-project knowledge is scattered across a large number of systems and interrelated
+projects. The question was how to make that knowledge easily accessible to
 both people and coding agents, without building something that only helps one narrow slice
 of it.
 
@@ -120,7 +120,7 @@ question is whether it holds up once compute isn't sitting on one beefy box (see
 
 This was tested on hardware beefy enough to run Postgres + Redis + SurrealDB + Ollama
 (chat + embedding models) + the Docmost/Open Notebook app containers all on one machine
-without tuning anything. Most of the ~100 systems this is meant to eventually help with
+without tuning anything. Most of the systems this is meant to eventually help with
 won't look like that. Before this goes beyond "proof of concept":
 
 - `OLLAMA_API_BASE` in `ai/notebook/opennotebook-single/docker.env` is just a URL — Open

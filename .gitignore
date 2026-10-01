@@ -11,7 +11,12 @@
 *.bak
 *.sql
 *_data
-.claude/
+
+## Claude Code: CLAUDE.md + settings.json are shared; local permissions/state are not
+.claude/settings.local.json
+
+## Environment-specific notes (work details etc.) that must never be pushed
+docs/private/
 
 ## App specific ignores
 network/pihole/etc-pihole

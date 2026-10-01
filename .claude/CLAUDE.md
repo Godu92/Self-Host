@@ -16,12 +16,12 @@ Originally built for RHEL 8 + podman; also runs on Docker.
   compose file directly instead (`- monitoring/gotify/docker-compose.yaml`); both are valid
   `include:` targets from any other compose file.
 - This grouping (2026-07-19) was a deliberate reorg for discoverability at ~50 services — see
-  CLEANUP.md's Organization item for the reasoning and what was traded off (all path references
+  docs/CLEANUP.md's Organization item for the reasoning and what was traded off (all path references
   repo-wide had to move together; there is no per-service top-level directory anymore).
 
 ## Launch mechanism
 
-- Root [docker-compose.yaml](docker-compose.yaml) is the **base file** — it defines the shared
+- Root [docker-compose.yaml](../docker-compose.yaml) is the **base file** — it defines the shared
   `proxy` network plus Traefik and `whoami` (under `infra/`). It's a self-sufficient smoke test:
   `docker compose up -d` alone proves the network/Traefik/`.env` setup works.
 - Additional services are opt-in via a **deploy style** override file at the repo root, named
@@ -46,8 +46,8 @@ Originally built for RHEL 8 + podman; also runs on Docker.
 1. Pick the group folder it belongs in (or add a new group if nothing fits — update this file's
    Organization list and the group's aggregator file).
 2. Create `<group>/<service>/docker-compose.yaml` with a `container_name`, `restart: always`, and
-   Traefik labels following the pattern in [monitoring/gotify/docker-compose.yaml](monitoring/gotify/docker-compose.yaml)
-   or [admin-tools/dozzle/docker-compose.yaml](admin-tools/dozzle/docker-compose.yaml) (both are clean references).
+   Traefik labels following the pattern in [monitoring/gotify/docker-compose.yaml](../monitoring/gotify/docker-compose.yaml)
+   or [admin-tools/dozzle/docker-compose.yaml](../admin-tools/dozzle/docker-compose.yaml) (both are clean references).
 3. Add `- <group>/<service>/docker-compose.yaml` to that group's own aggregator
    `<group>/docker-compose.yaml` AND to whichever `compose.<style>.yaml` file(s) should run it.
 4. Services join the shared `proxy` network by default (no explicit `networks:` needed) so
@@ -66,10 +66,10 @@ Originally built for RHEL 8 + podman; also runs on Docker.
 - `.gitignore` excludes `*.env` with a `!*.env.example` carve-out, plus `.direnv/`. Don't
   reintroduce a plain `.env` (bare, no suffix) rule — it wouldn't catch variants like
   `.db.env`/`docker.env`, which is exactly the gap that let several real env files get
-  committed before 2026-07-19 (see CLEANUP.md item 3).
+  committed before 2026-07-19 (see docs/CLEANUP.md item 3).
 - When one credential is shared across two containers in the same compose file under two
   different var names (e.g. an app's `DB_PASSWORD` vs. its database's `MYSQL_PASSWORD`), write
-  the second `.env.example` line as `MYSQL_PASSWORD=$DB_PASSWORD` — [scripts/gen-secrets.sh](scripts/gen-secrets.sh)
+  the second `.env.example` line as `MYSQL_PASSWORD=$DB_PASSWORD` — [scripts/gen-secrets.sh](../scripts/gen-secrets.sh)
   resolves that reference to whatever it generated for the first key, keeping them in sync.
   This only works within a single file; a service split across multiple env files (firefly's
   `.env`/`.db.env`/`.importer.env`) needs its shared password kept in sync by hand.
@@ -88,7 +88,7 @@ Originally built for RHEL 8 + podman; also runs on Docker.
 - Every image tag is `${SERVICE_VERSION:-latest}` (or similar) — floats to latest by default,
   pin-able per deployment by setting the var in that service's `.env`, no compose file edits
   needed. This is a deliberate policy choice (2026-07-19), not an oversight: simplicity/always-
-  current by default over CLEANUP.md's original "pin everything" framing.
+  current by default over docs/CLEANUP.md's original "pin everything" framing.
 - When a tag encodes a real *variant* (base OS like `-alpine`, container topology like
   `-single`, or a release *channel* like `lts`/`stable`/major-only `2`) rather than just a
   version, that variant stays hardcoded and only the floatable portion is a var — e.g.
@@ -97,7 +97,7 @@ Originally built for RHEL 8 + podman; also runs on Docker.
   that silently swaps the variant (different base OS, wrong container topology, or a bleeding-
   edge channel the deployment didn't ask for) for anyone who doesn't override it.
 - The one exception with no `latest` fallback at all:
-  [identity/freeipa](identity/freeipa/docker-compose.yaml) — its tags are OS-variant-specific
+  [identity/freeipa](../identity/freeipa/docker-compose.yaml) — its tags are OS-variant-specific
   (fedora-41, rocky-9, ...), no generic rolling tag exists. Its var defaults to the current pin
   (`fedora-41`), not `latest`. Verify against the actual registry before assuming any other
   image needs the same treatment — don't guess from memory which tags exist.
@@ -132,7 +132,7 @@ Originally built for RHEL 8 + podman; also runs on Docker.
 ## Docker socket access
 
 - Never mount `/var/run/docker.sock` directly into a service. Everything that needs Docker API
-  access goes through [infra/socket](infra/socket/docker-compose.yaml)
+  access goes through [infra/socket](../infra/socket/docker-compose.yaml)
   (`tecnativa/docker-socket-proxy`) instead, at `tcp://socket-proxy:2375` — direct socket access
   is root-equivalent host control, full stop.
 - The env var/flag for pointing a tool at the proxy **differs per tool** — verify against that
@@ -168,9 +168,9 @@ Originally built for RHEL 8 + podman; also runs on Docker.
   remember `<<:` merge does not merge list values — a service that also defines its own
   `labels:` list overrides the anchor's entirely rather than combining with it. Put
   `traefik.enable=true` in each service's own label list, not just the shared anchor (bit us in
-  `media/calibre`, see CLEANUP.md item 13).
+  `media/calibre`, see docs/CLEANUP.md item 13).
 - Every service with an active Traefik route also gets AutoKuma monitor labels
-  ([monitoring/autokuma](monitoring/autokuma/docker-compose.yaml) auto-registers Uptime Kuma
+  ([monitoring/autokuma](../monitoring/autokuma/docker-compose.yaml) auto-registers Uptime Kuma
   monitors from Docker labels): `kuma.<id>.http.name=<Display Name>` and
   `kuma.<id>.http.url=http://<container_name>:<port>`, reusing the same short `<id>` as the
   Traefik router. Point at the internal container:port, not the public `$HOST` hostname — it
@@ -181,14 +181,28 @@ Originally built for RHEL 8 + podman; also runs on Docker.
 
 ## Known repo debt
 
-See [CLEANUP.md](CLEANUP.md) for the full, prioritized audit (version pinning, secrets
+See [CLEANUP.md](../docs/CLEANUP.md) for the full, prioritized audit (version pinning, secrets
 hygiene, dead content, Traefik/network consistency, shared compose fragments). Check items
 off there as they're addressed rather than re-deriving this list from scratch.
 
 ## Experimental: living memory stack
 
 `compose.knowledge.yaml` stands up a proof-of-concept human-writes/AI-queries loop
-(Docmost + Open Notebook). See [KNOWLEDGE.md](KNOWLEDGE.md) before touching or extending
+(Docmost + Open Notebook). See [KNOWLEDGE.md](../docs/KNOWLEDGE.md) before touching or extending
 it — it records why MegaMemory was rejected for this, what's been validated, real upstream
 gotchas hit along the way (Postgres 18 volume/tag changes, Open Notebook API bugs), and the
 open question of whether this holds up off of one beefy box.
+
+## Current focus: multi-project RAG
+
+[MULTI-PROJECT-RAG.md](../docs/MULTI-PROJECT-RAG.md) is the design for a CPU-only, offline-
+capable Open WebUI + Ollama code assistant doing RAG across a large number of interrelated
+projects (built on `ai/ollama` + `ai/webui`). Keep that doc general-purpose — it's meant to be
+useful to anyone with a high project count, not tied to one environment.
+
+## Public vs. private docs
+
+This repo is public. Anything specific to a real deployment environment (hardware inventory,
+team, internal hostnames, project names/counts, approval or policy context) goes in
+`docs/private/`, which is gitignored — never in tracked docs, compose comments, or commit
+messages. Tracked docs describe the general pattern; `docs/private/` records how it applies.

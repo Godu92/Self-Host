@@ -29,7 +29,7 @@ services:
       # No kuma.* monitor label: firefly sits on its own isolated `firefly_iii` network, not
       # the shared `proxy` network autokuma/uptime-kuma live on — a monitor here would never
       # actually reach it. Same root cause as the Traefik route already being non-functional
-      # (see CLEANUP.md item 5). Add one once that's resolved.
+      # (see docs/CLEANUP.md item 5). Add one once that's resolved.
   firefly-db:
     image: mariadb:${MARIADB_VERSION:-lts}
     hostname: db

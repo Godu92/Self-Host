@@ -6,8 +6,8 @@ Check items off as they're addressed; add new findings as they turn up.
 
 ## 1. Reconcile the two competing launch mechanisms (highest priority) — DONE (2026-07-19)
 
-- [x] Decided on ONE mechanism: base [docker-compose.yaml](docker-compose.yaml) (networks only)
-      plus a per-deploy-style override, e.g. [compose.local.yaml](compose.local.yaml), merged at
+- [x] Decided on ONE mechanism: base [docker-compose.yaml](../docker-compose.yaml) (networks only)
+      plus a per-deploy-style override, e.g. [compose.local.yaml](../compose.local.yaml), merged at
       launch (`docker compose -f docker-compose.yaml -f compose.local.yaml up -d`). See README.
 - [x] `scripts/start.sh`/`stop.sh` retired entirely (deleted) — no more independent per-dir
       Compose projects bypassing the shared `proxy` network.
@@ -34,7 +34,7 @@ deployment by setting a var in that service's `.env`, with no compose file edits
       all, which was silently `latest` anyway) to `${VAR:-latest}` interpolation.
 - [x] Verified against the real registries (Docker Hub, ghcr.io, docker.gitea.com,
       docker.n8n.io) rather than assumed — only
-      [identity/freeipa/freeipa-server](identity/freeipa/docker-compose.yaml) has **no** generic `latest` tag at
+      [identity/freeipa/freeipa-server](../identity/freeipa/docker-compose.yaml) has **no** generic `latest` tag at
       all (its tags are OS-variant-specific: fedora-41/43/44, rocky-9, almalinux-9, ...). Its
       fallback stays the current pin (`fedora-41`), not `latest`.
 - [x] Tags that encode a real *variant*, not just a version, keep that variant hardcoded and
@@ -72,7 +72,7 @@ deployment by setting a var in that service's `.env`, with no compose file edits
 
 ## 3. Secrets / credentials hygiene — DONE (2026-07-19)
 
-- [x] Rotated [identity/lldap/docker-compose.yaml](identity/lldap/docker-compose.yaml) `LLDAP_JWT_SECRET` — the
+- [x] Rotated [identity/lldap/docker-compose.yaml](../identity/lldap/docker-compose.yaml) `LLDAP_JWT_SECRET` — the
       old committed value is retired; treat it as compromised if it was ever actually deployed.
 - [x] Hardcoded placeholder passwords moved to `${VAR}` interpolation + a tracked
       `.env.example`/gitignored `.env` per directory: pihole, phpipam, monica, n8n, wikijs,
@@ -93,7 +93,7 @@ deployment by setting a var in that service's `.env`, with no compose file edits
       rule was broadened to `*.env` (+ `!*.env.example`) since the bare form was only ever
       catching exact-name `.env` files, not `.db.env`/`docker.env` variants — which is exactly
       how firefly/notebook's extra env files ended up committed in the first place.
-- [x] Added [scripts/gen-secrets.sh](scripts/gen-secrets.sh) to generate a real `.env` from any
+- [x] Added [scripts/gen-secrets.sh](../scripts/gen-secrets.sh) to generate a real `.env` from any
       `.env.example`, including a `$OTHERKEY` reference syntax for credentials shared across two
       containers in the same file. Doesn't handle cross-*file* shared credentials (see firefly
       note above) — out of scope, do that by hand.
@@ -111,7 +111,7 @@ deployment by setting a var in that service's `.env`, with no compose file edits
 - [x] `remoteRhel` and `tenable` were referenced (README, `start.sh` EXCLUDED_DIRS, root
       compose comments) but no such directories exist. Purged along with `start.sh`/`stop.sh`
       and the old root compose include list (see item 1).
-- [x] [dev/testing/docker-compose.yaml](dev/testing/docker-compose.yaml) pointed at a defunct
+- [x] [dev/testing/docker-compose.yaml](../dev/testing/docker-compose.yaml) pointed at a defunct
       `Godu92/Remote-Rhel` GitHub repo and an EOL'd `debian:jessie` base image (no security
       updates since 2020) — updated example args to the real repo (`Godu92/Self-Host`) and
       `debian:bookworm` in both the compose file and `dev/testing/Dockerfile`'s default ARG.
@@ -119,14 +119,14 @@ deployment by setting a var in that service's `.env`, with no compose file edits
       `data/styles/document.db*` — confirmed with the repo owner this is real state on one of
       their actual running machines, not something in any checkout this assistant has access
       to, and is being handled by hand there. **Still true and unresolved on that machine**:
-      `TRILIUM_DATA_DIR` moved from the root `.env` to [notes/trilium/.env](notes/trilium/.env)
+      `TRILIUM_DATA_DIR` moved from the root `.env` to [notes/trilium/.env](../notes/trilium/.env)
       on 2026-07-19, and since Compose resolves a relative bind path in an *included* file
       relative to *that file's own directory*, `TRILIUM_DATA_DIR=./data` now means
       `notes/trilium/data`, not the repo root — the real server needs the data directory moved
       (or `TRILIUM_DATA_DIR` there set to an absolute path at the old location) before starting
       trilium fresh, or it'll silently create a new empty directory instead of using the
       existing one.
-- [ ] [dev/jenkins/](dev/jenkins/) has no `data/` in this checkout (just `Dockerfile` +
+- [ ] [dev/jenkins/](../dev/jenkins/) has no `data/` in this checkout (just `Dockerfile` +
       `docker-compose.yaml`) — confirmed with the repo owner: same story as Trilium above, this
       machine is clean but other machines this repo runs on are not, and `dev/jenkins/data/`
       (real credentials.xml/secret.key etc.) is expected to exist there. **Leave this note in
@@ -143,7 +143,7 @@ deployment by setting a var in that service's `.env`, with no compose file edits
 
 ## 5. Traefik / networking consistency
 
-- [ ] [finance/firefly/docker-compose.yaml](finance/firefly/docker-compose.yaml) defines its own isolated
+- [ ] [finance/firefly/docker-compose.yaml](../finance/firefly/docker-compose.yaml) defines its own isolated
       network — not reachable via Traefik as currently configured. Fix to join `proxy`, or
       document why it's intentionally isolated. Also now blocks the autokuma monitor labels
       added in item 13 for the same reason — see the comment left in that file.
@@ -166,15 +166,15 @@ own TODO comment already flags.
 - [ ] Build a Compose `x-*` anchor / shared fragment for the common boilerplate
       (restart policy, Traefik labels, network).
 - [ ] Use these as the clean reference examples when designing the fragment:
-      [gotify](gotify/docker-compose.yaml), [dozzle](dozzle/docker-compose.yaml),
-      [netalertx](netalertx/docker-compose.yaml), [glances](glances/docker-compose.yaml).
+      [gotify](../monitoring/gotify/docker-compose.yaml), [dozzle](../admin-tools/dozzle/docker-compose.yaml),
+      [netalertx](../monitoring/netalertx/docker-compose.yaml), [glances](../admin-tools/glances/docker-compose.yaml).
 - [ ] Multi-container stacks each hand-roll their own Postgres/MariaDB/Redis: docmost, n8n,
       firefly, phpipam, monica, adventurelog, papermerge, airtrail, wikijs. README's own TODO
       ("merge databases into one PostgreSQL") is still unaddressed — evaluate consolidating.
 
 ## 7. Tooling bugs / misc
 
-- [ ] [scripts/run2compose.py](scripts/run2compose.py): `inner_port` is referenced
+- [ ] [scripts/run2compose.py](../scripts/run2compose.py): `inner_port` is referenced
       unconditionally when building the Traefik port label but is only set if `-p` was passed
       in the source `docker run` command — throws `UnboundLocalError` otherwise. Also only
       handles `-p`/`-v`/`-e` flags (silently drops everything else, e.g. `--name`, `-d`,
@@ -183,12 +183,12 @@ own TODO comment already flags.
       via the `docker` SDK) appears untested/unused by `start.sh`/`stop.sh` — decide whether to
       wire it in or drop it.
 - [ ] No tracked `requirements.txt`/lockfile at the root for `run2compose.py`'s dependencies
-      (`docker`, `yaml`) even though [self-host.code-workspace](self-host.code-workspace) implies
+      (`docker`, `yaml`) even though [self-host.code-workspace](../self-host.code-workspace) implies
       a `.venv` convention. (Note: `scripts/requirements.txt` does exist — confirm it's current
       and referenced from docs.)
 - [ ] `.vscode/` directory is empty/vestigial now that `self-host.code-workspace` covers that
       role — remove or populate.
-- [ ] [.devcontainer/devcontainer.json](.devcontainer/devcontainer.json) is generic
+- [ ] [.devcontainer/devcontainer.json](../.devcontainer/devcontainer.json) is generic
       (docker-outside-of-docker + python) and doesn't bootstrap this repo's stack
       (no postCreateCommand, no forwarded ports) — low priority, but an opportunity.
 
@@ -269,7 +269,7 @@ network segmentation between groups does nothing to contain a compromised contai
 it, since it can just launch a new privileged container regardless of which network it's on.
 Judged higher-value to fix than the VLAN idea (see item 12), which is deferred.
 
-- [x] [infra/socket](infra/socket/docker-compose.yaml) (`tecnativa/docker-socket-proxy`) is now
+- [x] [infra/socket](../infra/socket/docker-compose.yaml) (`tecnativa/docker-socket-proxy`) is now
       actually wired in — was fully defined before but never included anywhere (`socket_proxy`
       network was commented out, its own `include:` line was commented out). Now included in
       the base `docker-compose.yaml` alongside Traefik.
@@ -346,7 +346,7 @@ socket-proxy in item 11).
       `admin-tools/watchtower` / `admin-tools/lazydocker`, previously flagged in item 11 as
       having routes with no HTTP UI to route to at all — removed rather than patched.
 - [x] Found and fixed a real bug via `docker compose config` validation:
-      [media/calibre/docker-compose.yaml](media/calibre/docker-compose.yaml) set
+      [media/calibre/docker-compose.yaml](../media/calibre/docker-compose.yaml) set
       `traefik.enable=true` only in its `x-settings` YAML anchor, but both services also define
       their own `labels:` list — the anchor's `<<:` merge doesn't merge list values, so the
       per-service list fully overrode the anchor's and `traefik.enable` never actually reached
@@ -366,7 +366,7 @@ socket-proxy in item 11).
       `admin-tools/lazydocker`, `files/filebrowser`, `productivity/ittools` to match the
       unquoted convention used by the rest of the repo. Also fixed lazydocker's `lazy.locahost`
       typo while touching that file — moot now since the whole route was removed, see above.
-- [x] AutoKuma ([monitoring/autokuma](monitoring/autokuma/docker-compose.yaml)) was pointed at
+- [x] AutoKuma ([monitoring/autokuma](../monitoring/autokuma/docker-compose.yaml)) was pointed at
       `AUTOKUMA__KUMA__URL: http://localhost:3001` — wrong, since it and Uptime Kuma are separate
       containers; fixed to `http://uptime-kuma:3001`. Added real
       `AUTOKUMA_KUMA_USERNAME`/`AUTOKUMA_KUMA_PASSWORD` env vars (`monitoring/autokuma/.env.example`)

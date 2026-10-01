@@ -7,7 +7,7 @@
 ## is testing. Actual page *content* still needs a scoped read-only account though
 ## (Wiki.js pages are a client-rendered SPA, and the GraphQL query that returns raw
 ## content — `pages.single` — checks view permission more strictly than `list`/`tree` do;
-## see KNOWLEDGE.md). Docmost stays in `notes/docmost` for more human-facing note-taking
+## see docs/KNOWLEDGE.md). Docmost stays in `notes/docmost` for more human-facing note-taking
 ## use, just not part of this experiment. No automation wired up yet — for now, sources
 ## get added to Open Notebook by hand. The point of this style is just to test whether the
 ## human-writes / AI-queries loop is actually useful before investing in anything below.
@@ -30,7 +30,7 @@ include:
   #   actual n8n workflow to pull commits/issues into Open Notebook.
   #
   # - productivity/n8n/docker-compose.yaml
-  #   Automation glue, validated end to end 2026-07-26 (see KNOWLEDGE.md): Wiki.js
+  #   Automation glue, validated end to end 2026-07-26 (see docs/KNOWLEDGE.md): Wiki.js
   #   `pages.list(orderBy: UPDATED)` (anonymous) -> LLDAP-authenticated login -> `GET
   #   /d/<path>` raw content -> POST to Open Notebook as a `type: "text"` source. Still
   #   manual-trigger only, no checkpoint/dedup yet. Import
@@ -43,7 +43,7 @@ include:
   #   Provides the shared read-only identity the n8n workflow above actually needs: a
   #   `svc-wikijs-ro` user in a `svc-readonly` group, wired to Wiki.js as an LDAP auth
   #   strategy. Provisioned via LLDAP's GraphQL API + its `lldap_set_password` CLI (no
-  #   REST/GraphQL password mutation exists - see KNOWLEDGE.md). Confirmed Gitea works with
+  #   REST/GraphQL password mutation exists - see docs/KNOWLEDGE.md). Confirmed Gitea works with
   #   LDAP too (incl. SSH keys); n8n LDAP is Enterprise-only so n8n itself just calls
   #   Wiki.js's HTTP API instead of speaking LDAP directly.
   #
