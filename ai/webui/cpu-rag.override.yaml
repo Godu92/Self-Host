@@ -1,0 +1,55 @@
+# CPU-only RAG profile for Open WebUI, layered on top of docker-compose.yaml by
+# compose.codeassist.yaml (via an `include: - path: [...]` list). Not used by any other
+# style. Every value is a ${VAR:-default}; override per deployment in ai/webui/.env.
+# Variable names verified against Open WebUI 0.11.4's config.py/env.py.
+#
+# These are Open WebUI "persistent config" values: env only seeds them on the FIRST start
+# with an empty data volume. After that the copy in its DB wins (edit in Admin > Settings,
+# or start from a fresh volume). See docs/MULTI-PROJECT-RAG.md.
+services:
+  open-webui:
+    mem_limit: ${OPEN_WEBUI_MEM_LIMIT:-4g}
+    environment:
+      # Nothing leaves the network: no HuggingFace downloads, no update check, no OpenAI.
+      - OFFLINE_MODE=${OFFLINE_MODE:-true}
+      - ENABLE_OPENAI_API=${ENABLE_OPENAI_API:-false}
+      # Embeddings come from Ollama (a model already pulled there), not a bundled
+      # sentence-transformers model that would need a HuggingFace download.
+      - RAG_EMBEDDING_ENGINE=ollama
+      - RAG_EMBEDDING_MODEL=${RAG_EMBEDDING_MODEL:-nomic-embed-text}
+      - RAG_OLLAMA_BASE_URL=http://ollama:11434
+      # Hybrid search = keyword (BM25) + vectors; exact identifiers matter in code. With no
+      # reranking model set it falls back to embedding similarity instead of running a
+      # cross-encoder on CPU. Note BM25 is rebuilt over the WHOLE collection on every query,
+      # so keep collections per project rather than one giant one.
+      - ENABLE_RAG_HYBRID_SEARCH=${ENABLE_RAG_HYBRID_SEARCH:-true}
+      - RAG_HYBRID_BM25_WEIGHT=${RAG_HYBRID_BM25_WEIGHT:-0.5}
+      # Add each chunk's file name (split into words) to the keyword index. Pairs with
+      # scripts/owui-sync.py's path-bearing names, e.g. monitoring__autokuma__docker-compose.yaml.
+      - ENABLE_RAG_HYBRID_SEARCH_ENRICHED_TEXTS=${ENABLE_RAG_HYBRID_SEARCH_ENRICHED_TEXTS:-true}
+      # Every retrieved chunk is prompt the CPU has to read before answering: keep it small.
+      - RAG_TOP_K=${RAG_TOP_K:-4}
+      - CHUNK_SIZE=${CHUNK_SIZE:-1000}
+      - CHUNK_OVERLAP=${CHUNK_OVERLAP:-100}
+      # Background LLM "tasks" each cost a full model call on CPU, and with one parallel
+      # slot they queue in front of your next question. Retrieval query generation is the
+      # worst: it runs BEFORE retrieval, adding a whole extra generation to every answer.
+      - ENABLE_RETRIEVAL_QUERY_GENERATION=${ENABLE_RETRIEVAL_QUERY_GENERATION:-false}
+      - ENABLE_SEARCH_QUERY_GENERATION=false
+      - ENABLE_AUTOCOMPLETE_GENERATION=false
+      - ENABLE_TITLE_GENERATION=${ENABLE_TITLE_GENERATION:-false}
+      - ENABLE_TAGS_GENERATION=false
+      - ENABLE_FOLLOW_UP_GENERATION=false
+      # Lets editor extensions (Continue etc.) use Open WebUI's OpenAI-compatible API with a
+      # per-user key, so Ollama itself never has to be reachable from workstations.
+      - ENABLE_API_KEYS=true
+      # Trust whatever CAs the host trusts (corporate TLS interception, internal CA).
+      # Python uses certifi's bundle by default, not the system one, hence both vars.
+      - SSL_CERT_FILE=/etc/ssl/certs/host-ca-bundle.pem
+      - REQUESTS_CA_BUNDLE=/etc/ssl/certs/host-ca-bundle.pem
+      - HTTPS_PROXY=${HTTPS_PROXY:-}
+      - NO_PROXY=${NO_PROXY:-localhost,127.0.0.1,ollama,open-webui}
+    volumes:
+      # On RHEL set HOST_CA_BUNDLE=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem in
+      # ai/webui/.env. The default suits Debian/Ubuntu hosts.
+      - ${HOST_CA_BUNDLE:-/etc/ssl/certs/ca-certificates.crt}:/etc/ssl/certs/host-ca-bundle.pem:ro

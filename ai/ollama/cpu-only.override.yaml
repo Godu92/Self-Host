@@ -1,0 +1,38 @@
+# CPU-only tuning for Ollama, layered on top of docker-compose.yaml by
+# compose.codeassist.yaml (via an `include: - path: [...]` list). Not used by any other
+# style. Every value is a ${VAR:-default}; override per deployment in ai/ollama/.env.
+# Defaults target a 16 vCPU / 32 GB VM — see docs/MULTI-PROJECT-RAG.md "Memory budget".
+services:
+  ollama:
+    # Ollama has no auth: in this style Open WebUI is the only way in (it proxies Ollama
+    # for admins at /ollama/ and serves an API-key-protected OpenAI-compatible API).
+    # Drop the host port and the Traefik route the base file defines.
+    ports: !reset []
+    labels:
+      - traefik.enable=false
+    # Keep Ollama from starving Open WebUI/the OS: pin it to all but a couple of cores
+    # (e.g. "2-15" on 16 vCPUs) and cap its memory. Empty cpuset = no pinning.
+    cpuset: ${OLLAMA_CPUSET:-}
+    mem_limit: ${OLLAMA_MEM_LIMIT:-26g}
+    environment:
+      # One user: each parallel slot gets its own context cache, so 1 saves memory.
+      - OLLAMA_NUM_PARALLEL=${OLLAMA_NUM_PARALLEL:-1}
+      # Chat + autocomplete + embedding resident together.
+      - OLLAMA_MAX_LOADED_MODELS=${OLLAMA_MAX_LOADED_MODELS:-3}
+      # Never unload: reloading a large model from disk after an idle timeout is slow.
+      - OLLAMA_KEEP_ALIVE=${OLLAMA_KEEP_ALIVE:--1}
+      # Roughly halves the context cache's memory (q8_0 cache requires flash attention).
+      - OLLAMA_FLASH_ATTENTION=${OLLAMA_FLASH_ATTENTION:-1}
+      - OLLAMA_KV_CACHE_TYPE=${OLLAMA_KV_CACHE_TYPE:-q8_0}
+      - OLLAMA_CONTEXT_LENGTH=${OLLAMA_CONTEXT_LENGTH:-16384}
+      # Recent Ollama versions can run "cloud" models on ollama.com's servers. Disable
+      # that so a model picked in the UI can never send prompts off the network.
+      - OLLAMA_NO_CLOUD=${OLLAMA_NO_CLOUD:-true}
+      # Corporate proxy, if it's explicit rather than transparent. Empty = unset.
+      - HTTPS_PROXY=${HTTPS_PROXY:-}
+      - NO_PROXY=${NO_PROXY:-localhost,127.0.0.1,ollama,open-webui}
+    volumes:
+      # Trust whatever CAs the host trusts (corporate TLS interception, internal CA).
+      # Mounted over the image's default bundle, which Go reads automatically. On RHEL set
+      # HOST_CA_BUNDLE=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem in ai/ollama/.env.
+      - ${HOST_CA_BUNDLE:-/etc/ssl/certs/ca-certificates.crt}:/etc/ssl/certs/ca-certificates.crt:ro

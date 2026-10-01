@@ -35,6 +35,13 @@ Originally built for RHEL 8 + podman; also runs on Docker.
   docker compose -f docker-compose.yaml -f compose.local.yaml down
   ```
 
+- A style that needs a service configured differently from its default (resource limits,
+  extra env) includes it together with a tracked override file in the service's own
+  directory, using Compose's `include:` path list, e.g.
+  `- path: [ai/ollama/docker-compose.yaml, ai/ollama/cpu-only.override.yaml]`. The
+  service's base compose file stays unchanged for every other style. Override values are
+  `${VAR:-default}`, so they're tunable per deployment from that service's `.env`. Compose's
+  `!reset` tag removes inherited lists (e.g. `ports: !reset []`). See `compose.codeassist.yaml`.
 - To add a new style, copy `compose.local.yaml` to `compose.<style>.yaml` and
   comment/uncomment services for that setup. Don't add a service's `include:` line to more
   than the styles it's actually meant for.
@@ -197,7 +204,8 @@ open question of whether this holds up off of one beefy box.
 
 [MULTI-PROJECT-RAG.md](../docs/MULTI-PROJECT-RAG.md) is the design for a CPU-only, offline-
 capable Open WebUI + Ollama code assistant doing RAG across a large number of interrelated
-projects (built on `ai/ollama` + `ai/webui`). Keep that doc general-purpose — it's meant to be
+projects (built on `ai/ollama` + `ai/webui`, launched with the `compose.codeassist.yaml` style;
+indexing and benchmarking via `scripts/owui-sync.py` / `scripts/owui-bench.py`). Keep that doc general-purpose — it's meant to be
 useful to anyone with a high project count, not tied to one environment.
 
 ## Public vs. private docs

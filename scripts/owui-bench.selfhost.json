@@ -1,0 +1,18 @@
+[
+  {
+    "q": "Which services use the shared Ollama instance, and how do they reach it?",
+    "collections": ["ai"]
+  },
+  {
+    "q": "How do services get Docker API access in this setup without mounting the Docker socket?",
+    "collections": ["infra", "admin-tools"]
+  },
+  {
+    "q": "Which services authenticate against LLDAP, and what is LLDAP used for here?",
+    "collections": ["identity", "notes", "productivity"]
+  },
+  {
+    "q": "How are Uptime Kuma monitors created for services? Give the label format.",
+    "collections": ["monitoring"]
+  }
+]

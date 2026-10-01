@@ -1,0 +1,13 @@
+## Deploy style: CPU-only local code assistant (Open WebUI + Ollama doing RAG).
+## See docs/MULTI-PROJECT-RAG.md for the design and sizing.
+##   docker compose -f docker-compose.yaml -f compose.codeassist.yaml up -d
+## Each service is included together with a CPU-tuning override file; tune values in that
+## service's own .env (see each .env.example), not here.
+include:
+  ### ai
+  - path:
+      - ai/ollama/docker-compose.yaml
+      - ai/ollama/cpu-only.override.yaml
+  - path:
+      - ai/webui/docker-compose.yaml
+      - ai/webui/cpu-rag.override.yaml
