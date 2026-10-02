@@ -12,6 +12,8 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.exposedByDefault=false"
       - "--providers.docker.endpoint=tcp://socket-proxy:2375"
+      - "--providers.file.directory=/etc/traefik/dynamic"
+      - "--providers.file.watch=true"
       - "--entryPoints.http.address=:80"
       - "--entryPoints.https.address=:443"
     networks:
@@ -23,10 +25,16 @@ services:
       - "443:443"
       # The Web UI (enabled by --api.insecure=true)
       - "8080:8080"
+    volumes:
+      - ./certs:/certs:ro
+      - ./dynamic:/etc/traefik/dynamic:ro
     labels:
       - traefik.enable=true
       - traefik.http.routers.proxy.rule=Host(`proxy.$HOST`) || Host(`proxy.$HOSTNAME`)
       - traefik.http.routers.proxy.entrypoints=http
+      - traefik.http.routers.proxy-secure.rule=Host(`proxy.$HOSTNAME`)
+      - traefik.http.routers.proxy-secure.entrypoints=https
+      - traefik.http.routers.proxy-secure.tls=true
       - traefik.http.services.proxy.loadbalancer.server.port=8080
       - kuma.proxy.http.name=Traefik
       - kuma.proxy.http.url=http://traefik:8080

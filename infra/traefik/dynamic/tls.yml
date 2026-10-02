@@ -1,0 +1,8 @@
+tls:
+  certificates:
+    - certFile: /certs/proxy.crt
+      keyFile: /certs/proxy.key
+    - certFile: /certs/who.crt
+      keyFile: /certs/who.key
+    - certFile: /certs/wikijs.crt
+      keyFile: /certs/wikijs.key

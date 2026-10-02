@@ -436,6 +436,22 @@ sections:
         statusCheck: true
         statusCheckAllowInsecure: true
         id: 46_937_dozzle
+      - title: Ollama
+        description: Local LLM inference
+        icon: fas fa-brain
+        url: http://ollama.localhost
+        target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 47_937_ollama
+      - title: Open WebUI
+        description: Chat UI for Ollama
+        icon: fas fa-comments
+        url: http://chat.localhost
+        target: newtab
+        statusCheck: true
+        statusCheckAllowInsecure: true
+        id: 48_937_openwebui
 appConfig:
   theme: crayola
   layout: horizontal
