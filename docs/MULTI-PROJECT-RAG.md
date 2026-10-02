@@ -253,6 +253,28 @@ The cross-project relationships are real, which makes for good tier 2 test quest
 **Limitation:** it's mostly YAML and Markdown, so it doesn't test how actual code gets
 chunked. Add a code-heavy open-source project before judging tier 3.
 
+## Getting models from Hugging Face
+
+If Hugging Face is reachable but Ollama's own registry isn't (or is less trusted), Ollama can
+pull GGUF files directly from it. Tested 2026-10-02 with `OLLAMA_NO_CLOUD=true` set; that only
+blocks *remote inference*, not downloads:
+
+```bash
+docker exec ollama ollama pull hf.co/<org>/<repo>-GGUF:<quant>   # e.g. :Q4_K_M
+```
+
+- **Prefer the model publisher's own repo** (e.g. `Qwen/...-GGUF`, `ibm-granite/...-GGUF`)
+  over third-party re-quantizations. It's one less party to trust, which matters wherever
+  model origin gets questioned.
+- **Downloads go through the same TLS path** as everything else, so a TLS-intercepting proxy
+  needs the CA bundle fix first. Hugging Face also redirects file downloads to its own CDN
+  hosts, which must be reachable too.
+- **Downloading a model is not the same as using hosted inference.** Hugging Face also offers
+  hosted chat and inference APIs. Pointing Open WebUI at those would send every prompt,
+  including retrieved code, to an outside service, which defeats the "nothing leaves the
+  network" design target. The override keeps `ENABLE_OPENAI_API=false` partly so that this
+  can't happen by accident.
+
 ## Offline setup
 
 - **Models:** download on a connected machine and import on the target. Either copy Ollama's
