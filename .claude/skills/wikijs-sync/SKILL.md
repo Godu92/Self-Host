@@ -1,6 +1,6 @@
 ---
 name: wikijs-sync
-description: Publish or refresh markdown docs (repo docs/, notes, memory) as pages on this stack's self-hosted WikiJS instance (notes/wikijs), so the content is reachable by browser without cloning a repo. Use when asked to sync/publish/push docs or notes to the wiki, or to check what's currently on it.
+description: Publish or refresh markdown docs (repo docs/, notes, memory) as pages on this stack's self-hosted WikiJS instance (notes/wikijs), so the content is reachable by browser without cloning a repo — and pull pages back out as a Markdown mirror (scripts/wikijs-export.py), e.g. to index the wiki in Open WebUI. Use when asked to sync/publish/push docs or notes to the wiki, to export/mirror/index the wiki, or to check what's currently on it.
 ---
 
 # wikijs-sync
@@ -91,6 +91,35 @@ humanized filename) as the title.
   `pages { delete(id: ...) }`.
 - Syncing many files means many sequential GraphQL calls — for more than a handful of pages,
   run the sync as a background task rather than blocking on it inline.
+
+## Pulling pages back out (wiki → Markdown → Open WebUI)
+
+The reverse direction is scripted, so don't rebuild it from GraphQL:
+[scripts/wikijs-export.py](../../../scripts/wikijs-export.py) mirrors every published page
+into `<out>/<locale>/<path>.md`, and [scripts/owui-sync.py](../../../scripts/owui-sync.py)
+then syncs that directory into an Open WebUI knowledge collection incrementally.
+
+```bash
+scripts/wikijs-export.py --url http://<wiki-host> --out ~/wiki-mirror [--prefix projects/foo]
+OWUI_TOKEN=... scripts/owui-sync.py --url http://chat.<HOST> --knowledge wiki ~/wiki-mirror
+```
+
+- **No account needed** if guests can read pages. Wiki.js renders the page body
+  server-side into a `<template slot="contents">` tag that a browser expands with
+  JavaScript. The script reads that tag and converts it back to Markdown (headings, code
+  blocks, lists, tables).
+- **With `$WIKIJS_TOKEN`** (an API key, or a read-only account whose group has "read
+  source" permission), it fetches each page's exact source from `/d/<locale>/<path>`
+  instead.
+- **Don't point Open WebUI's web-page loader at Wiki.js.** It sees only the `<title>`,
+  because the body lives in that `<template>` tag. It also refuses internal addresses unless
+  `ENABLE_LOCAL_WEB_FETCH` and `WEB_FETCH_FILTER_LIST` are set.
+- The output dir is a true mirror: deleted pages' files are removed on the next run, and
+  unchanged pages stay byte-identical, so `owui-sync.py` skips them. The script refuses to
+  prune a non-empty directory it didn't create.
+- Use one output dir per `--prefix` (and one collection per wiki section, if the wiki is
+  organized by project). Re-running with a different prefix into the same dir prunes the
+  pages outside it.
 
 ## General pattern
 

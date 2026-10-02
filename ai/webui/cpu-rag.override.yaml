@@ -3,13 +3,23 @@
 # style. Every value is a ${VAR:-default}; override per deployment in ai/webui/.env.
 # Variable names verified against Open WebUI 0.11.4's config.py/env.py.
 #
-# These are Open WebUI "persistent config" values: env only seeds them on the FIRST start
-# with an empty data volume. After that the copy in its DB wins (edit in Admin > Settings,
-# or start from a fresh volume). See docs/MULTI-PROJECT-RAG.md.
+# Open WebUI normally treats env as a one-time seed: on the first start it copies these
+# into its DB, and from then on the DB copy wins, so editing this file changes nothing on
+# an existing instance. This profile turns that off (ENABLE_PERSISTENT_CONFIG=false), so
+# this file plus ai/webui/.env are the single source of truth on every start. Trade-off:
+# admin-UI changes to these settings only last until the next restart; make permanent
+# changes here or in .env. Set ENABLE_PERSISTENT_CONFIG=true for the usual behavior.
 services:
   open-webui:
     mem_limit: ${OPEN_WEBUI_MEM_LIMIT:-4g}
     environment:
+      - ENABLE_PERSISTENT_CONFIG=${ENABLE_PERSISTENT_CONFIG:-false}
+      # Classic RAG for every model: retrieved chunks are injected into the prompt. The
+      # default ("native" function calling) instead hands the model search/ask_user tools
+      # in browser chats and lets it decide when to call them: an extra full model pass per
+      # tool call on CPU, and small models fail at it (Llama 3.2's template allows one tool
+      # call per turn, so multi-call turns 400). Override per model in Admin > Models.
+      - 'DEFAULT_MODEL_PARAMS={"function_calling": "legacy"}'
       # Nothing leaves the network: no HuggingFace downloads, no update check, no OpenAI.
       - OFFLINE_MODE=${OFFLINE_MODE:-true}
       - ENABLE_OPENAI_API=${ENABLE_OPENAI_API:-false}
@@ -18,6 +28,8 @@ services:
       - RAG_EMBEDDING_ENGINE=ollama
       - RAG_EMBEDDING_MODEL=${RAG_EMBEDDING_MODEL:-nomic-embed-text}
       - RAG_OLLAMA_BASE_URL=http://ollama:11434
+      # Chunks per embedding request. The default (1) means one Ollama call per chunk.
+      - RAG_EMBEDDING_BATCH_SIZE=${RAG_EMBEDDING_BATCH_SIZE:-32}
       # Hybrid search = keyword (BM25) + vectors; exact identifiers matter in code. With no
       # reranking model set it falls back to embedding similarity instead of running a
       # cross-encoder on CPU. Note BM25 is rebuilt over the WHOLE collection on every query,
@@ -40,6 +52,12 @@ services:
       - ENABLE_TITLE_GENERATION=${ENABLE_TITLE_GENERATION:-false}
       - ENABLE_TAGS_GENERATION=false
       - ENABLE_FOLLOW_UP_GENERATION=false
+      # Web-page loading (`#https://...` in chat, or /api/v1/retrieval/process/web) refuses
+      # private/internal addresses by default (SSRF protection). To let it read an internal
+      # wiki, enable local fetch AND allowlist just that host: entries without a `!` prefix
+      # form an allowlist, so nothing else internal becomes reachable.
+      - ENABLE_LOCAL_WEB_FETCH=${ENABLE_LOCAL_WEB_FETCH:-false}
+      - WEB_FETCH_FILTER_LIST=${WEB_FETCH_FILTER_LIST:-}
       # Lets editor extensions (Continue etc.) use Open WebUI's OpenAI-compatible API with a
       # per-user key, so Ollama itself never has to be reachable from workstations.
       - ENABLE_API_KEYS=true

@@ -119,22 +119,37 @@ incrementally from git diffs.
 
 ## Feeding a wiki into tier 2
 
-Two ways to get an existing Wiki.js into an Open WebUI knowledge collection:
+Three ways to get an existing Wiki.js 2.x into an Open WebUI knowledge collection, all
+ending in `owui-sync.py` against a directory of Markdown files:
 
-- **Wiki.js Git storage (recommended).** Wiki.js's built-in Git storage module syncs every
-  page as a Markdown file to a git repo, which is the app's own export with no custom
-  scraping. An ingest script then pushes changed files into Open WebUI through its knowledge
-  API, using `git diff` to find what changed since the last run. The same script later
-  handles tier 3, since a code repo is just another git repo. Bonus: the wiki gets version
-  history and a backup.
-- **The n8n workflow from [KNOWLEDGE.md](KNOWLEDGE.md)** (list pages over GraphQL → log in
-  as a read-only LDAP service account → fetch raw Markdown from `/d/<path>`). It's already
-  proven; only the final step changes, from Open Notebook to Open WebUI. Use this if n8n is
-  already running where the wiki lives.
+- **`scripts/wikijs-export.py` (works without any admin changes).** It mirrors every
+  published page into `<out>/<locale>/<path>.md`.
+  - **Anonymously**, if guests can read pages. Wiki.js renders each page body server-side
+    into a `<template slot="contents">` tag, and the script converts that back to Markdown,
+    keeping headings, code blocks, lists and tables.
+  - **With a token** whose group can read page source, it fetches the exact Markdown from
+    `/d/<locale>/<path>` instead.
+  - Unchanged pages stay byte-identical across runs, so the sync after it only uploads real
+    changes. Use `--prefix` to export one wiki section per collection.
+- **Wiki.js Git storage**, if you administer the wiki. Its built-in storage module syncs
+  every page as Markdown to a git repo. That's the app's own export, and the wiki gets
+  version history and a backup too.
+- **The n8n workflow from [KNOWLEDGE.md](KNOWLEDGE.md)**, if n8n already runs next to the
+  wiki. It lists pages over GraphQL, logs in as a read-only LDAP account, and fetches raw
+  Markdown from `/d/<path>`. Only its last step needs retargeting from Open Notebook to
+  Open WebUI.
 
-Wiki pages are prose with headings, so turn on Open WebUI's Markdown-header-aware text
-splitting rather than fixed-size chunks. Start with one collection for the whole wiki; split
-it by top-level wiki section only if answers start mixing unrelated projects.
+**Don't use Open WebUI's web-page loader for Wiki.js** (`#<url>` in chat, or the
+`process/web` API). It only gets the page `<title>`, because the body sits in that
+`<template>` tag that only JavaScript expands. Getting the body that way would need its
+headless-browser loader, which means running a whole browser service. The loader also
+refuses internal addresses by default (SSRF protection). If you use it for some other
+internal static site, set `ENABLE_LOCAL_WEB_FETCH=true` and an allowlist in
+`WEB_FETCH_FILTER_LIST` (just that host) so nothing else internal becomes reachable.
+
+Wiki pages are prose with headings, which suits Open WebUI's Markdown-header-aware
+splitting (on by default). Start with one collection for the whole wiki; split it by
+top-level section only if answers start mixing unrelated projects.
 
 ## Memory budget (32 GB VM example)
 
@@ -314,6 +329,7 @@ The `codeassist` deploy style wires everything above together:
 | [ai/webui/cpu-rag.override.yaml](../ai/webui/cpu-rag.override.yaml) | Offline mode; Ollama embeddings; hybrid search; small top-k; background LLM tasks off; API keys on; host CA bundle |
 | [scripts/owui-sync.py](../scripts/owui-sync.py) | Syncs a directory/git checkout into a knowledge collection, incrementally |
 | [scripts/owui-bench.py](../scripts/owui-bench.py) | Raw model speed plus RAG time-to-first-token, with a Markdown report of the answers |
+| [scripts/wikijs-export.py](../scripts/wikijs-export.py) | Mirrors a Wiki.js into Markdown files for `owui-sync.py`; works anonymously |
 
 Steps on a fresh host:
 
@@ -348,14 +364,21 @@ Steps on a fresh host:
   out while `curl` on the same path works. That's a policy decision, not a config bug.
   Ask for an exception instead of working around it.
 
-- **Settings come from env only on the first start.** Open WebUI stores most settings in its
-  own database once it has started. After that, changing an env var does nothing. Change
-  settings in Admin > Settings (or the API), or start with an empty data volume.
+- **Settings normally come from env only on the first start.** After that, Open WebUI's
+  database copy wins and env changes do nothing. The override sets
+  `ENABLE_PERSISTENT_CONFIG=false`, so the compose files and `.env` apply on every start,
+  existing instances included. The trade-off: admin-UI changes to those settings only last
+  until a restart.
+- **Browser chats use tool calling, not classic RAG, by default.** With the default
+  "native" function calling, chats opened in the UI give the model search tools (and
+  `ask_user`) and let it decide when to search. On CPU each tool call is another full model
+  pass, and small models get it wrong. The override sets
+  `DEFAULT_MODEL_PARAMS={"function_calling": "legacy"}` so retrieved chunks are injected
+  directly. API calls without a browser session always took the classic path, which is why
+  `owui-bench.py` never saw this.
+- **Embedding batch size defaults to 1**, one Ollama call per chunk. The override sets 32.
 - **Recent Ollama versions can run "cloud" models** on ollama.com. The override sets
   `OLLAMA_NO_CLOUD=true` so a model picked in the UI can never send prompts off the network.
-- **Embedding batch size defaults to 1** (`RAG_EMBEDDING_BATCH_SIZE`), meaning one Ollama
-  call per chunk. Raise it (Admin > Settings > Documents, or the env var on the first start).
-  It matters more for many-chunk files than for small configs.
 - **Files with no extractable text get rejected** when added to a collection, for example
   an HTML file that's only a `<script>` block. The HTML loader strips the tags and nothing
   is left. The sync script logs these, skips them and cleans up the upload. Worth checking

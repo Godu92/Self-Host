@@ -11,6 +11,7 @@
 *.bak
 *.sql
 *_data
+__pycache__/
 
 ## Claude Code: CLAUDE.md + settings.json are shared; local permissions/state are not
 .claude/settings.local.json
