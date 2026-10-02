@@ -335,6 +335,19 @@ Steps on a fresh host:
 
 ### Gotchas found in the first run
 
+- **Small models break Open WebUI's agentic features.** Flows where the model makes tool
+  calls, such as asking clarifying questions before answering from documents, can make
+  several tool calls in one turn. Some small models' chat templates (Llama 3.2 3B) allow
+  only one, so the request fails with a 400. Use a model whose template supports multiple
+  tool calls, or turn those features off at this size.
+- **7B-class code output needs review.** In a single-shot test, a 7B coder wrote a retry
+  loop that reported success after every attempt had failed. Fine for scaffolding and
+  explanations; not for unattended code generation.
+- **Some corporate network controls block specific applications, not just TLS.** Symptoms:
+  containers on a bridge network have no route out at all, or one tool's connections time
+  out while `curl` on the same path works. That's a policy decision, not a config bug.
+  Ask for an exception instead of working around it.
+
 - **Settings come from env only on the first start.** Open WebUI stores most settings in its
   own database once it has started. After that, changing an env var does nothing. Change
   settings in Admin > Settings (or the API), or start with an empty data volume.
